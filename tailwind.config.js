@@ -16,7 +16,8 @@ module.exports = {
         primary:'#74A942',
         secondary:'#1083AC',
         tertiary:'#FBFBFB',
-        layer:'#FBFBFB'
+        layer:'#FBFBFB',
+        warning:'#C64130',
       }
     },
   },
