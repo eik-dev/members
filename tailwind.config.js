@@ -15,9 +15,10 @@ module.exports = {
       colors:{
         primary:'#74A942',
         secondary:'#1083AC',
-        tertiary:'#FBFBFB',
         layer:'#FBFBFB',
         warning:'#C64130',
+        tertiary:'#D9D9D9',
+        surface:'#C8EAA7',
       }
     },
   },
