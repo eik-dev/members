@@ -39,19 +39,20 @@ export default function Page(){
 
     return(
         <div onClick={e=>{optionsAt>=0?setOptionsAt(-1):null}}>
-        <Head Range={Range} Search={Search} Title={'Admin panel'} TH={TH} Sort={Sort}>
+        <Head Range={Range} Search={Search} Title={'Admin panel'} TH={TH} Sort={Sort} placeholder={'Search registerd admins'}>
             <span className="min-w-[2px] hidden md:block min-h-6 h-max bg-tertiary mx-4"></span>
             <div className="bg-secondary text-white flex md:w-fit px-4 py-2 rounded-lg mx-auto w-2/3 items-center justify-center">
                 <UserPlusIcon className="w-6 h-6 mr-2"/>
                 <span className="font-semibold">New Admin</span>
             </div>
         </Head>
+        <div className="overflow-x-scroll mt-2 md:mt-10 mx-2 md:mx-0">
         <table className="w-full text-sm lg:text-xs 2xl:text-sm text-left table-auto">
-            <thead className="capitalize bg-tertiary sticky top-0">
+            <thead className="capitalize bg-tertiary bg-opacity-30 sticky top-0">
                 <tr>
                 {
                     TH.map((th, index) => {
-                        return (<th key={index} scope="col" className="px-6 py-3">{th}</th>)
+                        return (<th key={index} scope="col" className="px-6 py-3 whitespace-nowrap">{th}</th>)
                     })
                 }
                 <th></th>
@@ -69,13 +70,13 @@ export default function Page(){
                                         )
                                     })
                                 }
-                                <td className="px-6 py-4 whitespace-nowrap">
+                                <td className="px-6 py-4 whitespace-nowrap relative">
                                     <button onClick={e=>setOptionsAt(index)}>
                                         <EllipsisVerticalIcon className="w-6 h-6"/>
                                     </button>
                                     {
                                         optionsAt === index &&
-                                        <div className={`flex absolute bg-white flex-col gap-y-4 ${true?'block':'hidden'}`}>
+                                        <div className={`flex absolute z-50 right-12 md:right-44 bg-white flex-col gap-y-4 ${true?'block':'hidden'}`}>
                                             <div className="flex gap-x-2" onClick={e=>setOverlay('edit')}>
                                                 <PencilSquareIcon className="w-6 h-6"/>
                                                 Edit details
@@ -93,6 +94,7 @@ export default function Page(){
                 }
             </tbody>
         </table>
+        </div>
         <Overlay className={`${showOverlay?'block':'hidden'}`} >
             {overlay === 'edit' && <Edit control={setOverlay} />}
             {overlay === 'delete' && <Delete control={setOverlay} />}

@@ -11,15 +11,15 @@ export default function Layout({children}){
 
     return(
         <div className="flex h-lvh">
-        <div className={`h-lvh fixed z-40 bg-white ${showMenu?'-translate-x-0':'-translate-x-96'} lg:translate-x-0`}>
+        <div className={`h-[100%] fixed z-40 bg-white ${showMenu?'-translate-x-0':'-translate-x-96'} lg:translate-x-0`}>
             <SideNav control={setShowMenu}/>
         </div>
-        <div onClick={e=>{showMenu?setShowMenu(false):null}} className="w-[100%] lg:mx-12 lg:ml-64">
+        <div onClick={e=>{showMenu?setShowMenu(false):null}} className="w-[100%] lg:w-[70%] lg:mx-auto lg:pl-10">
             <header className="flex justify-between right-0 py-6">
-                <div>
-                    <Bars3Icon onClick={e=>setShowMenu(true)} className="w-6 h-6 lg:hidden block"/>
+                <div className="ml-4">
+                    <Bars3Icon onClick={e=>setShowMenu(true)} className="w-8 h-8 lg:hidden block"/>
                 </div>
-                <div className="flex">
+                <div className="flex mr-4">
                     <BellIcon className="w-6 h-6"/>
                     <span className="min-w-[2px] min-h-6 h-max bg-tertiary mx-4"></span>
                     <div className="flex items-center">

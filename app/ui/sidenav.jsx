@@ -3,7 +3,7 @@ import Link from "next/link";
 import { useContext } from "react";
 import { Context } from "@/app/lib/ContextProvider";
 import { usePathname } from "next/navigation";
-import {RectangleGroupIcon, UserPlusIcon, Square3Stack3DIcon, UserGroupIcon, BuildingLibraryIcon, AcademicCapIcon, ArrowLeftEndOnRectangleIcon} from '@heroicons/react/24/outline';
+import {RectangleGroupIcon, UserPlusIcon, Square3Stack3DIcon, UserGroupIcon, BuildingLibraryIcon, AcademicCapIcon, ArrowLeftEndOnRectangleIcon, UserCircleIcon, HomeIcon} from '@heroicons/react/24/outline';
 
 export default function SideNav({control}){
     let {User} = useContext(Context);
@@ -33,7 +33,7 @@ export default function SideNav({control}){
             name: "Members",
             icon: UserGroupIcon,
             href: "/members",
-            roles:['Admin']
+            roles:['Admin','Firm']
         },
         {
             name: "Firms",
@@ -46,6 +46,18 @@ export default function SideNav({control}){
             icon: AcademicCapIcon,
             href: "/certificates",
             roles:['Admin']
+        },
+        {
+            name: "Home",
+            icon: HomeIcon,
+            href: "/home",
+            roles:['Admin']
+        },
+        {
+            name: "Profile",
+            icon: UserCircleIcon,
+            href: "/profile",
+            roles:['Admin']
         }
     ]
     return(<>
@@ -55,7 +67,7 @@ export default function SideNav({control}){
             if(link.roles.includes(User[0].role)){
                 return(
                     <Link key={index} href={link.href} onClick={e=>control(false)}>
-                        <div className={`flex items-center p-4 ${pathname === link.href ? ' border-l-8 border-primary text-primary' : ''}`}>
+                        <div className={`flex items-center p-4 ${pathname === link.href ? ' border-l-8 border-primary text-primary bg-tertiary bg-opacity-10' : ''}`}>
                             <link.icon className="w-6 h-8 mr-2"/>
                             {link.name}
                         </div>
@@ -64,7 +76,7 @@ export default function SideNav({control}){
             }
         })
     }
-        <div className="flex items-center text-warning absolute bottom-10 ml-4">
+        <div className="flex items-center text-warning absolute bottom-10 md:bottom-20 ml-4">
             <ArrowLeftEndOnRectangleIcon className="w-6 h-8 mr-2"/>
             Logout
         </div>

@@ -1,3 +1,12 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Style scroll bar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+input:focus {
+  outline: none;
+}

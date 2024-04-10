@@ -1,14 +1,60 @@
 'use client'
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Head from '@/app/ui/head';
 
 export default function Page(){
     let Range = useState(20);
     let Search = useState("");
+    let TH = ['Date', 'Username', 'Email', 'Action'];
+    let Sort = useState(TH[0]);
+    let [optionsAt, setOptionsAt] = useState(-1);
+    
+    let [data, setData] = useState([
+        {
+            date: '12/12/2021',
+            username: 'johndoe',
+            email: 'admin@eik.co.ke',
+            action: 'login'
+        }
+    ]);
+
+    useEffect(()=>{},[])
+    useEffect(()=>{},[Sort[0]])
 
     return(
-        <>
-        <Head Range={Range} Search={Search} Title={'User Logs'}/>
-        </>
+        <div onClick={e=>{optionsAt>=0?setOptionsAt(-1):null}}>
+        <Head Range={Range} Search={Search} Title={'User Logs'} TH={TH} Sort={Sort} placeholder={'Search user logs'}>
+        </Head>
+        <div className="overflow-x-scroll mt-2 md:mt-10 mx-2 md:mx-0">
+        <table className="w-full text-sm lg:text-xs 2xl:text-sm text-left table-auto">
+            <thead className="capitalize bg-tertiary bg-opacity-30 sticky top-0">
+                <tr>
+                {
+                    TH.map((th, index) => {
+                        return (<th key={index} scope="col" className="px-6 py-3 whitespace-nowrap">{th}</th>)
+                    })
+                }
+                </tr>
+            </thead>
+            <tbody>
+                {
+                    data.map((data,index)=>{
+                        return(
+                            <tr key={index} className="border-b border-gray-700">
+                                {
+                                    Object.keys(data).map((key, index) => {
+                                        return(
+                                            <td key={index} className="px-6 py-4 whitespace-nowrap">{data[key]}</td>
+                                        )
+                                    })
+                                }
+                            </tr>
+                        )
+                    })
+                }
+            </tbody>
+        </table>
+        </div>
+        </div>
     )
 }
