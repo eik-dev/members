@@ -4,6 +4,7 @@ import Head from '@/app/ui/head';
 import Overlay from "@/app/ui/overlay";
 import Edit from "./Edit";
 import Delete from "./Delete";
+import New from "./New";
 import { UserPlusIcon, EllipsisVerticalIcon, PencilSquareIcon, TrashIcon } from "@heroicons/react/24/outline";
 
 export default function Page(){
@@ -41,7 +42,7 @@ export default function Page(){
         <div onClick={e=>{optionsAt>=0?setOptionsAt(-1):null}}>
         <Head Range={Range} Search={Search} Title={'Admin panel'} TH={TH} Sort={Sort} placeholder={'Search registerd admins'}>
             <span className="min-w-[2px] hidden md:block min-h-6 h-max bg-tertiary mx-4"></span>
-            <div className="bg-secondary text-white flex md:w-fit px-4 py-2 rounded-lg mx-auto w-2/3 items-center justify-center">
+            <div className="bg-secondary text-white flex md:w-fit px-4 py-2 rounded-lg mx-auto w-2/3 items-center justify-center" onClick={e=>setOverlay('new')}>
                 <UserPlusIcon className="w-6 h-6 mr-2"/>
                 <span className="font-semibold">New Admin</span>
             </div>
@@ -98,6 +99,7 @@ export default function Page(){
         <Overlay className={`${showOverlay?'block':'hidden'}`} >
             {overlay === 'edit' && <Edit control={setOverlay} />}
             {overlay === 'delete' && <Delete control={setOverlay} />}
+            {overlay === 'new' && <New control={setOverlay} />}
         </Overlay>
         </div>
     )
