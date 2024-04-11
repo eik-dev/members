@@ -23,7 +23,7 @@ export default function Layout({children}){
 
     return(
         <div className="flex h-lvh">
-        <div className={`h-[100%] fixed mt-4 bg-white ${showMenu?'-translate-x-0':'-translate-x-96'} lg:translate-x-0`}>
+        <div className={`h-[100%] fixed mt-4 bg-white ${showMenu?'-translate-x-0 z-10':'-translate-x-96'} lg:translate-x-0`}>
             <SideNav control={setShowMenu}/>
         </div>
         <div onClick={e=>{showMenu?setShowMenu(false):null}} className="w-[100%] lg:w-[80%] fixed right-0 md:mr-10 2xl:mr-20">
