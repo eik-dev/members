@@ -8,12 +8,19 @@ export default function Head({children, Range, Search, Title, TH, placeholder, S
     let [sort, setSort] = Sort;
     let [showDropDown, setShowDropDown] = useState(false);
     return(
-        <div className="mt-4">
+        <div className="mt-4 mx-2">
             <div className="flex justify-between my-6">
                 <h1 className="my-2 ml-2 md:ml-0 text-primary font-bold text-4xl">{Title}</h1>
                 <div className="md:flex items-center hidden">
                     <span className=" w-fit mr-2">1 - </span>
-                    <input className="w-8 text-center bg-tertiary bg-opacity-55" placeholder="20" type="number" name="" id="" />
+                    <input className="w-8 text-center bg-tertiary bg-opacity-55" placeholder={range} type="number" value={range} onChange={e=>{
+                        if (!isNaN(e.target.value)) {
+                            let value = parseInt(e.target.value);
+                            setRange(value)
+                        }else{
+                            setRange(range)
+                        }
+                    }} />
                     <span className="mx-1">of</span>
                     <span>{'100'}</span>
                     <button>

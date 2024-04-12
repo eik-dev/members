@@ -20,14 +20,15 @@ export default function Page(){
 
     useEffect(()=>{},[])
     useEffect(()=>{},[Sort[0]])
+    useEffect(()=>{console.log(`Pulling ${Range[0]} rows`)},[Range[0]])
 
     return(
         <div onClick={e=>{optionsAt>=0?setOptionsAt(-1):null}}>
         <Head Range={Range} Search={Search} Title={'User Logs'} TH={TH} Sort={Sort} placeholder={'Search user logs'}>
         </Head>
-        <div className="overflow-x-scroll mt-2 md:mt-10 mx-2 md:mx-0">
+        <div className="overflow-x-scroll mt-2 md:mt-10 mx-2 lg:mx-0 max-h-[60vh] 2xl:max-h-[67vh] overflow-y-scroll">
         <table className="w-full text-sm lg:text-xs 2xl:text-sm text-left table-auto">
-            <thead className="capitalize bg-tertiary bg-opacity-30 sticky top-0">
+            <thead className="capitalize bg-gray-100 sticky top-0">
                 <tr>
                 {
                     TH.map((th, index) => {
@@ -38,7 +39,7 @@ export default function Page(){
             </thead>
             <tbody>
                 {
-                    data.map((data,index)=>{
+                    data.slice(0,Range[0]).map((data,index)=>{
                         return(
                             <tr key={index} className="border-b border-gray-700">
                                 {
@@ -48,6 +49,15 @@ export default function Page(){
                                         )
                                     })
                                 }
+                            </tr>
+                        )
+                    })
+                }
+                {
+                    [...new Array((Range[0]-data.length>0)?Range[0]-data.length:0)].map((_,index)=>{
+                        return(
+                            <tr key={index} className="border-b border-gray-700">
+                                <td className="py-6"></td>
                             </tr>
                         )
                     })

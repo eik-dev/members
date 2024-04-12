@@ -11,6 +11,19 @@ export default function SideNav({control}){
 
 
     let links = [
+
+        {
+            name: "Home",
+            icon: HomeIcon,
+            href: "/home",
+            roles:['Admin']
+        },
+        {
+            name: "Profile",
+            icon: UserCircleIcon,
+            href: "/profile",
+            roles:['Admin']
+        },
         {
             name: "Dashboard",
             icon: RectangleGroupIcon,
@@ -47,18 +60,6 @@ export default function SideNav({control}){
             href: "/certificates",
             roles:['Admin']
         },
-        {
-            name: "Home",
-            icon: HomeIcon,
-            href: "/home",
-            roles:['Admin']
-        },
-        {
-            name: "Profile",
-            icon: UserCircleIcon,
-            href: "/profile",
-            roles:['Admin']
-        }
     ]
     return(<>
     <img className="w-48" src="/transparent-logo.svg" alt="" />
@@ -69,7 +70,7 @@ export default function SideNav({control}){
                     <Link key={index} href={link.href} onClick={e=>control(false)}>
                         <div className={`flex items-center p-4 ${pathname === link.href ? ' border-l-8 border-primary text-primary bg-tertiary bg-opacity-10' : ''}`}>
                             <link.icon className="w-6 h-8 mr-2"/>
-                            {link.name}
+                            <span className="text-sm">{link.name}</span>
                         </div>
                     </Link>
                 )

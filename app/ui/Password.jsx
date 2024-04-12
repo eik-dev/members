@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { XMarkIcon, UserPlusIcon } from "@heroicons/react/24/outline"
+import { XMarkIcon } from "@heroicons/react/24/outline"
 
 export default function ChangePassword({control}){
     let [fullName, setFullName] = useState('');

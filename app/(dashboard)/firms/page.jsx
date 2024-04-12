@@ -1,6 +1,8 @@
 'use client'
 import { useState, useEffect } from "react"
 import Head from '@/app/ui/head';
+import Details from "./Details";
+import Delete from "./Delete";
 import Overlay from "@/app/ui/overlay";
 import { EllipsisVerticalIcon, PencilSquareIcon, TrashIcon, CheckIcon, XMarkIcon } from "@heroicons/react/24/outline";
 
@@ -26,6 +28,7 @@ export default function Page(){
 
     useEffect(()=>{},[])
     useEffect(()=>{},[Sort[0]])
+    useEffect(()=>{console.log(`Pulling ${Range[0]} rows`)},[Range[0]])
     useEffect(()=>{
         console.clear();
         console.log('clicked')
@@ -44,9 +47,9 @@ export default function Page(){
         <div onClick={e=>{optionsAt>=0?setOptionsAt(-1):null}}>
         <Head Range={Range} Search={Search} Title={'Firms'} TH={TH} Sort={Sort} placeholder={'Search registered firms'}>
         </Head>
-        <div className="overflow-x-scroll mt-2 md:mt-10 mx-2 md:mx-0">
+        <div className="overflow-x-scroll mt-2 md:mt-10 mx-2 lg:mx-0 max-h-96 md:max-h-[65vh] overflow-y-scroll">
         <table className="w-full text-sm lg:text-xs 2xl:text-sm text-left table-auto">
-            <thead className="capitalize bg-tertiary bg-opacity-30 sticky top-0">
+            <thead className="capitalize bg-gray-100 sticky top-0">
                 <tr>
                 {
                     TH.map((th, index) => {
@@ -58,7 +61,7 @@ export default function Page(){
             </thead>
             <tbody>
                 {
-                    data.map((data,index)=>{
+                    data.slice(0,Range[0]).map((data,index)=>{
                         return(
                             <tr key={index} className="border-b border-gray-700">
                                 {
@@ -83,13 +86,13 @@ export default function Page(){
                                     {
                                         optionsAt === index &&
                                         <div className={`flex absolute z-50 right-12 md:right-44 bg-white flex-col gap-y-4 ${true?'block':'hidden'}`}>
-                                            <div className="flex gap-x-2" onClick={e=>setOverlay('edit')}>
+                                            <div className="flex gap-x-2" onClick={e=>setOverlay('details')}>
                                                 <PencilSquareIcon className="w-6 h-6"/>
                                                 Edit details
                                             </div>
-                                            <div className="flex gap-x-2" onClick={e=>setOverlay('delete')}>
+                                            <div className="flex gap-x-2 text-warning" onClick={e=>setOverlay('delete')}>
                                                 <TrashIcon className="w-6 h-6"/>
-                                                Delete admin
+                                                Delete firm
                                             </div>
                                         </div>
                                     }
@@ -98,10 +101,21 @@ export default function Page(){
                         )
                     })
                 }
+                {
+                    [...new Array((Range[0]-data.length>0)?Range[0]-data.length:0)].map((_,index)=>{
+                        return(
+                            <tr key={index} className="border-b border-gray-700">
+                                <td className="py-6"></td>
+                            </tr>
+                        )
+                    })
+                }
             </tbody>
         </table>
         </div>
         <Overlay className={`${showOverlay?'block':'hidden'}`} >
+            {overlay=='details'?<Details control={setOverlay} />:null}
+            {overlay=='delete'?<Delete control={setOverlay} />:null}
         </Overlay>
         </div>
     )
