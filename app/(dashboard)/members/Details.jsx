@@ -63,7 +63,7 @@ export default function Details({control}){
                     <input disabled={!edit} className={`px-4 w-full ${edit?'text-black':'text-gray-600'}`} type="text" placeholder="Full name" value={firm} onChange={e=>setFirm(e.target.value)} />
                 </div>
                 <div className="border-2 rounded-md focus-within:border-primary text-gray-400 focus-within:text-primary py-2 relative h-fit">
-                    <span className="text-xs absolute -top-2 left-2 bg-white px-2 focus-within:text-primary font-semibold">Firm of Expert's PIN Number</span>
+                    <span className="text-xs absolute -top-2 left-2 bg-white px-2 focus-within:text-primary font-semibold">Firm of Experts PIN Number</span>
                     <input disabled={!edit} className={`px-4 w-full ${edit?'text-black':'text-gray-600'}`} type="text" placeholder="Full name" value={pin} onChange={e=>setPin(e.target.value)} />
                 </div>
                 <div className="border-2 rounded-md focus-within:border-primary text-gray-400 focus-within:text-primary py-2 relative h-fit">
