@@ -107,7 +107,7 @@ export default function Page({id}){
                     </div>
                     <div className="flex gap-4 justify-between">
                         <span className="font-bold whitespace-nowrap w-1/2">Firm of Experts:</span>
-                        <span className="w-1/2">"</span>
+                        <span className="w-1/2">*</span>
                     </div>
                     <div className="flex gap-4 justify-between">
                         <span className="font-bold whitespace-nowrap w-1/2">Phone Number:</span>
@@ -115,7 +115,7 @@ export default function Page({id}){
                     </div>
                     <div className="flex gap-4 justify-between">
                         <span className="font-bold whitespace-nowrap w-1/2">Firm of Experts PIN:</span>
-                        <span className="w-1/2">"</span>
+                        <span className="w-1/2">*</span>
                     </div>
                     <div className="flex gap-4 justify-between">
                         <span className="font-bold whitespace-nowrap w-1/2">Email:</span>
@@ -146,7 +146,7 @@ export default function Page({id}){
                 <span className="font-bold w-fit">Start & Finish Date:</span>
                 <span className="md:whitespace-nowrap">8th March, 2021 - 17th March, 2023</span>
                 <span className="font-bold w-fit">Certification</span>
-                <span className="md:whitespace-nowrap">Bachelor's Degree in Environmental Studies and Community Development (Second Class Honours)</span>
+                <span className="md:whitespace-nowrap">Bachelors Degree in Environmental Studies and Community Development (Second Class Honours)</span>
             </div>
         </section>
         <section>
@@ -159,7 +159,7 @@ export default function Page({id}){
                 <span className="font-bold w-fit">Location</span>
                 <span className="md:whitespace-nowrap">Nairobi, Kenya</span>
                 <span className="font-bold w-fit">Specialization</span>
-                <span className="md:whitespace-nowrap">Bachelor's Degree in Environmental Studies and Community Development (Second Class Honours)</span>
+                <span className="md:whitespace-nowrap">Bachelors Degree in Environmental Studies and Community Development (Second Class Honours)</span>
             </div>
         </section>
         <section>
