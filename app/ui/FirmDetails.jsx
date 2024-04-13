@@ -3,17 +3,12 @@ import Image from "next/image";
 import { XMarkIcon, PencilSquareIcon } from "@heroicons/react/24/outline"
 import { Stalinist_One } from "next/font/google";
 
-export default function Details({control}){
-    let [fullName, setFullName] = useState('Sifa Kilomena');
+export default function FirmDetails({control}){
     let [email, setEmail] = useState('sifa@email.com');
-    let [username, setUsername] = useState('');
-    let [category, setCategory] = useState('Associate');
     let [nema, setNema] = useState('NEMA/IAE/NA/12345');
     let [certificate, setCertificate] = useState('EIK/2/1234');
-    let [firm, setFirm] = useState('"');
-    let [pin, setPin] = useState('"');
-    let [nationality, setNationality] = useState('Kenyan');
-    let [id, setId] = useState('21315967');
+    let [firm, setFirm] = useState('Sustainable Earth Ltd.');
+    let [pin, setPin] = useState('A0123456');
     let [postal, setPostal] = useState('987654 - 00100');
     let [town, setTown] = useState('Nairobi');
     let [county, setCounty] = useState('Nairobi');
@@ -32,7 +27,7 @@ export default function Details({control}){
         <div className="flex flex-col justify-center gap-y-8 gap-x-10 md:flex-row">
             <div className="w-32 md:w-64 h-fit relative">
             <Image
-                src="/profile.png"
+                src="/profile_firm.png"
                 width={500}
                 height={500}
                 alt="Picture of the author"
@@ -43,12 +38,8 @@ export default function Details({control}){
             </div>
             <div className="grid md:grid-cols-2 gap-4 md:gap-6 w-full">
                 <div className="border-2 rounded-md focus-within:border-primary text-gray-400 focus-within:text-primary py-2 relative h-fit">
-                    <span className="text-xs absolute -top-2 left-2 bg-white px-2 focus-within:text-primary font-semibold">Full name</span>
-                    <input disabled={!edit} className={`px-4 w-full ${edit?'text-black':'text-gray-600'}`} type="text" placeholder="Full name" value={fullName} onChange={e=>setFullName(e.target.value)} />
-                </div>
-                <div className="border-2 rounded-md focus-within:border-primary text-gray-400 focus-within:text-primary py-2 relative h-fit">
-                    <span className="text-xs absolute -top-2 left-2 bg-white px-2 focus-within:text-primary font-semibold">Category</span>
-                    <input disabled={!edit} className={`px-4 w-full ${edit?'text-black':'text-gray-600'}`} type="text" placeholder="Full name" value={category} onChange={e=>setCategory(e.target.value)} />
+                    <span className="text-xs absolute -top-2 left-2 bg-white px-2 focus-within:text-primary font-semibold">Firm of Experts</span>
+                    <input disabled={!edit} className={`px-4 w-full ${edit?'text-black':'text-gray-600'}`} type="text" placeholder="Full name" value={firm} onChange={e=>setFirm(e.target.value)} />
                 </div>
                 <div className="border-2 rounded-md focus-within:border-primary text-gray-400 focus-within:text-primary py-2 relative h-fit">
                     <span className="text-xs absolute -top-2 left-2 bg-white px-2 focus-within:text-primary font-semibold">NEMA Registration Number</span>
@@ -59,20 +50,8 @@ export default function Details({control}){
                     <input disabled={!edit} className={`px-4 w-full ${edit?'text-black':'text-gray-600'}`} type="text" placeholder="Full name" value={certificate} onChange={e=>setCertificate(e.target.value)} />
                 </div>
                 <div className="border-2 rounded-md focus-within:border-primary text-gray-400 focus-within:text-primary py-2 relative h-fit">
-                    <span className="text-xs absolute -top-2 left-2 bg-white px-2 focus-within:text-primary font-semibold">Firm of Experts</span>
-                    <input disabled={!edit} className={`px-4 w-full ${edit?'text-black':'text-gray-600'}`} type="text" placeholder="Full name" value={firm} onChange={e=>setFirm(e.target.value)} />
-                </div>
-                <div className="border-2 rounded-md focus-within:border-primary text-gray-400 focus-within:text-primary py-2 relative h-fit">
-                    <span className="text-xs absolute -top-2 left-2 bg-white px-2 focus-within:text-primary font-semibold">Firm of Experts PIN Number</span>
+                    <span className="text-xs absolute -top-2 left-2 bg-white px-2 focus-within:text-primary font-semibold">Firm PIN Number</span>
                     <input disabled={!edit} className={`px-4 w-full ${edit?'text-black':'text-gray-600'}`} type="text" placeholder="Full name" value={pin} onChange={e=>setPin(e.target.value)} />
-                </div>
-                <div className="border-2 rounded-md focus-within:border-primary text-gray-400 focus-within:text-primary py-2 relative h-fit">
-                    <span className="text-xs absolute -top-2 left-2 bg-white px-2 focus-within:text-primary font-semibold">Nationality</span>
-                    <input disabled={!edit} className={`px-4 w-full ${edit?'text-black':'text-gray-600'}`} type="text" placeholder="Full name" value={nationality} onChange={e=>setNationality(e.target.value)} />
-                </div>
-                <div className="border-2 rounded-md focus-within:border-primary text-gray-400 focus-within:text-primary py-2 relative h-fit">
-                    <span className="text-xs absolute -top-2 left-2 bg-white px-2 focus-within:text-primary font-semibold">Identification Number</span>
-                    <input disabled={!edit} className={`px-4 w-full ${edit?'text-black':'text-gray-600'}`} type="text" placeholder="Full name" value={id} onChange={e=>setId(e.target.value)} />
                 </div>
                 <div className="border-2 rounded-md focus-within:border-primary text-gray-400 focus-within:text-primary py-2 relative h-fit">
                     <span className="text-xs absolute -top-2 left-2 bg-white px-2 focus-within:text-primary font-semibold">Postal Address</span>

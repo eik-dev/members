@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react"
 import Head from '@/app/ui/head';
 import Overlay from "@/app/ui/overlay";
-import Details from "./Details";
+import MemberDetails from "@/app/ui/MemberDetails";
 import Delete from "./Delete";
 import { EllipsisVerticalIcon, UserCircleIcon, TrashIcon, CheckIcon, XMarkIcon } from "@heroicons/react/24/outline";
 
@@ -113,7 +113,7 @@ export default function Page(){
         </table>
         </div>
         <Overlay className={`${showOverlay?'block':'hidden'}`} >
-            {overlay=='details'?<Details control={setOverlay} />:null}
+            {overlay=='details'?<MemberDetails control={setOverlay} />:null}
             {overlay=='delete'?<Delete control={setOverlay} />:null}
         </Overlay>
         </div>
