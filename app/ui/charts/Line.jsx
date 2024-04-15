@@ -76,7 +76,7 @@ const data = {
 };
 
   return(
-        <div className='h-64'>
+        <div className='h-72 lg:h-[20vh] 2xl:h-[25vh] mt-4 2xl:mt-0'>
           <Top title='Total Revenue' />
           <Line options={options} data={data} />
         </div>

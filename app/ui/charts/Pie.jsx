@@ -39,9 +39,27 @@ export default function Py() {
   };
 
   return (
-      <div className='h-80'>
+      <div className='mt-4 md:mt-0 md:w-1/2 md:h-[30vh] h-80'>
         <Top title='Print Certificate Requests' />
-        <Pie data={data} options={options} />
+        <div className='flex flex-col md:flex-row gap-x-0'>
+          <div><Pie data={data} options={options} /></div>
+          <div className='lg:text-xs 2xl:text-sm'>
+            <div className='flex'>
+              <div className='w-5 h-5 rounded-full bg-secondary mt-2 mr-2'></div>
+              <div className='flex flex-col gap-y-1'>
+                <span>Approved</span>
+                <span>76%</span>
+              </div>
+            </div>
+            <div className='flex mt-4'>
+              <div className='w-5 h-5 rounded-full bg-[#C64130]/20 mt-2 mr-2'></div>
+              <div className='flex flex-col gap-y-1'>
+                <span>Rejected</span>
+                <span>76%</span>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
   );
 }

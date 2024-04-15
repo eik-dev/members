@@ -30,14 +30,14 @@ export default function Page(){
     }
     return(
         <>
-        <h1 className="my-2 ml-2 md:ml-0 text-primary font-bold text-4xl">Dashboard</h1>
-        <div className="mb-8 overflow-x-scroll w-[100%] px-4">
+        <h1 className="my-2 ml-2 md:ml-0 text-primary font-bold text-2xl 2xl:text-4xl">Dashboard</h1>
+        <div className="mb-0 overflow-x-scroll w-[100%] px-4 ">
             <div className="flex w-fit gap-10">
                 <div className="bg-tertiary bg-opacity-15 px-6 py-4 rounded-md w-80">
                     <div className="flex justify-between mb-4">
                         <div>
-                            <div className="mb-4">Total Revenue</div>
-                            <div className="text-2xl font-bold">KES {data.revenue.quantity}</div>
+                            <div className="mb-4 lg:text-xs 2xl:text-base">Total Revenue</div>
+                            <div className="text-2xl font-bold lg:text-xl 2xl:text-2xl">KES {data.revenue.quantity}</div>
                         </div>
                         <div className="flex bg-primary bg-opacity-25 px-4 mb-4 items-center rounded-lg">
                             <img src="/icons/bag.svg" className="w-8 h-8 block" alt="" />
@@ -53,8 +53,8 @@ export default function Page(){
                 <div className="bg-tertiary bg-opacity-15 px-6 py-4 rounded-md w-80">
                     <div className="flex justify-between mb-4">
                         <div>
-                            <div className="mb-4">Total Logins</div>
-                            <div className="text-2xl font-bold">{data.logins.quantity}</div>
+                            <div className="mb-4 lg:text-xs 2xl:text-base">Total Logins</div>
+                            <div className="text-2xl font-bold lg:text-xl 2xl:text-2xl">{data.logins.quantity}</div>
                         </div>
                         <div className="flex bg-primary bg-opacity-25 px-4 mb-4 items-center rounded-lg">
                             <img src="/icons/login.svg" className="w-8 h-8 block" alt="" />
@@ -70,11 +70,11 @@ export default function Page(){
                 <div className="bg-tertiary bg-opacity-15 px-6 py-4 rounded-md w-fit">
                     <div className="flex justify-between mb-4">
                         <div>
-                            <div className="mb-4">Print Certificate Requests</div>
-                            <div className="text-2xl font-bold">{data.print.quantity}</div>
+                            <div className="mb-4 lg:text-xs 2xl:text-base">Print Certificate Requests</div>
+                            <div className="text-2xl font-bold lg:text-xl 2xl:text-2xl">{data.print.quantity}</div>
                         </div>
-                        <div className="flex bg-primary ml-4 bg-opacity-25 px-4 mb-4 items-center rounded-lg">
-                            <img src="/icons/printer.svg" className="w-8 h-8 block" alt="" />
+                        <div className="flex bg-primary ml-4 bg-opacity-25 px-4 mb-4 items-center rounded-lg h-14">
+                            <img src="/icons/printer.svg" className="h-6 w-6 2xl:w-8 2xl:h-8 block" alt="" />
                         </div>
                     </div>
                     <div className="flex text-sm">
@@ -87,7 +87,7 @@ export default function Page(){
             </div>
         </div>
         <Lyn/>
-        <div className="flex flex-col md:flex-row gap-y-10">
+        <div className="flex flex-col md:flex-row gap-y-10 gap-x-10 justify-between mt-16">
             <Bur/>
             <Py/>
         </div>

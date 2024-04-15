@@ -77,7 +77,7 @@ export default function SideNav({control}){
             }
         })
     }
-        <div className="flex items-center text-warning absolute bottom-10 md:bottom-20 ml-4">
+        <div className="flex items-center text-warning absolute bottom-10 2xl:bottom-20 ml-4">
             <ArrowLeftEndOnRectangleIcon className="w-6 h-8 mr-2"/>
             Logout
         </div>

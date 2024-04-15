@@ -27,7 +27,7 @@ export default function Layout({children}){
                 <SideNav control={setShowMenu}/>
             </div>
             <div onClick={e=>{showMenu?setShowMenu(false):null}} className="w-[100%] lg:w-[80%] absolute right-0 lg:mr-10 2xl:mr-20 overflow-y-scroll">
-                <header className="flex justify-between right-0 mt-4 md:my-6 md:mb-20">
+                <header className="flex justify-between right-0 mt-4 md:my-6 md:mb-12 2xl:mb-20">
                     <div className="ml-4">
                         <Bars3Icon onClick={e=>setShowMenu(true)} className="w-8 h-8 lg:hidden block"/>
                     </div>
@@ -35,7 +35,7 @@ export default function Layout({children}){
                         <BellIcon className="w-6 h-6"/>
                         <span className="min-w-[2px] min-h-6 h-max bg-tertiary mx-4"></span>
                         <button className="flex items-center" onClick={e=>setShowOptions(!showOptions)}>
-                            <span className="mx-4">{User[0].role}</span>
+                            <span className="mx-4 lg:text-xs 2xl:text-base">{User[0].role}</span>
                             <ChevronDownIcon className="w-6 h-6"/>
                         </button>
                     </div>

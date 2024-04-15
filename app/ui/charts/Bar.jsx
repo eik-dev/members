@@ -67,7 +67,7 @@ export default function Bur() {
   };
 
   return (
-    <div className='h-80'>
+    <div className='md:h-[30vh] md:w-1/3 h-80'>
       <Top title='Site traffic' />
       <Bar options={options} data={data} />
     </div>
