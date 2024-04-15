@@ -43,8 +43,8 @@ export default function Page(){
         <div onClick={e=>{optionsAt>=0?setOptionsAt(-1):null}}>
         <Head Range={Range} Search={Search} Title={'Admin panel'} TH={TH} Sort={Sort} placeholder={'Search registerd admins'}>
             <span className="min-w-[2px] hidden md:block min-h-6 h-max bg-tertiary mx-4"></span>
-            <div className="bg-secondary text-white flex md:w-fit px-4 py-2 rounded-lg mx-auto w-2/3 items-center justify-center" onClick={e=>setOverlay('new')}>
-                <UserPlusIcon className="w-6 h-6 mr-2"/>
+            <div className="bg-secondary text-white flex md:w-fit px-4 py-2 rounded-lg mx-auto w-2/3 items-center justify-center text-xs 2xl:text-base" onClick={e=>setOverlay('new')}>
+                <UserPlusIcon className="w-4 h-4 2xl:w-6 2xl:h-6 mr-2"/>
                 <span className="font-semibold">New Admin</span>
             </div>
         </Head>

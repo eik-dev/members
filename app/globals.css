@@ -13,6 +13,9 @@ input:focus, textarea:focus{
 input{
   background: none;
 }
+option, option:focus, option:hover, select, select:focus, select:hover, select::-ms-expand{
+  background: none;
+}
 
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
