@@ -1,5 +1,6 @@
 'use client'
 import { useEffect, useState } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { PDFDocument, rgb } from 'pdf-lib';
 import fontkit from '@pdf-lib/fontkit'
 import QRCode from 'qrcode'
@@ -89,10 +90,10 @@ async function downloadPDF(e,data){
 }
 
 export default function Page() {
+    let params = useSearchParams();
+    let id = params.get('id');
     let [data, setData] = useState({});
     useEffect(()=>{
-        const urlParams = new URLSearchParams(window.location.search);
-        const id = urlParams.get('id');
         setData({
             id: id,
             name: 'frida nyiva mutui',
