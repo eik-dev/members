@@ -1,11 +1,15 @@
 'use client'
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 
 export default function Page() {
     let params = useSearchParams();
     let id = params.get('id');
-    let [data, setData] = useState({});
+    let [data, setData] = useState({
+        name: '',
+        member: '',
+        date:''
+    });
 
     useEffect(()=>{
         setData({
@@ -17,9 +21,11 @@ export default function Page() {
     },[])
 
     return (
-    <div>
-        <h1>Download Receipt</h1>
-        <p>Download your receipt here. ID = {data.id}</p>
-    </div>
+    <Suspense>
+        <div>
+            <h1>Download Receipt</h1>
+            <p>Download your receipt here. ID = {id}</p>
+        </div>
+    </Suspense>
     );
 }
