@@ -1,16 +1,8 @@
 'use client'
+import { useEffect, useState } from 'react';
 import { PDFDocument, rgb } from 'pdf-lib';
 import fontkit from '@pdf-lib/fontkit'
 import QRCode from 'qrcode'
-
-function base64ToArrayBuffer(base64) {
-    var binaryString = atob(base64);
-    var bytes = new Uint8Array(binaryString.length);
-    for (var i = 0; i < binaryString.length; i++) {
-        bytes[i] = binaryString.charCodeAt(i);
-    }
-    return bytes.buffer;
-}
 
 async function downloadPDF(e,data){
     e.preventDefault();
@@ -97,19 +89,22 @@ async function downloadPDF(e,data){
 }
 
 export default function Page() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const id = urlParams.get('id');
-    let data = {
-        id: id,
-        name: 'frida nyiva mutui',
-        member: 'EIK/1/4247',
-        date:'08/04/2024'
-    }
-
+    let [data, setData] = useState({});
+    useEffect(()=>{
+        const urlParams = new URLSearchParams(window.location.search);
+        const id = urlParams.get('id');
+        setData({
+            id: id,
+            name: 'frida nyiva mutui',
+            member: 'EIK/1/4247',
+            date:'08/04/2024'
+        })
+    },[])
+    
     return (
     <div className='mx-2'>
         <h1>Download Certificate</h1>
-        <h3>Certificate {id} <br /> issued to {data.name}</h3>
+        <h3>Certificate No: {data.id} <br /> issued to {data.name}</h3>
             <div>Member Number: {data.member}</div>
             <div>Date issued: {data.date}</div>
         <button className=' px-4 py-2 bg-secondary text-white my-4' onClick={e=>downloadPDF(e,data)}>Download</button>
