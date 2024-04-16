@@ -55,7 +55,7 @@ export default function Page({id}){
         <>
         <header className="flex flex-col gap-y-2 md:flex-row md:items-center md:justify-between ml-2 my-4">
             <h1 className="my-2 ml-2 md:ml-0 text-primary font-bold text-4xl">Profile</h1>
-            <div className="flex items-center h-fit bg-secondary w-fit text-white font-semibold px-4 py-2 rounded-md justify-between text-sm">
+            <div className="flex items-center h-fit bg-secondary w-fit text-white font-semibold px-4 py-2 rounded-md justify-between text-sm" onClick={e=>{window.location.href = '/download/certificate?id='+'12345'}}>
                 <PrinterIcon className="h-6 w-6 mr-2" />
                 Print Certificate Request
             </div>
