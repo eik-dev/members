@@ -5,7 +5,11 @@ import { useSearchParams } from "next/navigation";
 export default function Page() {
     let params = useSearchParams();
     let id = params.get('id');
-    let [data, setData] = useState({});
+    let [data, setData] = useState({
+        name: '',
+        member: '',
+        date:''
+    });
 
     useEffect(()=>{
         setData({
@@ -20,7 +24,7 @@ export default function Page() {
     <Suspense>
         <div>
             <h1>Download Receipt</h1>
-            <p>Download your receipt here. ID = {data.id}</p>
+            <p>Download your receipt here. ID = {id}</p>
         </div>
     </Suspense>
     );

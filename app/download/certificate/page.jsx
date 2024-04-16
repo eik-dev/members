@@ -92,7 +92,11 @@ async function downloadPDF(e,data){
 export default function Page() {
     let params = useSearchParams();
     let id = params.get('id');
-    let [data, setData] = useState({});
+    let [data, setData] = useState({
+        name: '',
+        member: '',
+        date:''
+    });
     useEffect(()=>{
         setData({
             id: id,
@@ -106,7 +110,7 @@ export default function Page() {
     <Suspense>
         <div className='mx-2'>
             <h1>Download Certificate</h1>
-            <h3>Certificate No: {data.id} <br /> issued to {data.name}</h3>
+            <h3>Certificate No: {id} <br /> issued to {data.name}</h3>
                 <div>Member Number: {data.member}</div>
                 <div>Date issued: {data.date}</div>
             <button className=' px-4 py-2 bg-secondary text-white my-4' onClick={e=>downloadPDF(e,data)}>Download</button>
