@@ -9,7 +9,7 @@ async function downloadPDF(e,data){
     e.preventDefault();
     console.log('Downloading...');
 
-    let pngImageBytes = await fetch('/transparent-logo.png').then(res =>res.arrayBuffer()).catch(err => console.error(err));
+    let pngImageBytes = await fetch('/certificates/transparent-logo.png').then(res =>res.arrayBuffer()).catch(err => console.error(err));
 
     let qrImageBytes = await fetch(await QRCode.toDataURL(`https://members-sooty.vercel.app/verify?id=${data.id}`)).then(res => res.arrayBuffer()).catch(err => console.error(err));
 
