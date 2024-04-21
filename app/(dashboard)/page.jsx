@@ -29,7 +29,7 @@ export default function Page(){
         window.location.href = '/profile'
     }
     useEffect(()=>{
-        fetch('https://api.eik.co.ke/api/version/api/summary').then(res=>res.json()).then(data=>{
+        fetch('https://api.eik.co.ke/api/summary').then(res=>res.json()).then(data=>{
             setData(data)
         })
         console.log(data)
