@@ -2,6 +2,7 @@
 import { Scanner } from '@yudiel/react-qr-scanner';
 import { useEffect, useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
+
 export default function Page(){
     let params = useSearchParams();
     let id = params.get('id');
@@ -10,18 +11,17 @@ export default function Page(){
         member: '',
         date:''
     });
-    let [link, setLink] = useState('');
 
     useEffect(()=>{
-        setData({
-            name: 'frida nyiva mutui',
-            member: 'EIK/1/4247',
-            date:'08/04/2024'
-        })
+        if (id != null)
+            fetch(`${process.env.NEXT_PUBLIC_API_URL}/verify?id=${id}`).then(res=>res.json()).then(data=>{
+                setData(data)
+                console.log(data)
+            })
     },[])
 
     let verify = result=>{
-        if (result.includes('https://members-sooty.vercel.app/verify?id='))
+        if (result.includes('https://portal.eik.co.ke/verify?id='))
             window.location.href = result
         else
             alert('Invalid QR code')
@@ -32,7 +32,7 @@ export default function Page(){
             {
                 id == null?
                 <>
-                <h3>Scan QR Code</h3>
+                <h3 className='my-4 text-center text-xl'>Scan QR Code</h3>
                 <Scanner
                     onResult={(text, result) => verify(text)}
                     onError={(error) => console.log(error?.message)}

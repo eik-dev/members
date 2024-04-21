@@ -29,7 +29,8 @@ export default function Page(){
         window.location.href = '/profile'
     }
     useEffect(()=>{
-        fetch('https://api.eik.co.ke/api/summary').then(res=>res.json()).then(data=>{
+        console.log('URL: == ', process.env.NEXT_PUBLIC_API_URL)
+        fetch(`${process.env.NEXT_PUBLIC_API_URL}/summary`).then(res=>res.json()).then(data=>{
             setData(data)
         })
         console.log(data)

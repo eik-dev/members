@@ -11,7 +11,7 @@ async function downloadPDF(e,data){
 
     let pngImageBytes = await fetch('/certificates/transparent-logo.png').then(res =>res.arrayBuffer()).catch(err => console.error(err));
 
-    let qrImageBytes = await fetch(await QRCode.toDataURL(`https://members-sooty.vercel.app/verify?id=${data.id}`)).then(res => res.arrayBuffer()).catch(err => console.error(err));
+    let qrImageBytes = await fetch(await QRCode.toDataURL(`https://portal.eik.co.ke/verify?id=${data.id}`)).then(res => res.arrayBuffer()).catch(err => console.error(err));
 
     const pdfDoc = await PDFDocument.create()
     pdfDoc.registerFontkit(fontkit)
@@ -98,11 +98,8 @@ export default function Page() {
         date:''
     });
     useEffect(()=>{
-        setData({
-            id: id,
-            name: 'frida nyiva mutui',
-            member: 'EIK/1/4247',
-            date:'08/04/2024'
+        fetch(`${process.env.NEXT_PUBLIC_API_URL}/download/certificate?id=${id}`).then(res=>res.json()).then(data=>{
+            setData(data)
         })
     },[])
     
