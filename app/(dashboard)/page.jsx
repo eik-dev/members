@@ -8,26 +8,32 @@ import { ArrowTrendingUpIcon, ArrowTrendingDownIcon } from "@heroicons/react/24/
 
 export default function Page(){
     let {User} = useContext(Context)
+    let [data, setData] = useState({
+        revenue:{
+            quantity: '0',
+            trend: false,
+            rate: 0
+        },
+        logins:{
+            quantity: 0,
+            trend: false,
+            rate: 0
+        },print:{
+            quantity: 0,
+            trend: false,
+            rate: 0
+        }
+    })
     // if user role is not admin redirect to profile page
     if (User[0].role != 'Admin') {
         window.location.href = '/profile'
     }
-    let data = {
-        revenue:{
-            quantity: '78,358',
-            trend: true,
-            rate: 8.5
-        },
-        logins:{
-            quantity: 38,
-            trend: false,
-            rate: 12.5
-        },print:{
-            quantity: 23,
-            trend: true,
-            rate: 38.5
-        }
-    }
+    useEffect(()=>{
+        fetch('https://api.eik.co.ke/api/version/api/summary').then(res=>res.json()).then(data=>{
+            setData(data)
+        })
+        console.log(data)
+    },[])
     return(
         <>
         <h1 className="my-2 ml-2 md:ml-0 text-primary font-bold text-2xl 2xl:text-4xl">Dashboard</h1>
