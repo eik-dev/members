@@ -1,4 +1,5 @@
 'use client'
+import { useState, useEffect } from 'react';
 import { useFlutterwave, closePaymentModal } from 'flutterwave-react-v3';
 
 export default function Page(){
@@ -21,6 +22,14 @@ export default function Page(){
         },
     };
     const handleFlutterPayment = useFlutterwave(config);
+
+    let [data, setData] = useState([])
+
+    useEffect(() => {
+        fetch(`${process.env.NEXT_PUBLIC_API_URL}/books`).then(res=>res.json()).then(data=>{
+            setData(data)
+        })
+    }, [])
     
     return(
         <div>
@@ -42,6 +51,16 @@ export default function Page(){
             >
                 Pay
             </button>
+
+            <h2 className='my-6'>Test DB</h2>
+            {
+                data.map((item, index) => (
+                    <div key={index}>
+                        <h3>{item.name}</h3>
+                        <p>{item.author}</p>
+                    </div>
+                ))
+            }
         </div>
     )
 }
