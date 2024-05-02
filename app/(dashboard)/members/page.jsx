@@ -29,8 +29,6 @@ export default function Page(){
     useEffect(()=>{},[Sort[0]])
     useEffect(()=>{console.log(`Pulling ${Range[0]} rows`)},[Range[0]])
     useEffect(()=>{
-        console.clear();
-        console.log('clicked')
         if (overlay=='') setShowOverlay(false)
         else setShowOverlay(true)
     },[overlay])

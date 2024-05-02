@@ -11,8 +11,6 @@ function SectionHead({section}){
     let [overlay, setOverlay] = useState('');
 
     useEffect(()=>{
-        console.clear();
-        console.log('clicked')
         if (overlay=='') setShowOverlay(false)
         else setShowOverlay(true)
     },[overlay])

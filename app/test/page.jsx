@@ -1,6 +1,7 @@
 'use client'
 import { useState, useEffect } from 'react';
 import { useFlutterwave, closePaymentModal } from 'flutterwave-react-v3';
+import File from '@/app/ui/File';
 
 export default function Page(){
     let amount = 10;
@@ -24,16 +25,31 @@ export default function Page(){
     const handleFlutterPayment = useFlutterwave(config);
 
     let [data, setData] = useState([])
+    let [files, setFiles] = useState([])
 
     useEffect(() => {
         fetch(`${process.env.NEXT_PUBLIC_API_URL}/books`).then(res=>res.json()).then(data=>{
             setData(data)
         })
+        fetch(`${process.env.NEXT_PUBLIC_API_URL}/files`).then(res=>res.json()).then(data=>{
+            setFiles(data)
+        })
     }, [])
     
     return(
         <div>
+            <h1>File upload</h1>
+            <File destination='docs' />
+            <h1>File download</h1>
+            {
+                files.map((file, index) => (
+                    <div key={index}>
+                        <a href={`${file}`} target='blank' download>{file}</a>
+                    </div>
+                ))
+            }
             <h1>Flutter wave test payment</h1>
+            <button onClick={e=>setControl(true)}>Upload</button>
             <p>You will pay {amount}</p>
             <button
                 className='bg-primary py-2 px-4 text-white rounded-lg font-semibold ml-2 my-4 w-24'
