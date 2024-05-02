@@ -5,18 +5,31 @@ import { Context } from "@/app/lib/ContextProvider"
 import { Bars3Icon, BellIcon, ChevronDownIcon, LockClosedIcon, ArrowLeftEndOnRectangleIcon } from "@heroicons/react/24/outline";
 import Overlay from "@/app/ui/overlay";
 import ChangePassword from "../ui/Password";
+import { useRouter } from "next/navigation";
 
-export default function Layout({children}){
+export default async function Layout({children}){
     let [showMenu, setShowMenu] = useState(false);
     let {User} = useContext(Context);
+    let [user, setUser] = User;
 
     let [showOverlay, setShowOverlay] = useState(false);
     let [overlay, setOverlay] = useState('');
     let [showOptions, setShowOptions] = useState(false);
+    let router = useRouter();
 
     useEffect(()=>{
-        console.clear();
-        console.log('clicked')
+        if (Object.keys(user).length === 0){
+            router.push('/login')
+        }
+        console.log(user);
+    },[])
+    useEffect(()=>{
+        if (Object.keys(user).length === 0){
+            router.push('/login')
+        }
+        console.log(user);
+    },[user])
+    useEffect(()=>{
         if (overlay=='') setShowOverlay(false)
         else setShowOverlay(true)
     },[overlay])
@@ -35,7 +48,7 @@ export default function Layout({children}){
                         <BellIcon className="w-6 h-6"/>
                         <span className="min-w-[2px] min-h-6 h-max bg-tertiary mx-4"></span>
                         <button className="flex items-center" onClick={e=>setShowOptions(!showOptions)}>
-                            <span className="mx-4 lg:text-xs 2xl:text-base">{User[0].role}</span>
+                            <span className="mx-4 lg:text-xs 2xl:text-base">{user.role}</span>
                             <ChevronDownIcon className="w-6 h-6"/>
                         </button>
                     </div>
@@ -44,7 +57,7 @@ export default function Layout({children}){
                             <LockClosedIcon className="w-6 h-6 mr-2"/>
                             Change Password
                         </button>
-                        <button className="flex items-center text-warning py-2">
+                        <button className="flex items-center text-warning py-2" onClick={e=>setUser({})}>
                             <ArrowLeftEndOnRectangleIcon className="w-6 h-6 mr-2"/>
                             Logout
                         </button>

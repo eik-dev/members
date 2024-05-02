@@ -9,7 +9,7 @@ export default function Page(){
 
     return(
         <>
-        {true?<Individual/>:<Firm/>}
+        {User[0].role=='Individual'?<Individual/>:<Firm/>}
         </>
     )
 }

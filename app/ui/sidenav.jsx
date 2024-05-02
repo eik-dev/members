@@ -7,6 +7,7 @@ import {RectangleGroupIcon, UserPlusIcon, Square3Stack3DIcon, UserGroupIcon, Bui
 
 export default function SideNav({control}){
     let {User} = useContext(Context);
+    let [user, setUser] = User;
     let pathname = usePathname();
 
 
@@ -15,20 +16,20 @@ export default function SideNav({control}){
         {
             name: "Home",
             icon: HomeIcon,
-            href: "/home",
-            roles:['Admin']
+            href: "/",
+            roles:['Firm','Individual']
         },
         {
             name: "Profile",
             icon: UserCircleIcon,
             href: "/profile",
-            roles:['Admin']
+            roles:['Firm','Individual']
         },
         {
             name: "Dashboard",
             icon: RectangleGroupIcon,
             href: "/",
-            roles:['Admin','Member','Firm']
+            roles:['Admin']
         },
         {
             name: "Admins",
@@ -65,7 +66,7 @@ export default function SideNav({control}){
     <img className="w-48" src="/transparent-logo.svg" alt="" />
     {
         links.map((link, index) => {
-            if(link.roles.includes(User[0].role)){
+            if(link.roles.includes(user.role)){
                 return(
                     <Link key={index} href={link.href} onClick={e=>control(false)}>
                         <div className={`flex items-center p-4 ${pathname === link.href ? ' border-l-8 border-primary text-primary bg-tertiary bg-opacity-10' : ''}`}>
@@ -77,7 +78,7 @@ export default function SideNav({control}){
             }
         })
     }
-        <div className="flex items-center text-warning absolute bottom-10 2xl:bottom-20 ml-4">
+        <div className="flex items-center text-warning absolute bottom-10 2xl:bottom-20 ml-4" onClick={e=>setUser({})}>
             <ArrowLeftEndOnRectangleIcon className="w-6 h-8 mr-2"/>
             Logout
         </div>
