@@ -3,6 +3,8 @@ import { useState, useContext, useEffect } from 'react'
 import { Context } from '@/app/lib/ContextProvider';
 import Link from 'next/link';
 import { useRouter } from "next/navigation";
+import Input from '@/app/ui/Input';
+import { save } from '@/app/lib/storage';
 
 export default function Login() {
     let { User } = useContext(Context);
@@ -15,7 +17,7 @@ export default function Login() {
 
     let login = (e) => {
         e.preventDefault()
-
+        
         fetch(`${process.env.NEXT_PUBLIC_API_URL}/login`, {
             method: 'POST',
             headers: {
@@ -31,14 +33,16 @@ export default function Login() {
             if (data.error != null) {
                 throw new Error(data.error)
             }
+            if(!save('token', data.user.token)) alert('Error saving token');
             setUser({...data.user});
             setTimeout(() => {
                 router.push('/')
-            }, 1000);
+            }, 5000);
         })
         .catch(err => console.log(err))
-
     }
+
+    // if(Object.keys(user).length>0) router.push('/')
     
     return(
         <div className="flex h-screen flex-1 flex-col justify-center items-center px-6 py-12 lg:px-8">
@@ -47,14 +51,6 @@ export default function Login() {
                     <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
                         <strong className="font-bold">Success!</strong>
                         <span className="block sm:inline">You have successfully logged in.</span>
-                        {
-                            Object.keys(user).map((key) => (
-                                <div key={key}>
-                                    <span>{key}: </span>
-                                    <span>{user[key]}</span>
-                                </div>
-                            ))
-                        }
                     </div>
                 ):null
             }
@@ -65,47 +61,14 @@ export default function Login() {
 
             <div className="mt-10 sm:mx-auto w-full max-w-sm">
             <form className="space-y-6">
-                <div>
-                <label htmlFor="username" className="block text-sm font-medium leading-6">
-                    Email
-                </label>
-                <div className="mt-2">
-                    <input
-                    id="email"
-                    name="email"
-                    type="email"
-                    autoComplete="email"
-                    value={email}
-                    onChange={(e)=>setEmail(e.target.value)}
-                    className="pl-2 block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-black focus:ring-2 focus:ring-inset focus:ring-geen-600 sm:text-sm sm:leading-6 text-black"
-                    />
-                </div>
-                </div>
-
-                <div>
-                <div className="flex items-center justify-between">
-                    <label htmlFor="password" className="block text-sm font-medium leading-6">
-                    Password
-                    </label>
-                    <div className="text-sm">
+                <Input value={email} setValue={setEmail} placeholder={'janedoe@gmail.com'} type={'email'} name={'Email'}/>
+                <div className="text-sm text-right">
                     <Link href={'/recover'}>
                         <span className="font-semibold leading-6 text-secondary hover:text-blue-500">Forgot password?</span>
                     </Link>
-                    </div>
                 </div>
-                <div className="mt-2">
-                    <input
-                    id="password"
-                    name="password"
-                    type={true?"password":"text"}
-                    autoComplete="current-password"
-                    required
-                    value={password}
-                    onChange={(e)=>setPassword(e.target.value)}
-                    className="pl-2 text-black block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-secondary sm:text-sm sm:leading-6"
-                    />
-                </div>
-                </div>
+                <Input value={password} setValue={setPassword} placeholder={''} type={'password'} name={'Password'}/>
+
 
                 <div>
                 <button

@@ -2,10 +2,11 @@
 import { useState, useContext } from 'react'
 import { Context } from '@/app/lib/ContextProvider';
 import Link from 'next/link';
+import Input from '@/app/ui/Input';
 
 export default function Page() {
-    let { User } = useContext(Context);
-    let [user, setUser] = User;
+    let { Signup } = useContext(Context);
+    let [data, setData] = Signup;
     let [name, setName] = useState('')
     let [email, setEmail] = useState('')
     let [password, setPassword] = useState('')
@@ -14,7 +15,7 @@ export default function Page() {
     let login = (e) => {
         e.preventDefault()
 
-        fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/register`, {
+        fetch(`${process.env.NEXT_PUBLIC_API_URL}/register`, {
             method: 'POST',
             headers: {
             'Content-Type': 'application/json',
