@@ -6,6 +6,7 @@ import { Bars3Icon, BellIcon, ChevronDownIcon, LockClosedIcon, ArrowLeftEndOnRec
 import Overlay from "@/app/ui/overlay";
 import ChangePassword from "../ui/Password";
 import { useRouter } from "next/navigation";
+import {load, remove} from '@/app/lib/storage';
 
 export default async function Layout({children}){
     let [showMenu, setShowMenu] = useState(false);
@@ -17,18 +18,46 @@ export default async function Layout({children}){
     let [showOptions, setShowOptions] = useState(false);
     let router = useRouter();
 
+    let logout = e => {
+        remove('token');
+        setUser({});
+    }
+
     useEffect(()=>{
-        if (Object.keys(user).length === 0){
+        let token = load('token');
+        
+        if (Object.keys(user).length === 0 && token){
+            //previous login but user info not in memory -> get user info from server
+            fetch(`${process.env.NEXT_PUBLIC_API_URL}/user`,{
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.error != null) {
+                    throw new Error(data.error)
+                }
+                console.log("Getting session data")
+                if (Object.keys(data).length != 0){
+                    console.log(data);
+                    setUser({...data.user})
+                }else{
+                    //if token is invalid
+                    router.push('/login')
+                }
+            })
+            .catch(err => console.log(err));
+        }
+        else if (Object.keys(user).length === 0 && !token){
+            //no previous login
             router.push('/login')
         }
-        console.log(user);
-    },[])
-    useEffect(()=>{
-        if (Object.keys(user).length === 0){
-            router.push('/login')
-        }
-        console.log(user);
+
     },[user])
+
     useEffect(()=>{
         if (overlay=='') setShowOverlay(false)
         else setShowOverlay(true)
@@ -57,7 +86,7 @@ export default async function Layout({children}){
                             <LockClosedIcon className="w-6 h-6 mr-2"/>
                             Change Password
                         </button>
-                        <button className="flex items-center text-warning py-2" onClick={e=>setUser({})}>
+                        <button className="flex items-center text-warning py-2" onClick={e=>logout(e)}>
                             <ArrowLeftEndOnRectangleIcon className="w-6 h-6 mr-2"/>
                             Logout
                         </button>

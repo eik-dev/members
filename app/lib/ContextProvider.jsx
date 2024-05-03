@@ -5,8 +5,9 @@ export let Context = createContext();
 
 export default function ContextProvider({ children }) {
     let User = useState({});
+    let Signup = useState({});
     return(
-        <Context.Provider value={{User}}>
+        <Context.Provider value={{User, Signup}}>
         {children}
         </Context.Provider>
     )

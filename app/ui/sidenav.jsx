@@ -4,11 +4,17 @@ import { useContext } from "react";
 import { Context } from "@/app/lib/ContextProvider";
 import { usePathname } from "next/navigation";
 import {RectangleGroupIcon, UserPlusIcon, Square3Stack3DIcon, UserGroupIcon, BuildingLibraryIcon, AcademicCapIcon, ArrowLeftEndOnRectangleIcon, UserCircleIcon, HomeIcon} from '@heroicons/react/24/outline';
+import { remove } from "@/app/lib/storage";
 
 export default function SideNav({control}){
     let {User} = useContext(Context);
     let [user, setUser] = User;
     let pathname = usePathname();
+
+    let logout = e => {
+        remove('token');
+        setUser({});
+    }
 
 
     let links = [
@@ -78,7 +84,7 @@ export default function SideNav({control}){
             }
         })
     }
-        <div className="flex items-center text-warning absolute bottom-10 2xl:bottom-20 ml-4" onClick={e=>setUser({})}>
+        <div className="flex items-center text-warning absolute bottom-10 2xl:bottom-20 ml-4" onClick={e=>logout(e)}>
             <ArrowLeftEndOnRectangleIcon className="w-6 h-8 mr-2"/>
             Logout
         </div>
