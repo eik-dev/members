@@ -1,5 +1,6 @@
 'use client'
 import { useState, useEffect } from "react"
+import { ViewfinderCircleIcon } from '@heroicons/react/24/outline'
 
 export default function File({ destination }) {
     const [files, setFiles] = useState([]);
@@ -13,10 +14,10 @@ export default function File({ destination }) {
             formData.append(`file`, file);
             fetch(`${process.env.NEXT_PUBLIC_API_URL}/upload`, {
                 method: "POST",
-                // headers:{
-                //     'Content-Type': 'multipart/form-data',
-                //     'X-CSRF-Token': 'YOUR_CSRF_TOKEN_HERE', // Replace with your CSRF token
-                // },
+                headers:{
+                    'Content-Type': 'multipart/form-data',
+                    // 'X-CSRF-Token': 'YOUR_CSRF_TOKEN_HERE',
+                },
                 body: formData
             })
                 .then((res) => res.json())
@@ -56,19 +57,33 @@ export default function File({ destination }) {
             onDragOver={handleDragEnter}
             onDragLeave={handleDragLeave}
             onDrop={handleDrop}
-            style={{
-                border: dragging ? "2px dashed blue" : "2px solid black",
-                padding: "1rem",
-            }}
+            className={`p-2 flex flex-col items-center justify-center ${dragging ? "border-2" : "border-2"} rounded-xl`}
         >
-            <input type="file" multiple onChange={handleFileChange} />
+            <img src="/icons/file.svg" className="w-24 h-24 md:w-56 md:h-56" alt="" />
+            <input 
+                type="file"
+                id='profile' 
+                multiple onChange={handleFileChange} 
+                placeholder='Upload profile photo'
+                className="
+                    text-sm text-stone-500
+                    file:mr-5 file:py-1 file:px-3 file:border-[1px]
+                    file:text-xs file:font-medium
+                    file:bg-stone-50 file:text-stone-700
+                    hover:file:cursor-pointer hover:file:bg-blue-50
+                    hover:file:text-blue-700
+                    file:hidden
+                " 
+            />
+            <label htmlFor="profile" className='py-4'>
+                <span className='text-secondary'>Browse Files</span> or Drag into area
+            </label>
             {files.map((file, index) => (
-                <div key={index}>
-                    <span>{file.name}</span>
-                    <button onClick={() => removeFile(index)}>Remove</button>
+                <div className="text-sm md:text-base grid grid-cols-3 gap-x-2 auto-rows-max mb-2" key={index}>
+                    <span className="whitespace-pre-wrap col-span-2 text-left">{file.name}</span>
+                    <button className=" text-warning w-fit" onClick={() => removeFile(index)}>Remove</button>
                 </div>
             ))}
-            <button onClick={e=>submit(e)}>Upload</button>
         </div>
     );
 }

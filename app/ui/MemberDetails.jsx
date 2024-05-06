@@ -1,7 +1,7 @@
 import { useState } from "react"
 import Image from "next/image";
 import { XMarkIcon, PencilSquareIcon } from "@heroicons/react/24/outline"
-import { Stalinist_One } from "next/font/google";
+import Input from "./Input";
 
 export default function MemberDetails({control}){
     let [fullName, setFullName] = useState('Sifa Kilomena');
