@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useRouter } from "next/navigation";
 import Input from '@/app/ui/Input';
 import { save } from '@/app/lib/storage';
+import { popupE } from '@/app/lib/trigger';
 
 export default function Login() {
     let { User } = useContext(Context);
@@ -35,25 +36,19 @@ export default function Login() {
             }
             if(!save('token', data.user.token)) alert('Error saving token');
             setUser({...data.user});
-            setTimeout(() => {
-                router.push('/')
-            }, 5000);
+            popupE('ok', 'Success', 'Login successful')
+            router.push('/')
         })
-        .catch(err => console.log(err))
+        .catch(err => {
+            popupE('error', 'Error', err.message)
+            console.log(err)
+        })
     }
 
     // if(Object.keys(user).length>0) router.push('/')
     
     return(
         <div className="flex h-screen flex-1 flex-col justify-center items-center px-6 py-12 lg:px-8">
-            {
-                Object.keys(user).length>0?(
-                    <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
-                        <strong className="font-bold">Success!</strong>
-                        <span className="block sm:inline">You have successfully logged in.</span>
-                    </div>
-                ):null
-            }
             <div className="flex flex-col items-center justify-center">
                 <img className="mx-auto h-24 w-auto" src="/transparent-logo.svg" alt="Your Company"/>
                 <span className="text-primary font-bold text-xl md:text-4xl inline-block align-bottom ml-4 text-center">Environment Institute of Kenya</span>
@@ -82,7 +77,7 @@ export default function Login() {
 
             <p className="mt-10 text-center text-sm text-gray-500">
                 {'Don\'t have an account?'}
-                <Link href={'/register'}>
+                <Link href={'/register/individual'}>
                     <span className="font-semibold leading-6 text-secondary hover:text-blue-500">Sign Up</span>
                 </Link>
             </p>
