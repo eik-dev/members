@@ -1,1 +1,22 @@
 onClick={e=>{optionsAt>=0?setOptionsAt(-1):null}}
+
+<h3>Select Category</h3>
+                    <div className='my-4 flex flex-col md:flex-row gap-4'>
+                        <select className="bg-white border-[2px] rounded-lg p-2" name="" id="" onChange={e=>setCategory(e.target.value)}>
+                            <option className='bg-white hover:bg-white' value={'Corporate'}>Corporate Membership</option>
+                            <option className='bg-white hover:bg-white' value={'Firms'}>Firms Membership</option>
+                        </select>
+                    </div>
+                    <div className='grid gap-4 md:grid-cols-2'>
+                        <Input value={firmName} setValue={setFirmName} placeholder={'XYZ ltd.'} type={'text'} name={'Firm of experts'}/>
+                        <Input value={email} setValue={setEmail} placeholder={'jane@gmail.com'} type={'email'} name={'Email'}/>
+                        <Input value={alternate} setValue={setAlternate} placeholder={'jane@gmail.com'} type={'email'} name={'Alternate email'}/>
+                        <Input value={nationality} setValue={setNationality} placeholder={'Kenya'} type={'text'} name={'Nationality'}/>
+                        <Input value={ID} setValue={setID} placeholder={'12345678'} type={'number'} name={'National ID'}/>
+                        <Input value={postal} setValue={setPostal} placeholder={'1234-4321'} type={'text'} name={'Postal Address'}/>
+                        <Input value={town} setValue={setTown} placeholder={'Town'} type={'text'} name={'Town'}/>
+                        <Input value={county} setValue={setCounty} placeholder={'County'} type={'text'} name={'County'}/>
+                        <Input value={nema} setValue={setNema} placeholder={'AXR/321'} type={'text'} name={'NEMA'}/>
+                        <Input value={pin} setValue={setPin} placeholder={'4321'} type={'number'} name={'Firm PIN'}/>
+                        <Input value={phone} setValue={setPhone} placeholder={'0712345678'} type={'phone'} name={'Phone number'}/>
+                    </div>

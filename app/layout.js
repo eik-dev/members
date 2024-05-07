@@ -2,6 +2,7 @@ import "./globals.css";
 import ContextProvider from "@/app/lib/ContextProvider";
 import { Montserrat } from "next/font/google";
 import { Suspense } from "react";
+import Popup from "@/app/ui/Popup";
 
 const montserrat = Montserrat({ subsets: ["latin"] });
 
@@ -17,6 +18,7 @@ export default function RootLayout({ children }) {
         <ContextProvider>
           <Suspense>
             {children}
+            <Popup />
           </Suspense>
         </ContextProvider>
       </body>
