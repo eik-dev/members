@@ -1,31 +1,23 @@
 'use client'
-import { useState, useContext, useEffect } from 'react'
-import { Context } from "@/app/lib/ContextProvider"
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Input from "@/app/ui/Input"
-import { Institutions, Organizations } from '@/app/ui/Input'
-import { ViewfinderCircleIcon } from '@heroicons/react/24/outline'
 import Pay from '@/app/ui/Pay'
 import File from '@/app/ui/File'
 import { Corporate, Firms } from '@/app/lib/instructions'
 import { popupE, verifyE } from '@/app/lib/trigger'
 
 export default function Page() {
-    let {Signup} = useContext(Context)
-    let [data, setData] = Signup
     let router = useRouter()
 
-    let [image, setImage] = useState(null);
-    const [dragging, setDragging] = useState(false);
+    let [image, setImage] = useState([]);
+    let [requirements, setRequirements] = useState([]);
 
     let [category, setCategory] = useState('Corporate');
     let [firmName, setFirmName] = useState('');
-    let [username, setUsername] = useState('');
     let [nema, setNema] = useState('');
-    let [firm, setFirm] = useState('');
     let [pin, setPin] = useState('');
     let [nationality, setNationality] = useState('');
-    let [ID, setID] = useState('');
     let [postal, setPostal] = useState('');
     let [town, setTown] = useState('');
     let [county, setCounty] = useState('');
@@ -36,9 +28,10 @@ export default function Page() {
     let [password, setPassword] = useState('');
     let [confirm, setConfirm] = useState('');
 
+    let [institutions, setInstitutions] = useState([]);
+    let [organizations, setOrganizations] = useState([]);
+
     let [instructions, setInstructions] = useState(Corporate);
-    let [registeredEmail, setRegisteredEmail] = useState('');
-    let [registerdId, setRegisteredId] = useState('');
     let [amount, setAmount] = useState(300);
 
     useEffect(() => {
@@ -58,7 +51,7 @@ export default function Page() {
 
     let validate = () => {
         //validate all required fields
-        if (firmNamername == '' || email == '' || password == '') {
+        if (name == '' || last == '' || username == '' || email == '' || ID == '' || password == '') {
             verifyE();
             popupE('error', 'Error', 'Fill all mandatory fields')
             return false;
@@ -77,58 +70,84 @@ export default function Page() {
                 body: JSON.stringify({
                     email: email,
                     password: password,
-                    name: name
+                    name: firmName,
+                    role: 'Firm',
+                    profile:{
+                        category: category,
+                        username: username,
+                        alternate: alternate,
+                        nationality: nationality,
+                        nationalID: ID,
+                        postal: postal,
+                        town: town,
+                        county: county,
+                        nema: nema,
+                        kra: pin,
+                        phone: phone,
+                        note: note,
+                    }
                 })
             })
             .then(res => res.json())
             .then(data => {
                 if (data.error != null) {
-                    throw new Error(data.error)
+                    throw new Error(data.message)
                 }
-                if(!save('token', data.user.token)) alert('Error saving token');
-                setUser({...data.user});
-                setTimeout(() => {
-                    router.push('/')
-                }, 1000);
+                if (data.success != null) {
+                    if (image.length>0) { //sending profile photo
+                        let token = data.token;
+                        console.log(`Token: ${token}`)
+                        let imageform = new FormData();
+                        imageform.append(`file`, image[0]);
+                        console.log(image[0].name)
+                        fetch(`${process.env.NEXT_PUBLIC_API_URL}/files/profile`, {
+                            method: "POST",
+                            headers:{
+                                'Authorization': `Bearer ${token}`,
+                            },
+                            body: imageform
+                        })
+                        .then((res) => res.json())
+                        .then((data) => {
+                            console.log(data);
+                            if (requirements.length>0){// sending requirements
+                                const formData = new FormData();
+                                requirements.forEach((file, index) => {
+                                    console.log(`${index} :: ${file.name}`);
+                                    formData.append(`file`, file);
+                                    fetch(`${process.env.NEXT_PUBLIC_API_URL}/files/requirements`, {
+                                        method: "POST",
+                                        headers:{
+                                            'Authorization': `Bearer ${token}`,
+                                        },
+                                        body: formData
+                                    })
+                                        .then((res) => res.json())
+                                        .then((data) => {
+                                            console.log(data);
+                                            popupE('ok', 'Success', 'Account created successfully')
+                                            router.push('/login')
+                                        });
+                                });
+                            } else { // no files
+                                popupE('ok', 'Success', 'Account created successfully')
+                                router.push('/login')
+                            }
+                        });
+                    } else { //no profile photo
+                        popupE('ok', 'Success', 'Account created successfully')
+                        router.push('/login')
+                    }
+                }
             })
-            .catch(err => console.log(err))
+            .catch(err => {
+                console.log(err)
+                popupE('error', 'Server Error', err.message)
+            })
         }
     }
     
 
-    const handleFileChange = (event) => {
-        let file = event.target.files[0];
-        if (file && file.type.startsWith('image/')){
-            let url = URL.createObjectURL(file);
-            // saveDB('profile', file)
-            setImage(url);
-        } else {
-            alert ('File uploaded not image')
-        }
-    };
-
-    const handleDragEnter = (event) => {
-        event.preventDefault();
-        setDragging(true);
-    };
-
-    const handleDragLeave = (event) => {
-        event.preventDefault();
-        setDragging(false);
-    };
-
-    const handleDrop = (event) => {
-        event.preventDefault();
-        setDragging(false);
-        let file = event.dataTransfer.files[0];
-        if (file && file.type.startsWith('image/')){
-            let url = URL.createObjectURL(file);
-            // saveDB('profile', file)
-            setImage(url);
-        } else {
-            popupE('error', 'Error', 'File uploaded not image')
-        }
-    };
     let edit = true;
 
     return(
@@ -138,43 +157,13 @@ export default function Page() {
 
                 <div className='h-[50%]'>
                     <h4 className='mb-4'>Upload Profile Photo</h4>
-                    <div
-                        onDragEnter={handleDragEnter}
-                        onDragOver={handleDragEnter}
-                        onDragLeave={handleDragLeave}
-                        onDrop={handleDrop}
-                        className={`p-2 mx-2 md:w-1/3 md:mx-uto rounded-md flex flex-col items-center justify-center ${dragging ? "border-2 border-primary" : "border-2"}`}
-                    >
-                        {
-                            image?
-                            <img src={image} alt="profile" className='h-56 w-56 rounded-lg'/>
-                            :
-                            <ViewfinderCircleIcon className='text-tertiary h-56 w-56'/>
-                        }
-                        <input 
-                            type="file"
-                            id='profile' 
-                            accept=".jpg,.jpeg,.png"
-                            multiple onChange={handleFileChange} 
-                            placeholder='Upload profile photo'
-                            className="
-                                text-sm text-stone-500
-                                file:mr-5 file:py-1 file:px-3 file:border-[1px]
-                                file:text-xs file:font-medium
-                                file:bg-stone-50 file:text-stone-700
-                                hover:file:cursor-pointer hover:file:bg-blue-50
-                                hover:file:text-blue-700
-                                file:hidden
-                            " 
-                        />
-                        <label htmlFor="profile" className='py-4'>
-                            <span className='text-secondary'>Browse Files</span> or Drag into area
-                        </label>
+                    <div className='w-1/3'>
+                        <File type='image' files={image} setFiles={setImage} />
                     </div>
                 </div>
 
                 <div>
-                <h3>Select Category</h3>
+                    <h3>Select Category</h3>
                     <div className='my-4 flex flex-col md:flex-row gap-4'>
                         <select className="bg-white border-[2px] rounded-lg p-2" name="" id="" onChange={e=>setCategory(e.target.value)}>
                             <option className='bg-white hover:bg-white' value={'Corporate'}>Corporate Membership</option>
@@ -185,12 +174,12 @@ export default function Page() {
                         <Input required={true} value={firmName} setValue={setFirmName} placeholder={'XYZ ltd.'} type={'text'} name={'Firm of experts'}/>
                         <Input required={true} value={email} setValue={setEmail} placeholder={'jane@gmail.com'} type={'email'} name={'Email'}/>
                         <Input value={alternate} setValue={setAlternate} placeholder={'jane@gmail.com'} type={'email'} name={'Alternate email'}/>
-                        <Input value={nationality} setValue={setNationality} placeholder={'Kenya'} type={'text'} name={'Country'}/>
+                        <Input value={nationality} setValue={setNationality} placeholder={'Kenya'} type={'text'} name={'Nationality'}/>
                         <Input value={postal} setValue={setPostal} placeholder={'1234-4321'} type={'text'} name={'Postal Address'}/>
                         <Input value={town} setValue={setTown} placeholder={'Town'} type={'text'} name={'Town'}/>
                         <Input value={county} setValue={setCounty} placeholder={'County'} type={'text'} name={'County'}/>
                         <Input value={nema} setValue={setNema} placeholder={'AXR/321'} type={'text'} name={'NEMA'}/>
-                        <Input value={pin} setValue={setPin} placeholder={'4321'} type={'number'} name={'Firm KRA PIN'}/>
+                        <Input required={true} value={pin} setValue={setPin} placeholder={'4321'} type={'number'} name={'Firm KRA PIN'}/>
                         <Input value={phone} setValue={setPhone} placeholder={'0712345678'} type={'phone'} name={'Phone number'}/>
                         <Input required={true} value={password} setValue={setPassword} placeholder={'******'} type={'password'} name={'Password'}/>
                         <Input value={confirm} setValue={setConfirm} placeholder={'******'} type={'password'} name={'Confirm password'}/>
@@ -214,15 +203,8 @@ export default function Page() {
                     })
                 }
             </div>
-            {
-                category=='Firms' && 
-                <div className='flex justify-between gap-5 mt-5'>
-                    <Input required={true} value={registerdId} setValue={setRegisteredId} placeholder={'12345678'} type={'number'} name={'ID number'}/>
-                    <Input required={true} value={registeredEmail} setValue={setRegisteredEmail} placeholder={'jane@gmail.com'} type={'email'} name={'Email'}/>
-                </div>
-            }
             <div className='mx-2 md:w-1/3 md:mx-auto my-5'>
-                <File/>
+                <File files={requirements} setFiles={setRequirements} type={'all'}/>
             </div>
 
             <h1 className='text-xl md:text-xl font-medium mx-2 py-2 border-b-2 mb-8'>Payment</h1>
@@ -237,7 +219,7 @@ export default function Page() {
                 </div>
 
                 <div className='flex mt-4'>
-                    <Pay title={'Registration fee'} description={'First time registration fee'} amount={30} email={data.email} phone={data.phone} name={`${data.firstname} ${data.lastname}`} />
+                    <Pay title={'Registration fee'} description={'First time registration fee'} amount={30} email={email} phone={phone} name={`${firmName}`} />
                 </div>
             </div>
 

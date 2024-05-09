@@ -7,6 +7,7 @@ import Overlay from "@/app/ui/overlay";
 import ChangePassword from "../ui/Password";
 import { useRouter } from "next/navigation";
 import {load, remove} from '@/app/lib/storage';
+import { popupE } from "@/app/lib/trigger";
 
 export default async function Layout({children}){
     let [showMenu, setShowMenu] = useState(false);
@@ -35,21 +36,29 @@ export default async function Layout({children}){
                     'Content-Type': 'application/json'
                 }
             })
-            .then(res => res.json())
-            .then(data => {
-                if (data.error != null) {
-                    throw new Error(data.error)
+            .then(res => {
+                if (res.status === 401){
+                    res.json().then(data => {
+                        popupE('error', 'Session expired',data.message)
+                        router.push('/login')
+                    })
                 }
+                return res.json()
+            })
+            .then(data => {
                 console.log("Getting session data")
                 if (Object.keys(data).length != 0){
-                    console.log(data);
+                    // console.log(data);
                     setUser({...data.user})
                 }else{
                     //if token is invalid
                     router.push('/login')
                 }
             })
-            .catch(err => console.log(err));
+            .catch(err => {
+                popupE('error', 'Server error','Internal server error')
+                console.log(err)
+            });
         }
         else if (Object.keys(user).length === 0 && !token){
             //no previous login
