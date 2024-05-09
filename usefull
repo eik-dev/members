@@ -1,5 +1,8 @@
 onClick={e=>{optionsAt>=0?setOptionsAt(-1):null}}
 
+
+import { Corporate, Firms } from '@/app/lib/instructions'
+
 <h3>Select Category</h3>
                     <div className='my-4 flex flex-col md:flex-row gap-4'>
                         <select className="bg-white border-[2px] rounded-lg p-2" name="" id="" onChange={e=>setCategory(e.target.value)}>

@@ -2,30 +2,29 @@
 import { useState, useEffect } from "react"
 import { ViewfinderCircleIcon } from '@heroicons/react/24/outline'
 
-export default function File({ destination }) {
-    const [files, setFiles] = useState([]);
+export default function File({ files, setFiles, type }) {
     const [dragging, setDragging] = useState(false);
+    let [image, setImage] = useState(null);
 
-    let submit = (e) => {
-        e.preventDefault();
-        const formData = new FormData();
-        files.forEach((file, index) => {
-            console.log(`${index} :: ${file.name}`);
-            formData.append(`file`, file);
-            fetch(`${process.env.NEXT_PUBLIC_API_URL}/upload`, {
-                method: "POST",
-                headers:{
-                    'Content-Type': 'multipart/form-data',
-                    // 'X-CSRF-Token': 'YOUR_CSRF_TOKEN_HERE',
-                },
-                body: formData
-            })
-                .then((res) => res.json())
-                .then((data) => {
-                    console.log(data);
-                });
-        });
-    }
+    let createURL = () => {
+        if (type != 'image') return;
+        if (files.length===0) {
+            setImage(null);
+            return;
+        }
+        let file = files[0]
+        if (file && file.type.startsWith('image/')){
+            let url = URL.createObjectURL(file);
+            // saveDB('profile', file)
+            setImage(url);
+        } else {
+            alert ('File uploaded not image')
+        }
+    };
+
+    useEffect(() => {
+        createURL();
+    }, [files]);
 
     const handleFileChange = (event) => {
         setFiles([...files, ...event.target.files]);
@@ -59,10 +58,27 @@ export default function File({ destination }) {
             onDrop={handleDrop}
             className={`p-2 flex flex-col items-center justify-center ${dragging ? "border-2" : "border-2"} rounded-xl`}
         >
-            <img src="/icons/file.svg" className="w-24 h-24 md:w-56 md:h-56" alt="" />
+            {
+                type === 'image' ?
+                    image?
+                    <img src={image} alt="profile" className='h-56 w-56 rounded-lg'/>
+                    :
+                    <ViewfinderCircleIcon className='text-tertiary h-56 w-56'/>
+                :
+                <img src="/icons/file.svg" className="w-24 h-24 md:w-56 md:h-56" alt="" />
+            }
+            <label htmlFor="profile" className='py-4'>
+                <span className='text-secondary'>Browse Files</span> or Drag into area
+            </label>
             <input 
                 type="file"
-                id='profile' 
+                id={`profile-${type}`} 
+                {...
+                    type === 'image' ?
+                    {accept: 'image/*'}
+                    :
+                    {accept: '*'}
+                }
                 multiple onChange={handleFileChange} 
                 placeholder='Upload profile photo'
                 className="
@@ -75,9 +91,6 @@ export default function File({ destination }) {
                     file:hidden
                 " 
             />
-            <label htmlFor="profile" className='py-4'>
-                <span className='text-secondary'>Browse Files</span> or Drag into area
-            </label>
             {files.map((file, index) => (
                 <div className="text-sm md:text-base grid grid-cols-3 gap-x-2 auto-rows-max mb-2" key={index}>
                     <span className="whitespace-pre-wrap col-span-2 text-left">{file.name}</span>
