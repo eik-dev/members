@@ -5,6 +5,7 @@ import Overlay from "@/app/ui/overlay";
 import MemberDetails from "@/app/ui/MemberDetails";
 import Delete from "./Delete";
 import { EllipsisVerticalIcon, UserCircleIcon, TrashIcon, CheckIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import { getData } from "@/app/lib/data";
 
 export default function Page(){
     let Range = useState(20);
@@ -14,18 +15,13 @@ export default function Page(){
     let [showOverlay, setShowOverlay] = useState(false);
     let [overlay, setOverlay] = useState('');
     let [optionsAt, setOptionsAt] = useState(-1);
+    let [userID, setUserID] = useState(null);
     
-    let [data, setData] = useState([
-        {
-            firm_name: 'Sifa Kilomena',
-            email: 'sifa@email.com',
-            nema:'NEMA/IAE/NA/12345',
-            cert_no:'EIK/2/1234',
-            date:'12/12/2021'
-        }
-    ]);
+    let [data, setData] = useState([]);
 
-    useEffect(()=>{},[])
+    useEffect(()=>{
+        getData(setData, '/admin/members', {})
+    },[])
     useEffect(()=>{},[Sort[0]])
     useEffect(()=>{console.log(`Pulling ${Range[0]} rows`)},[Range[0]])
     useEffect(()=>{
@@ -33,11 +29,10 @@ export default function Page(){
         else setShowOverlay(true)
     },[overlay])
 
-    let accept = (e,index) => {
+    let action = (e,id, action) => {
         e.preventDefault();
-    }
-    let deny = (e,index) => {
-        e.preventDefault();
+        getData((_)=>{}, '/user/verify', {verify:action, user:id})
+        getData(setData, '/admin/members', {})
     }
 
     return(
@@ -60,19 +55,17 @@ export default function Page(){
                 {
                     data.slice(0,Range[0]).map((data,index)=>{
                         return(
-                            <tr key={index} className="border-b border-gray-700">
-                                {
-                                    Object.keys(data).map((key, index) => {
-                                        return(
-                                            <td key={index} className="px-6 py-4 whitespace-nowrap">{data[key]}</td>
-                                        )
-                                    })
-                                }
+                            <tr key={data['id']} className="border-b border-gray-300">
+                                <td className="px-6 py-4 whitespace-nowrap">{data['name']}</td>
+                                <td className="px-6 py-4 whitespace-nowrap">{data['email']}</td>
+                                <td className="px-6 py-4 whitespace-nowrap">{data['nema']}</td>
+                                <td className="px-6 py-4 whitespace-nowrap">{data['certificates'] && data['certificates'].number}</td>
+                                <td className="px-6 py-4 whitespace-nowrap">{data['created_at']}</td>
                                 <td className="px-6 py-4 whitespace-nowrap">
-                                    <button className="border-2 border-primary text-primary mr-4" onClick={e=>accept(e, index)}>
+                                    <button className={`border-2 ${data['email_verified_at']==null?'border-primary text-primary':'border-gray-900/50 text-gray-900'} mr-4`} onClick={e=>action(e, data['id'], 'true')}>
                                         <CheckIcon className="w-5 h-5"/>
                                     </button>
-                                    <button className="border-2 border-warning text-warning" onClick={e=>accept(e, index)}>
+                                    <button className={`border-2 ${data['email_verified_at']!=null?'border-warning text-warning':'border-gray-900/50 text-gray-900'}`} onClick={e=>action(e, data['id'], 'false')}>
                                         <XMarkIcon className="w-5 h-5"/>
                                     </button>
                                 </td>
@@ -82,7 +75,7 @@ export default function Page(){
                                     </button>
                                     {
                                         optionsAt === index &&
-                                        <div className={`flex absolute z-50 right-12 md:right-44 bg-white flex-col gap-y-4 ${true?'block':'hidden'}`}>
+                                        <div className={`flex absolute z-50 right-12 md:right-44 bg-white flex-col gap-y-4 ${true?'block':'hidden'}`} onClick={e=>setUserID(data['id'])}>
                                             <div className="flex gap-x-2" onClick={e=>setOverlay('details')}>
                                                 <UserCircleIcon className="w-6 h-6"/>
                                                 View details
@@ -101,7 +94,7 @@ export default function Page(){
                 {
                     [...new Array((Range[0]-data.length>0)?Range[0]-data.length:0)].map((_,index)=>{
                         return(
-                            <tr key={index} className="border-b border-gray-700">
+                            <tr key={index} className="border-b border-gray-300">
                                 <td className="py-6"></td>
                             </tr>
                         )
@@ -111,8 +104,8 @@ export default function Page(){
         </table>
         </div>
         <Overlay className={`${showOverlay?'block':'hidden'}`} >
-            {overlay=='details'?<MemberDetails control={setOverlay} />:null}
-            {overlay=='delete'?<Delete control={setOverlay} />:null}
+            {overlay=='details'?<MemberDetails id={userID} control={setOverlay} />:null}
+            {overlay=='delete'?<Delete id={userID} control={setOverlay} />:null}
         </Overlay>
         </div>
     )

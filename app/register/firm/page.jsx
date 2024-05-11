@@ -28,9 +28,6 @@ export default function Page() {
     let [password, setPassword] = useState('');
     let [confirm, setConfirm] = useState('');
 
-    let [institutions, setInstitutions] = useState([]);
-    let [organizations, setOrganizations] = useState([]);
-
     let [instructions, setInstructions] = useState(Corporate);
     let [amount, setAmount] = useState(300);
 
@@ -51,7 +48,7 @@ export default function Page() {
 
     let validate = () => {
         //validate all required fields
-        if (name == '' || last == '' || username == '' || email == '' || ID == '' || password == '') {
+        if (email == '' || password == '') {
             verifyE();
             popupE('error', 'Error', 'Fill all mandatory fields')
             return false;
@@ -72,16 +69,14 @@ export default function Page() {
                     password: password,
                     name: firmName,
                     role: 'Firm',
+                    nema: nema,
                     profile:{
                         category: category,
-                        username: username,
                         alternate: alternate,
                         nationality: nationality,
-                        nationalID: ID,
                         postal: postal,
                         town: town,
                         county: county,
-                        nema: nema,
                         kra: pin,
                         phone: phone,
                         note: note,
@@ -179,7 +174,7 @@ export default function Page() {
                         <Input value={town} setValue={setTown} placeholder={'Town'} type={'text'} name={'Town'}/>
                         <Input value={county} setValue={setCounty} placeholder={'County'} type={'text'} name={'County'}/>
                         <Input value={nema} setValue={setNema} placeholder={'AXR/321'} type={'text'} name={'NEMA'}/>
-                        <Input required={true} value={pin} setValue={setPin} placeholder={'4321'} type={'number'} name={'Firm KRA PIN'}/>
+                        <Input required={true} value={pin} setValue={setPin} placeholder={'4321'} type={'text'} name={'Firm KRA PIN'}/>
                         <Input value={phone} setValue={setPhone} placeholder={'0712345678'} type={'phone'} name={'Phone number'}/>
                         <Input required={true} value={password} setValue={setPassword} placeholder={'******'} type={'password'} name={'Password'}/>
                         <Input value={confirm} setValue={setConfirm} placeholder={'******'} type={'password'} name={'Confirm password'}/>

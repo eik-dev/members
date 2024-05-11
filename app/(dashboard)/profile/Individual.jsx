@@ -1,5 +1,6 @@
 'use client'
 import Image from "next/image"
+import { useRouter } from "next/navigation"
 import { PrinterIcon, EllipsisVerticalIcon, PencilSquareIcon } from "@heroicons/react/24/outline"
 import Overlay from "@/app/ui/overlay"
 import MemberDetails from "@/app/ui/MemberDetails"
@@ -9,6 +10,8 @@ import Qualifications from "./Qualifications"
 import Experience from "./Experience"
 import Introductory from "./Introductory"
 import { useState, useEffect } from "react"
+import { getData } from "@/app/lib/data"
+import { popupE } from "@/app/lib/trigger"
 
 function SectionHead({section}){
     let [showEdit, setShowEdit] = useState(false);
@@ -48,92 +51,121 @@ function SectionHead({section}){
     )
 }
 export default function Individual({id}){
+    let [files, setFiles] = useState([])
+    let [profilePhoto, setProfilePhoto] = useState([])
+    let [profile, setProfile] = useState({});
+    let router = useRouter();
+
+    useEffect(() => {
+        getData(setFiles, '/files/requirements', {})
+        getData(setProfilePhoto, '/files/profile', {})
+        getData(setProfile, '/profile', {})
+    }, [])
+
+    let print = e => {
+        e.preventDefault();
+        if(profile['certificate']){
+            if(profile['certificate'].verified){
+                router.push(`/download/certificate?id=${profile['certificate'].id}`)
+            } else{
+                popupE('error','Error' ,'Certificate request has not been approved')
+            }
+        }else  getData((_)=>{}, '/request', {})
+    }
     
     return(
         <>
         <header className="flex flex-col gap-y-2 md:flex-row md:items-center md:justify-between ml-2 my-4">
             <h1 className="my-2 ml-2 md:ml-0 text-primary font-bold text-4xl">Profile</h1>
-            <div className="flex items-center h-fit bg-secondary w-fit text-white font-semibold px-4 py-2 rounded-md justify-between text-sm" onClick={e=>{window.location.href = '/download/certificate?id='+'12345'}}>
+            <button className="flex items-center h-fit bg-secondary w-fit text-white font-semibold px-4 py-2 rounded-md justify-between text-sm" onClick={e=>print(e)}>
                 <PrinterIcon className="h-6 w-6 mr-2" />
                 Print Certificate Request
-            </div>
+            </button>
         </header>
         <div className="mx-2">
         <section>
             <SectionHead section={'Basic Information'}/>
             <div className="flex flex-col gap-x-3 md:flex-row w-full">
                 <div className="w-32 md:w-64 h-fit relative mr-4 mb-4">
-                    <Image
-                        src="/profile.png"
-                        width={500}
-                        height={500}
-                        alt="Picture of the author"
-                    />
+                    {
+                        profilePhoto.length>0?
+                        <img src={profilePhoto[0].url} alt="" />
+                        :
+                        <Image
+                            src="/profile.png"
+                            width={500}
+                            height={500}
+                            alt="Picture of the author"
+                        />
+                    }
                 </div>
-                <div className="grid gap-x-5 gap-y-3 md:grid-cols-2 text-sm w-full">
-                    <div className="flex gap-4 justify-between">
-                        <span className="font-bold whitespace-nowrap w-1/2">Name of Expert:</span>
-                        <span className="w-1/2">Sifa Kilomena</span>
+                {
+                    profile.profile != undefined &&
+                    <div className="grid gap-x-5 gap-y-3 md:grid-cols-2 text-sm w-full">
+                        <div className="flex gap-4 justify-between">
+                            <span className="font-bold whitespace-nowrap w-1/2">Name of Expert:</span>
+                            <span className="w-1/2">{profile.profile.name}</span>
+                        </div>
+                        <div className="flex gap-4 justify-between">
+                            <span className="font-bold whitespace-nowrap w-1/2">Category:</span>
+                            <span className="w-1/2">{profile.profile.category}</span>
+                        </div>
+                        <div className="flex gap-4 justify-between">
+                            <span className="font-bold whitespace-nowrap w-1/2">Identification Number:</span>
+                            <span className="w-1/2">{profile.profile.nationalID}</span>
+                        </div>
+                        <div className="flex gap-4 justify-between">
+                            <span className="font-bold whitespace-nowrap w-1/2">Postal Address:</span>
+                            <span className="w-1/2">{profile.profile.postal}</span>
+                        </div>
+                        <div className="flex gap-4 justify-between">
+                            <span className="font-bold whitespace-nowrap md:whitespace-pre-wrap w-1/2">NEMA Registration Number:</span>
+                            <span className="w-1/2">{profile.profile.nema}</span>
+                        </div>
+                        <div className="flex gap-4 justify-between">
+                            <span className="font-bold whitespace-nowrap w-1/2">Town:</span>
+                            <span className="w-1/2">{profile.profile.town}</span>
+                        </div>
+                        <div className="flex gap-4 justify-between">
+                            <span className="font-bold whitespace-nowrap w-1/2">Certificate Number:</span>
+                            <span className="w-1/2">{profile['certificate'] && profile['certificate'].number}</span>
+                        </div>
+                        <div className="flex gap-4 justify-between">
+                            <span className="font-bold whitespace-nowrap w-1/2">County:</span>
+                            <span className="w-1/2">{profile.profile.county}</span>
+                        </div>
+                        <div className="flex gap-4 justify-between">
+                            <span className="font-bold whitespace-nowrap w-1/2">Firm of Experts:</span>
+                            <span className="w-1/2">{profile.profile.firm}</span>
+                        </div>
+                        <div className="flex gap-4 justify-between">
+                            <span className="font-bold whitespace-nowrap w-1/2">Phone Number:</span>
+                            <span className="w-1/2">{profile.profile.phone}</span>
+                        </div>
+                        <div className="flex gap-4 justify-between">
+                            <span className="font-bold whitespace-nowrap w-1/2">KRA PIN:</span>
+                            <span className="w-1/2">{profile.profile.kra}</span>
+                        </div>
+                        <div className="flex gap-4 justify-between">
+                            <span className="font-bold whitespace-nowrap w-1/2">Email:</span>
+                            <span className="w-1/2">{profile.profile.email}</span>
+                        </div>
+                        <div className="flex gap-4 justify-between">
+                            <span className="font-bold whitespace-nowrap w-1/2">Nationality:</span>
+                            <span className="w-1/2">{profile.profile.nationality}</span>
+                        </div>
+                        <div className="flex gap-4 justify-between">
+                            <span className="font-bold whitespace-nowrap w-1/2">Alternative Email Address:</span>
+                            <span className="w-1/2">{profile.profile.alternate}</span>
+                        </div>
                     </div>
-                    <div className="flex gap-4 justify-between">
-                        <span className="font-bold whitespace-nowrap w-1/2">Category:</span>
-                        <span className="w-1/2">Associate</span>
-                    </div>
-                    <div className="flex gap-4 justify-between">
-                        <span className="font-bold whitespace-nowrap w-1/2">Identification Number:</span>
-                        <span className="w-1/2">21435690</span>
-                    </div>
-                    <div className="flex gap-4 justify-between">
-                        <span className="font-bold whitespace-nowrap w-1/2">Postal Address:</span>
-                        <span className="w-1/2">Sifa Kilomena</span>
-                    </div>
-                    <div className="flex gap-4 justify-between">
-                        <span className="font-bold whitespace-nowrap md:whitespace-pre-wrap w-1/2">NEMA Registration Number:</span>
-                        <span className="w-1/2">NEMA/IAE/NA/12345</span>
-                    </div>
-                    <div className="flex gap-4 justify-between">
-                        <span className="font-bold whitespace-nowrap w-1/2">Town:</span>
-                        <span className="w-1/2">Nairobi</span>
-                    </div>
-                    <div className="flex gap-4 justify-between">
-                        <span className="font-bold whitespace-nowrap w-1/2">Certificate Number:</span>
-                        <span className="w-1/2">EIK/2/1234</span>
-                    </div>
-                    <div className="flex gap-4 justify-between">
-                        <span className="font-bold whitespace-nowrap w-1/2">County:</span>
-                        <span className="w-1/2">Nairobi</span>
-                    </div>
-                    <div className="flex gap-4 justify-between">
-                        <span className="font-bold whitespace-nowrap w-1/2">Firm of Experts:</span>
-                        <span className="w-1/2">*</span>
-                    </div>
-                    <div className="flex gap-4 justify-between">
-                        <span className="font-bold whitespace-nowrap w-1/2">Phone Number:</span>
-                        <span className="w-1/2">+254712329875</span>
-                    </div>
-                    <div className="flex gap-4 justify-between">
-                        <span className="font-bold whitespace-nowrap w-1/2">Firm of Experts PIN:</span>
-                        <span className="w-1/2">*</span>
-                    </div>
-                    <div className="flex gap-4 justify-between">
-                        <span className="font-bold whitespace-nowrap w-1/2">Email:</span>
-                        <span className="w-1/2">sifa@email.com</span>
-                    </div>
-                    <div className="flex gap-4 justify-between">
-                        <span className="font-bold whitespace-nowrap w-1/2">Nationality:</span>
-                        <span className="w-1/2">Kenyan</span>
-                    </div>
-                    <div className="flex gap-4 justify-between">
-                        <span className="font-bold whitespace-nowrap w-1/2">Alternative Email Address:</span>
-                        <span className="w-1/2">x</span>
-                    </div>
-                </div>
+                }
             </div>
         </section>
         <section>
             <SectionHead section={'Introductory Statement'}/>
             <p className="font-light text-md">
-            As a dedicated member of the Environmental Institute of Kenya, I am committed to fostering sustainability and environmental stewardship within our community and beyond. With a passion for conservation and a drive to effect positive change, I actively engage in initiatives aimed at preserving our natural resources and promoting eco-friendly practices. Through collaboration, education, and advocacy, I strive to inspire others to join me in safeguarding our planet for future generations.
+                {profile.profile != undefined && profile.profile.bio}
             </p>
         </section>
         <section>
@@ -177,11 +209,13 @@ export default function Individual({id}){
         </section>
         <section>
             <SectionHead section={'Attachments'}/>
-            <button className="text-secondary underline mb-2 block">EIK Receipt.jpg</button>
-            <button className="text-secondary underline mb-2 block">NEMA Registration Certificate.pdf</button>
-            <button className="text-secondary underline mb-2 block">EIK Registration Certificate.pdf</button>
-            <button className="text-secondary underline mb-2 block">Degree Certificate.png</button>
-            <button className="text-secondary underline mb-2 block">EIA Training Certificate.pdf</button>
+            {
+                files.map((file, index) => (
+                    <div key={index}>
+                        <a className="text-secondary underline mb-2 block" href={`${file.url}`} target='blank' download>{file.name}</a>
+                    </div>
+                ))
+            }
         </section>
         </div>
         </>

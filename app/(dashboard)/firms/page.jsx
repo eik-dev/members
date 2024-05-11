@@ -5,6 +5,7 @@ import FirmDetails from "@/app/ui/FirmDetails";
 import Delete from "./Delete";
 import Overlay from "@/app/ui/overlay";
 import { EllipsisVerticalIcon, PencilSquareIcon, TrashIcon, CheckIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import { getData } from "@/app/lib/data";
 
 export default function Page(){
     let Range = useState(20);
@@ -15,18 +16,11 @@ export default function Page(){
     let [overlay, setOverlay] = useState('');
     let [optionsAt, setOptionsAt] = useState(-1);
     
-    let [data, setData] = useState([
-        {
-            firm_name: 'Sustainable Earth Ltd.',
-            email: 'sel@email.com',
-            nema:'NEMA/IAE/NA/12345',
-            cert_no:'EIK/2/1234',
-            pin:'A0123456',
-            date:'12/12/2021'
-        }
-    ]);
+    let [data, setData] = useState([]);
 
-    useEffect(()=>{},[])
+    useEffect(()=>{
+        getData(setData, '/admin/firms', {})
+    },[])
     useEffect(()=>{},[Sort[0]])
     useEffect(()=>{console.log(`Pulling ${Range[0]} rows`)},[Range[0]])
     useEffect(()=>{
@@ -34,11 +28,10 @@ export default function Page(){
         else setShowOverlay(true)
     },[overlay])
 
-    let accept = (e,index) => {
+    let action = (e,id, action) => {
         e.preventDefault();
-    }
-    let deny = (e,index) => {
-        e.preventDefault();
+        getData((_)=>{}, '/user/verify', {verify:action, user:id})
+        getData(setData, '/admin/firms', {})
     }
 
     return(
@@ -61,19 +54,18 @@ export default function Page(){
                 {
                     data.slice(0,Range[0]).map((data,index)=>{
                         return(
-                            <tr key={index} className="border-b border-gray-700">
-                                {
-                                    Object.keys(data).map((key, index) => {
-                                        return(
-                                            <td key={index} className="px-6 py-4 whitespace-nowrap">{data[key]}</td>
-                                        )
-                                    })
-                                }
+                            <tr key={index} className="border-b border-gray-300">
+                                <td className="px-6 py-4 whitespace-nowrap">{data['name']}</td>
+                                <td className="px-6 py-4 whitespace-nowrap">{data['email']}</td>
+                                <td className="px-6 py-4 whitespace-nowrap">{data['nema']}</td>
+                                <td className="px-6 py-4 whitespace-nowrap">{data['certificates'] && data['certificates'].number}</td>
+                                <td className="px-6 py-4 whitespace-nowrap">{data['firm'].kra}</td>
+                                <td className="px-6 py-4 whitespace-nowrap">{data['created_at']}</td>
                                 <td className="px-6 py-4 whitespace-nowrap">
-                                    <button className="border-2 border-primary text-primary mr-4" onClick={e=>accept(e, index)}>
+                                <button className={`border-2 ${data['email_verified_at']==null?'border-primary text-primary':'border-gray-900/50 text-gray-900'} mr-4`} onClick={e=>action(e, data['id'], 'true')}>
                                         <CheckIcon className="w-5 h-5"/>
                                     </button>
-                                    <button className="border-2 border-warning text-warning" onClick={e=>accept(e, index)}>
+                                    <button className={`border-2 ${data['email_verified_at']!=null?'border-warning text-warning':'border-gray-900/50 text-gray-900'}`} onClick={e=>action(e, data['id'], 'false')}>
                                         <XMarkIcon className="w-5 h-5"/>
                                     </button>
                                 </td>
@@ -102,7 +94,7 @@ export default function Page(){
                 {
                     [...new Array((Range[0]-data.length>0)?Range[0]-data.length:0)].map((_,index)=>{
                         return(
-                            <tr key={index} className="border-b border-gray-700">
+                            <tr key={index} className="border-b border-gray-300">
                                 <td className="py-6"></td>
                             </tr>
                         )

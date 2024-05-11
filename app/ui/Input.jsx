@@ -69,6 +69,7 @@ export function Institutions({data, setData}){
 export function Organizations({data, setData}){
     let [institution, setInstitution] = useState('');
     let [course, setCourse] = useState('');
+    let [location, setLocation] = useState('');
     let [startDate, setStartDate] = useState('');
     let [endDate, setEndDate] = useState('');
 
@@ -85,9 +86,10 @@ export function Organizations({data, setData}){
 
     let add = e => {
         e.preventDefault();
-        setData([...data, {institution, course, startDate, endDate}])
+        setData([...data, {institution, location, course, startDate, endDate}])
         setInstitution('')
         setCourse('')
+        setLocation('')
         setStartDate('')
         setEndDate('')
     }
@@ -110,6 +112,7 @@ export function Organizations({data, setData}){
                         <div key={index} className='my-8 flex flex-col gap-4 md:flex-row justify-between items-center'>
                             <Input disabled={true} value={item.institution} placeholder={''} type={'text'} name={'Organization'}/>
                             <Input disabled={true} value={item.course} placeholder={''} type={'text'} name={'Position'}/>
+                            <Input disabled={true} value={item.location} placeholder={''} type={'text'} name={'Position'}/>
                             <Input disabled={true} value={item.startDate} placeholder={''} type={'date'} name={'Start date'}/>
                             <Input disabled={true} value={item.endDate}  placeholder={''} type={'date'} name={'End date'}/>
                             <button onClick={e=>remove(e,index)} className="text-2xl px-6 h-fit rounded-md bg-warning font-semibold text-white">-</button>
@@ -120,6 +123,7 @@ export function Organizations({data, setData}){
             <div className='my-8 flex flex-col gap-4 md:flex-row justify-between'>
                 <Input required={true} value={institution} setValue={setInstitution} placeholder={''} type={'text'} name={'Organization'}/>
                 <Input value={course} setValue={setCourse} placeholder={''} type={'text'} name={'Position'}/>
+                <Input value={location} setValue={setLocation} placeholder={'Nairobi, Kenya'} type={'text'} name={'Position'}/>
                 <Input value={startDate} setValue={setStartDate} placeholder={''} type={'date'} name={'Start date'}/>
                 <Input value={endDate} setValue={setEndDate} placeholder={''} type={'date'} name={'End date'}/>
             </div>

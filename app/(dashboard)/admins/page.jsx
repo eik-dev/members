@@ -6,6 +6,7 @@ import Edit from "./Edit";
 import Delete from "./Delete";
 import New from "./New";
 import { UserPlusIcon, EllipsisVerticalIcon, PencilSquareIcon, TrashIcon } from "@heroicons/react/24/outline";
+import { getData } from "@/app/lib/data";
 
 export default function Page(){
     let Range = useState(20);
@@ -16,20 +17,11 @@ export default function Page(){
     let [overlay, setOverlay] = useState('');
     let [optionsAt, setOptionsAt] = useState(-1);
     
-    let [data, setData] = useState([
-        {
-            full_name: 'John Doe',
-            username: 'johndoe',
-            email: 'admin@eik.co.ke'
-        },
-        {
-            full_name: 'John Doe',
-            username: 'johndoe',
-            email: 'admin@eik.co.ke'
-        }
-    ]);
+    let [data, setData] = useState([]);
 
-    useEffect(()=>{},[])
+    useEffect(()=>{
+        getData(setData, '/admins', {})
+    },[])
     useEffect(()=>{},[Sort[0]])
     useEffect(()=>{console.log(`Pulling ${Range[0]} rows`)},[Range[0]])
     useEffect(()=>{
@@ -62,13 +54,13 @@ export default function Page(){
                 {
                     data.slice(0,Range[0]).map((data,index)=>{
                         return(
-                            <tr key={index} className="border-b border-gray-700">
+                            <tr key={index} className="border-b border-gray-300">
                                 {
-                                    Object.keys(data).map((key, index) => {
-                                        return(
-                                            <td key={index} className="px-6 py-4 whitespace-nowrap">{data[key]}</td>
-                                        )
-                                    })
+                                    <>
+                                    <td key={index} className="px-6 py-4 whitespace-nowrap">{data['name']}</td>
+                                    <td key={index} className="px-6 py-4 whitespace-nowrap">{data['username']}</td>
+                                    <td key={index} className="px-6 py-4 whitespace-nowrap">{data['email']}</td>
+                                    </>
                                 }
                                 <td className="px-6 py-4 whitespace-nowrap relative">
                                     <button onClick={e=>setOptionsAt(index)}>
@@ -95,7 +87,7 @@ export default function Page(){
                 {
                     [...new Array((Range[0]-data.length>0)?Range[0]-data.length:0)].map((_,index)=>{
                         return(
-                            <tr key={index} className="border-b border-gray-700">
+                            <tr key={index} className="border-b border-gray-300">
                                 <td className="py-6"></td>
                             </tr>
                         )

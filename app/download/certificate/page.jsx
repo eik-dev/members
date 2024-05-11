@@ -4,6 +4,7 @@ import { useSearchParams } from 'next/navigation';
 import { PDFDocument, rgb } from 'pdf-lib';
 import fontkit from '@pdf-lib/fontkit'
 import QRCode from 'qrcode'
+import { getData } from "@/app/lib/data";
 
 async function downloadPDF(e,data){
     e.preventDefault();
@@ -11,7 +12,7 @@ async function downloadPDF(e,data){
 
     let pngImageBytes = await fetch('/certificates/transparent-logo.png').then(res =>res.arrayBuffer()).catch(err => console.error(err));
 
-    let qrImageBytes = await fetch(await QRCode.toDataURL(`https://portal.eik.co.ke/verify?id=${data.id}`)).then(res => res.arrayBuffer()).catch(err => console.error(err));
+    let qrImageBytes = await fetch(await QRCode.toDataURL(`https://portal.eik.co.ke/verify?id=${data['number']}`)).then(res => res.arrayBuffer()).catch(err => console.error(err));
 
     const pdfDoc = await PDFDocument.create()
     pdfDoc.registerFontkit(fontkit)
@@ -25,7 +26,7 @@ async function downloadPDF(e,data){
     const page = pdfDoc.addPage();
     const { width, height } = page.getSize();
     let fontSize = 30;
-    let fontBytes = await fetch('/DancingScript-Regular.ttf').then(res => res.arrayBuffer()).catch(err => console.error(err));
+    let fontBytes = await fetch('/certificates/DancingScript-Regular.ttf').then(res => res.arrayBuffer()).catch(err => console.error(err));
     let dancingScript = await pdfDoc.embedFont(fontBytes, {subset: true});
 
     let line = height - pngDims.height;
@@ -55,7 +56,7 @@ async function downloadPDF(e,data){
     })
 
     line = line - fontSize
-    page.drawText(data.name.toUpperCase(), {
+    page.drawText(data['user'].name.toUpperCase(), {
         x: 50,
         y: line,
         size: fontSize,
@@ -63,7 +64,7 @@ async function downloadPDF(e,data){
     })
 
     line = line - fontSize
-    page.drawText('Member NO: '+ data.member, {
+    page.drawText('Member NO: '+ data['number'], {
         x: 50,
         y: line,
         size: fontSize,
@@ -92,26 +93,23 @@ async function downloadPDF(e,data){
 export default function Page() {
     let params = useSearchParams();
     let id = params.get('id');
-    let [data, setData] = useState({
-        name: '',
-        member: '',
-        date:''
-    });
+    let [data, setData] = useState();
     useEffect(()=>{
-        fetch(`${process.env.NEXT_PUBLIC_API_URL}/download/certificate?id=${id}`).then(res=>res.json()).then(data=>{
-            setData(data)
-        })
+        getData(setData, '/certificate/download', {id:id})
     },[])
     
     return (
     <Suspense>
-        <div className='mx-2'>
-            <h1>Download Certificate</h1>
-            <h3>Certificate No: {id} <br /> issued to {data.name}</h3>
-                <div>Member Number: {data.member}</div>
-                <div>Date issued: {data.date}</div>
-            <button className=' px-4 py-2 bg-secondary text-white my-4' onClick={e=>downloadPDF(e,data)}>Download</button>
-        </div>
+        {
+            data &&
+            <div className='mx-2 md:mx-auto md:w-1/3'>
+                <h1 className='text-primary text-center md:text-2xl font-bold my-10'>Download Certificate</h1>
+                <h3>Issued to: {data['user'].name}</h3>
+                <div className='my-3'>Member Number: {data['number']}</div>
+                <div className='my-3'>Valid upto: {data['expiry']}</div>
+                <button className=' px-5 py-2 bg-secondary hover:bg-primary text-white my-4 rounded-full' onClick={e=>downloadPDF(e,data)}>Download</button>
+            </div>
+        }
     </Suspense>
     );
 }

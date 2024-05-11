@@ -1,12 +1,13 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Image from "next/image";
 import { XMarkIcon, PencilSquareIcon } from "@heroicons/react/24/outline"
 import Input from "./Input";
+import { getData } from "@/app/lib/data";
 
 export default function MemberDetails({control}){
+    let [data, setData] = useState();
     let [fullName, setFullName] = useState('Sifa Kilomena');
     let [email, setEmail] = useState('sifa@email.com');
-    let [username, setUsername] = useState('');
     let [category, setCategory] = useState('Associate');
     let [nema, setNema] = useState('NEMA/IAE/NA/12345');
     let [certificate, setCertificate] = useState('EIK/2/1234');
@@ -21,6 +22,10 @@ export default function MemberDetails({control}){
     let [alternative, setAlternative] = useState('x');
 
     let [edit, setEdit] = useState(true);
+
+    useEffect(()=>{
+        getData(setData, '/admin/members', {xyz:'opy',xy:'opy'})
+    },[])
 
     return(
     <div className="bg-white w-[80%] md:w-fit py-1 px-4 rounded-lg max-h-[89%] md:max-h-fit -mt-12 overflow-y-scroll">
