@@ -2,6 +2,7 @@
 import { Scanner } from '@yudiel/react-qr-scanner';
 import { useEffect, useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
+import { getData } from "@/app/lib/data";
 
 export default function Page(){
     let params = useSearchParams();
@@ -14,10 +15,7 @@ export default function Page(){
 
     useEffect(()=>{
         if (id != null)
-            fetch(`${process.env.NEXT_PUBLIC_API_URL}/verify?id=${id}`).then(res=>res.json()).then(data=>{
-                setData(data)
-                console.log(data)
-            })
+        getData(setData, '/certificate/verify', {id})
     },[])
 
     let verify = result=>{
@@ -51,11 +49,11 @@ export default function Page(){
                 />
                 </>
                 :
-                <div className="mx-4">
+                <div className="mx-4 md:mx-auto md:w-2/3">
                     <span className="bg-primary text-white px-4 py-2 block my-4 text-center text-xl font-semibold lg:w-1/2">Certificate Valid</span>
-                    <h3>Certificate {id} <br /> issued to {data.name.toUpperCase()}</h3>
-                    <div>Member Number: {data.member}</div>
-                    <div>Date issued: {data.date}</div>
+                    <div className='my-2'>Issued to: {data['user'].name}</div>
+                    <div className='my-2'>Member Number: {data['number']}</div>
+                    <div className='my-2'>Date issued: {data['created_at']}</div>
                 </div>
             }
         </Suspense>

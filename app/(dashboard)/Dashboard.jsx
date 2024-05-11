@@ -6,6 +6,7 @@ import Lyn from "@/app/ui/charts/Line"
 import Py from "@/app/ui/charts/Pie"
 import { ArrowTrendingUpIcon, ArrowTrendingDownIcon } from "@heroicons/react/24/outline"
 import { useRouter } from "next/navigation";
+import { getData } from "@/app/lib/data"
 
 export default function Dashboard(){
     let {User} = useContext(Context)
@@ -32,9 +33,7 @@ export default function Dashboard(){
         if (User[0].role != 'Admin') {
             router.push('/profile')
         }
-        fetch(`${process.env.NEXT_PUBLIC_API_URL}/summary`).then(res=>res.json()).then(data=>{
-            setData(data)
-        })
+        getData(setData, '/summary',{})
         console.log(data)
     },[])
     return(

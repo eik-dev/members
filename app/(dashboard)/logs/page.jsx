@@ -41,7 +41,7 @@ export default function Page(){
                 {
                     data.slice(0,Range[0]).map((data,index)=>{
                         return(
-                            <tr key={index} className="border-b border-gray-700">
+                            <tr key={index} className="border-b border-gray-300">
                                 {
                                     Object.keys(data).map((key, index) => {
                                         return(
@@ -56,7 +56,7 @@ export default function Page(){
                 {
                     [...new Array((Range[0]-data.length>0)?Range[0]-data.length:0)].map((_,index)=>{
                         return(
-                            <tr key={index} className="border-b border-gray-700">
+                            <tr key={index} className="border-b border-gray-300">
                                 <td className="py-6"></td>
                             </tr>
                         )
