@@ -1,85 +1,48 @@
 'use client'
 import { useEffect, useState, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { PDFDocument, rgb } from 'pdf-lib';
+import { PDFDocument, rgb, degrees } from 'pdf-lib';
 import fontkit from '@pdf-lib/fontkit'
 import QRCode from 'qrcode'
 import { getData } from "@/app/lib/data";
 
-async function downloadPDF(e,data){
+async function modifyPdf(e,data) {
     e.preventDefault();
-    console.log('Downloading...');
-
-    let pngImageBytes = await fetch('/certificates/transparent-logo.png').then(res =>res.arrayBuffer()).catch(err => console.error(err));
-
+    const url = '/certificates/eik-cert.pdf'
+    const existingPdfBytes = await fetch(url).then(res => res.arrayBuffer())
     let qrImageBytes = await fetch(await QRCode.toDataURL(`https://portal.eik.co.ke/verify?id=${data['number']}`)).then(res => res.arrayBuffer()).catch(err => console.error(err));
-
-    const pdfDoc = await PDFDocument.create()
-    pdfDoc.registerFontkit(fontkit)
-
-    let pngImage = await pdfDoc.embedPng(pngImageBytes);
+  
+    const pdfDoc = await PDFDocument.load(existingPdfBytes)
     let qrCodeImage = await pdfDoc.embedPng(qrImageBytes);
-
-    let pngDims = pngImage.scale(1);
-    let qrCodeDims = qrCodeImage.scale(0.25);
-
-    const page = pdfDoc.addPage();
-    const { width, height } = page.getSize();
-    let fontSize = 30;
-    let fontBytes = await fetch('/certificates/DancingScript-Regular.ttf').then(res => res.arrayBuffer()).catch(err => console.error(err));
-    let dancingScript = await pdfDoc.embedFont(fontBytes, {subset: true});
-
-    let line = height - pngDims.height;
-    page.drawImage(pngImage, {
-        x: width/2 - pngDims.width/2,
-        y: line,
-        width: pngDims.width,
-        height: pngDims.height,
-    });
-    
-    line = line - pngDims.height;
-    page.drawText('Certificate of Membership', {
-        x: 50,
-        y: line,
-        size: fontSize,
-        font: dancingScript,
-        color: rgb(0, 0.53, 0.71),
-    })
-    
-    line = line - fontSize
-    fontSize = 10;
-    page.drawText('This is to verify that', {
-        x: 50,
-        y: line,
-        size: fontSize,
+    let qrCodeDims = qrCodeImage.scale(0.75);
+    const pages = pdfDoc.getPages()
+    const firstPage = pages[0]
+    const { width, height } = firstPage.getSize()
+    firstPage.drawText(data['user'].name.toUpperCase(), {
+        x: width/3 + 180,
+        y: height / 2 + 60,
+        size: 70,
         color: rgb(0, 0, 0),
     })
-
-    line = line - fontSize
-    page.drawText(data['user'].name.toUpperCase(), {
-        x: 50,
-        y: line,
-        size: fontSize,
+    firstPage.drawText('Member No: '+ data['number'], {
+        x: width/2 - 290,
+        y: height / 2 - 50,
+        size: 50,
         color: rgb(0, 0, 0),
     })
-
-    line = line - fontSize
-    page.drawText('Member NO: '+ data['number'], {
-        x: 50,
-        y: line,
-        size: fontSize,
+    firstPage.drawText(data['verified'], {
+        x: width - 1100,
+        y: 365,
+        size: 60,
         color: rgb(0, 0, 0),
     })
-
-    line = line - fontSize*4
-    page.drawImage(qrCodeImage, {
-        x: 50,
-        y: line,
+    firstPage.drawImage(qrCodeImage, {
+        x: width/2,
+        y: 300,
         width: qrCodeDims.width,
         height: qrCodeDims.height,
     });
-    
-
+  
     const pdfBytes = await pdfDoc.save()
 
     //download pdf
@@ -88,7 +51,7 @@ async function downloadPDF(e,data){
     link.href = window.URL.createObjectURL(blob);
     link.download = 'certificate.pdf';
     link.click();
-}
+  }
 
 export default function Page() {
     let params = useSearchParams();
@@ -107,7 +70,7 @@ export default function Page() {
                 <h3>Issued to: {data['user'].name}</h3>
                 <div className='my-3'>Member Number: {data['number']}</div>
                 <div className='my-3'>Valid upto: {data['expiry']}</div>
-                <button className=' px-5 py-2 bg-secondary hover:bg-primary text-white my-4 rounded-full' onClick={e=>downloadPDF(e,data)}>Download</button>
+                <button className=' px-5 py-2 bg-secondary hover:bg-primary text-white my-4 rounded-full' onClick={e=>modifyPdf(e,data)}>Download</button>
             </div>
         }
     </Suspense>

@@ -7,15 +7,10 @@ import { getData } from "@/app/lib/data";
 export default function Page(){
     let params = useSearchParams();
     let id = params.get('id');
-    let [data, setData] = useState({
-        name: '',
-        member: '',
-        date:''
-    });
+    let [data, setData] = useState();
 
     useEffect(()=>{
-        if (id != null)
-        getData(setData, '/certificate/verify', {id})
+        if (id != null)  getData(setData, '/certificate/verify', {id});
     },[])
 
     let verify = result=>{
@@ -49,6 +44,7 @@ export default function Page(){
                 />
                 </>
                 :
+                data &&
                 <div className="mx-4 md:mx-auto md:w-2/3">
                     <span className="bg-primary text-white px-4 py-2 block my-4 text-center text-xl font-semibold lg:w-1/2">Certificate Valid</span>
                     <div className='my-2'>Issued to: {data['user'].name}</div>
