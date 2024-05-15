@@ -1,14 +1,28 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { XMarkIcon } from "@heroicons/react/24/outline"
+import Input from "@/app/ui/Input";
+import { postData, getData } from "@/app/lib/data";
 
-export default function Edit({control}){
+export default function Edit({control, id}){
     let [fullName, setFullName] = useState('');
     let [email, setEmail] = useState('');
     let [username, setUsername] = useState('');
+    let [data, setData] = useState({});
+
+    useEffect(()=>{
+        getData(setData, '/admin/read', {id})
+    },[])
+    useEffect(()=>{
+        console.log(data)
+        setFullName(data.name)
+        setEmail(data.email)
+        setUsername(data.username)
+    },[data])
 
     let submit = e=>{
         e.preventDefault();
         console.log('submitting')
+        postData({fullName, email, username, id}, '/admin/modify')
     }
 
     return(
@@ -18,21 +32,15 @@ export default function Edit({control}){
             <XMarkIcon className="w-8 h-8" onClick={e=>control('')} />
         </div>
 
-        <div className="border-2 rounded-md focus-within:border-primary text-gray-400 focus-within:text-primary py-2 mb-6 relative">
-            <span className="text-xs absolute -top-2 left-2 bg-white px-2 focus-within:text-primary font-semibold">Full name</span>
-            <input className="px-4 w-full text-black" type="text" placeholder="Full name" value={fullName} onChange={e=>setFullName(e.target.value)} />
-        </div>
-        <div className="border-2 rounded-md focus-within:border-primary text-gray-400 focus-within:text-primary py-2 mb-6 relative">
-            <span className="text-xs absolute -top-2 left-2 bg-white px-2 focus-within:text-primary font-semibold">Email</span>
-            <input className="px-4 w-full text-black" type="email" placeholder="Email" value={email} onChange={e=>setEmail(e.target.value)} />
-        </div>
-        <div className="border-2 rounded-md focus-within:border-primary text-gray-400 focus-within:text-primary py-2 mb-6 relative">
-            <span className="text-xs absolute -top-2 left-2 bg-white px-2 focus-within:text-primary font-semibold">Username</span>
-            <input className="px-4 w-full text-black" type="text" placeholder="Username" value={username} onChange={e=>setUsername(e.target.value)} />
+        <div className="flex flex-col gap-6">
+            <Input value={fullName} setValue={setFullName} placeholder={'Jane Doe'} type={'text'} name={'Full name'}/>
+            <Input value={email} setValue={setEmail} placeholder={'janedoe@gmail.com'} type={'email'} name={'Email'}/>
+            <Input value={username} setValue={setUsername} placeholder={''} type={'text'} name={'Username'}/>
         </div>
 
-        <div className="flex w-full justify-between gap-4 my-4 text-sm">
-            <button className="py-2 px-4 w-[50%] whitespace-nowrap rounded-md font-semibold bg-primary text-white">Save Changes</button>
+
+        <div className="flex w-full justify-between gap-4 my-6 text-sm">
+            <button className="py-2 px-4 w-[50%] whitespace-nowrap rounded-md font-semibold bg-primary text-white" onClick={e=>submit(e)}>Save Changes</button>
             <button className="border-2 py-2 px-4 w-[50%] whitespace-nowrap rounded-md font-semibold" onClick={e=>control('')}>Cancel</button>
         </div>
     </div>

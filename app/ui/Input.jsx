@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react"
+import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
 
 export function Institutions({data, setData}){
-    let [institution, setInstitution] = useState('');
-    let [course, setCourse] = useState('');
-    let [startDate, setStartDate] = useState('');
-    let [endDate, setEndDate] = useState('');
+    let [Institution, setInstitution] = useState('');
+    let [Certification, setCourse] = useState('');
+    let [start, setStartDate] = useState('');
+    let [end, setEndDate] = useState('');
 
     let handler = e => {
     }
@@ -19,7 +20,12 @@ export function Institutions({data, setData}){
 
     let add = e => {
         e.preventDefault();
-        setData([...data, {institution, course, startDate, endDate}])
+        setData([...data, {
+            Institution,
+            Certification,
+            start,
+            end
+        }])
         setInstitution('')
         setCourse('')
         setStartDate('')
@@ -32,9 +38,6 @@ export function Institutions({data, setData}){
         setData(temp)
     }
 
-    useEffect(()=>{
-    },[institution, course, startDate, endDate])
-
     return(
         <>
         <div className="w-[90%]">
@@ -42,20 +45,20 @@ export function Institutions({data, setData}){
                 data.map((item, index)=>{
                     return(
                         <div key={index} className='my-8 flex flex-col gap-4 md:flex-row justify-between items-center'>
-                            <Input disabled={true} value={item.institution} placeholder={'University of Nairobi'} type={'text'} name={'Institution'}/>
-                            <Input disabled={true} value={item.course} placeholder={'Enviromental Science'} type={'text'} name={'Course'}/>
-                            <Input disabled={true} value={item.startDate} placeholder={''} type={'date'} name={'Start date'}/>
-                            <Input disabled={true} value={item.endDate}  placeholder={''} type={'date'} name={'End date'}/>
+                            <Input disabled={true} value={item.Institution} placeholder={'University of Nairobi'} type={'text'} name={'Institution'}/>
+                            <Input disabled={true} value={item.Certification} placeholder={'Enviromental Science'} type={'text'} name={'Course'}/>
+                            <Input disabled={true} value={item.start} placeholder={''} type={'date'} name={'Start date'}/>
+                            <Input disabled={true} value={item.end}  placeholder={''} type={'date'} name={'End date'}/>
                             <button onClick={e=>remove(e,index)} className="text-2xl px-6 h-fit rounded-md bg-warning font-semibold text-white">-</button>
                         </div>
                     )
                 })
             }
             <div className='my-8 flex flex-col gap-4 md:flex-row justify-between'>
-                <Input required={true} value={institution} setValue={setInstitution} placeholder={'University of Nairobi'} type={'text'} name={'Institution'}/>
-                <Input value={course} setValue={setCourse} placeholder={'Enviromental Science'} type={'text'} name={'Course'}/>
-                <Input value={startDate} setValue={setStartDate} placeholder={''} type={'date'} name={'Start date'}/>
-                <Input value={endDate} setValue={setEndDate} placeholder={''} type={'date'} name={'End date'}/>
+                <Input required={true} value={Institution} setValue={setInstitution} placeholder={'University of Nairobi'} type={'text'} name={'Institution'}/>
+                <Input value={Certification} setValue={setCourse} placeholder={'BSc. Enviromental Science'} type={'text'} name={'Certification'}/>
+                <Input value={start} setValue={setStartDate} placeholder={''} type={'date'} name={'Start date'}/>
+                <Input value={end} setValue={setEndDate} placeholder={''} type={'date'} name={'End date'}/>
             </div>
         </div>
         <div className="flex items-center group">
@@ -67,11 +70,11 @@ export function Institutions({data, setData}){
 }
 
 export function Organizations({data, setData}){
-    let [institution, setInstitution] = useState('');
-    let [course, setCourse] = useState('');
-    let [location, setLocation] = useState('');
-    let [startDate, setStartDate] = useState('');
-    let [endDate, setEndDate] = useState('');
+    let [Organization, setInstitution] = useState('');
+    let [Position, setCourse] = useState('');
+    let [Location, setLocation] = useState('');
+    let [start, setStartDate] = useState('');
+    let [end, setEndDate] = useState('');
 
     let handler = e => {
     }
@@ -86,7 +89,7 @@ export function Organizations({data, setData}){
 
     let add = e => {
         e.preventDefault();
-        setData([...data, {institution, location, course, startDate, endDate}])
+        setData([...data, {Organization, Location, Position, start, end}])
         setInstitution('')
         setCourse('')
         setLocation('')
@@ -100,9 +103,6 @@ export function Organizations({data, setData}){
         setData(temp)
     }
 
-    useEffect(()=>{
-    },[institution, course, startDate, endDate])
-
     return(
         <>
         <div className="w-[90%]">
@@ -110,22 +110,22 @@ export function Organizations({data, setData}){
                 data.map((item, index)=>{
                     return(
                         <div key={index} className='my-8 flex flex-col gap-4 md:flex-row justify-between items-center'>
-                            <Input disabled={true} value={item.institution} placeholder={''} type={'text'} name={'Organization'}/>
-                            <Input disabled={true} value={item.course} placeholder={''} type={'text'} name={'Position'}/>
-                            <Input disabled={true} value={item.location} placeholder={''} type={'text'} name={'Position'}/>
-                            <Input disabled={true} value={item.startDate} placeholder={''} type={'date'} name={'Start date'}/>
-                            <Input disabled={true} value={item.endDate}  placeholder={''} type={'date'} name={'End date'}/>
+                            <Input disabled={true} value={item.Organization} placeholder={''} type={'text'} name={'Organization'}/>
+                            <Input disabled={true} value={item.Position} placeholder={''} type={'text'} name={'Position'}/>
+                            <Input disabled={true} value={item.Location} placeholder={''} type={'text'} name={'Location'}/>
+                            <Input disabled={true} value={item.start} placeholder={''} type={'date'} name={'Start date'}/>
+                            <Input disabled={true} value={item.end}  placeholder={''} type={'date'} name={'End date'}/>
                             <button onClick={e=>remove(e,index)} className="text-2xl px-6 h-fit rounded-md bg-warning font-semibold text-white">-</button>
                         </div>
                     )
                 })
             }
             <div className='my-8 flex flex-col gap-4 md:flex-row justify-between'>
-                <Input required={true} value={institution} setValue={setInstitution} placeholder={''} type={'text'} name={'Organization'}/>
-                <Input value={course} setValue={setCourse} placeholder={''} type={'text'} name={'Position'}/>
-                <Input value={location} setValue={setLocation} placeholder={'Nairobi, Kenya'} type={'text'} name={'Position'}/>
-                <Input value={startDate} setValue={setStartDate} placeholder={''} type={'date'} name={'Start date'}/>
-                <Input value={endDate} setValue={setEndDate} placeholder={''} type={'date'} name={'End date'}/>
+                <Input required={true} value={Organization} setValue={setInstitution} placeholder={''} type={'text'} name={'Organization'}/>
+                <Input value={Position} setValue={setCourse} placeholder={''} type={'text'} name={'Position'}/>
+                <Input value={Location} setValue={setLocation} placeholder={'Nairobi, Kenya'} type={'text'} name={'Location'}/>
+                <Input value={start} setValue={setStartDate} placeholder={''} type={'date'} name={'Start date'}/>
+                <Input value={end} setValue={setEndDate} placeholder={''} type={'date'} name={'End date'}/>
             </div>
         </div>
         <div className="flex items-center group">
@@ -138,6 +138,7 @@ export function Organizations({data, setData}){
 
 export default function Input({type, value, setValue, placeholder, disabled, name, required }){
     let [error, setError] = useState(false)
+    let [show, setShow] = useState(type=='password'?true:false)
 
     let handler = e => {
         if (required && value=='') setError(true)
@@ -151,9 +152,23 @@ export default function Input({type, value, setValue, placeholder, disabled, nam
         }
     },[])
     return (
-        <div id={name.replace(/\s+/g, '').toLowerCase()} className={`border-2 rounded-md focus-within:border-primary focus-within:text-primary py-2 relative h-fit w-full ${error?'text-warning border-warning':'text-gray-500'}`}>
+        <div id={name.replace(/\s+/g, '').toLowerCase()} className={`border-2 flex rounded-md focus-within:border-primary focus-within:text-primary py-2 pr-4 relative h-fit w-full ${error?'text-warning border-warning':'text-gray-500'}`}>
             <span className="text-xs absolute -top-2 left-2 bg-white px-2 focus-within:text-primary font-semibold">{name} {required ? '*' : ''}</span>
-            <input disabled={disabled} className={`px-4 w-full ${disabled ? 'text-black' : 'text-gray-600'}`} type={type} placeholder={placeholder} value={value} onChange={e => setValue(e.target.value)} />
+            {
+                type=='textarea'?
+                <textarea required disabled={disabled} className={`px-4 w-full h-48 ${disabled?'text-black':'text-gray-600'}`} type="text" placeholder={placeholder} value={value} onChange={e=>setValue(e.target.value)} />
+                :
+                <input disabled={disabled} className={`px-4 w-full ${disabled ? 'text-black' : 'text-gray-600'}`} type={show?'password':type=='password'?'text':type} placeholder={placeholder} value={value} onChange={e => setValue(e.target.value)} />
+            }
+            {
+                type=='password'?
+                show?
+                <EyeIcon onClick={e=>{setShow(false)}} className="w-5 h-5"/>
+                :
+                <EyeSlashIcon onClick={e=>{setShow(true)}} className="w-5 h-5"/>
+                :
+                null
+            }
         </div>
     );
 }

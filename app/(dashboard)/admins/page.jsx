@@ -16,6 +16,7 @@ export default function Page(){
     let [showOverlay, setShowOverlay] = useState(false);
     let [overlay, setOverlay] = useState('');
     let [optionsAt, setOptionsAt] = useState(-1);
+    let [userID, setUserID] = useState();
     
     let [data, setData] = useState([]);
 
@@ -33,10 +34,10 @@ export default function Page(){
         <div onClick={e=>{optionsAt>=0?setOptionsAt(-1):null}}>
         <Head Range={Range} Search={Search} Title={'Admin panel'} TH={TH} Sort={Sort} placeholder={'Search registerd admins'}>
             <span className="min-w-[2px] hidden md:block min-h-6 h-max bg-tertiary mx-4"></span>
-            <div className="bg-secondary text-white flex md:w-fit px-4 py-2 rounded-lg mx-auto w-2/3 items-center justify-center text-base lg:text-xs 2xl:text-base" onClick={e=>setOverlay('new')}>
+            <button className="bg-secondary text-white flex md:w-fit px-4 py-2 rounded-lg mx-auto w-2/3 items-center justify-center text-base lg:text-xs 2xl:text-base" onClick={e=>setOverlay('new')}>
                 <UserPlusIcon className="w-6 h-6 lg:w-4 lg:h-4 2xl:w-6 2xl:h-6 mr-2"/>
                 <span className="font-semibold">New Admin</span>
-            </div>
+            </button>
         </Head>
         <div className="overflow-x-scroll mt-2 md:mt-10 mx-2 lg:mx-0 max-h-96 md:max-h-[65vh] overflow-y-scroll">
         <table className="w-full text-sm lg:text-xs 2xl:text-sm text-left table-auto">
@@ -57,26 +58,26 @@ export default function Page(){
                             <tr key={index} className="border-b border-gray-300">
                                 {
                                     <>
-                                    <td key={index} className="px-6 py-4 whitespace-nowrap">{data['name']}</td>
-                                    <td key={index} className="px-6 py-4 whitespace-nowrap">{data['username']}</td>
-                                    <td key={index} className="px-6 py-4 whitespace-nowrap">{data['email']}</td>
+                                    <td className="px-6 py-4 whitespace-nowrap">{data['name']}</td>
+                                    <td className="px-6 py-4 whitespace-nowrap">{data['username']}</td>
+                                    <td className="px-6 py-4 whitespace-nowrap">{data['email']}</td>
                                     </>
                                 }
-                                <td className="px-6 py-4 whitespace-nowrap relative">
+                                <td onClick={e=>setUserID(data['id'])} className="px-6 py-4 whitespace-nowrap relative">
                                     <button onClick={e=>setOptionsAt(index)}>
                                         <EllipsisVerticalIcon className="w-6 h-6"/>
                                     </button>
                                     {
                                         optionsAt === index &&
-                                        <div className={`flex absolute z-50 right-12 md:right-44 bg-white flex-col gap-y-4 ${true?'block':'hidden'}`}>
-                                            <div className="flex gap-x-2" onClick={e=>setOverlay('edit')}>
+                                        <div className={`flex shadow-xl p-4 absolute z-50 right-12 md:right-44 bg-white flex-col gap-y-4 ${true?'block':'hidden'}`}>
+                                            <button className="flex gap-x-2" onClick={e=>setOverlay('edit')}>
                                                 <PencilSquareIcon className="w-6 h-6"/>
                                                 Edit details
-                                            </div>
-                                            <div className="flex gap-x-2 text-warning" onClick={e=>setOverlay('delete')}>
+                                            </button>
+                                            <button className="flex gap-x-2 text-warning" onClick={e=>setOverlay('delete')}>
                                                 <TrashIcon className="w-6 h-6"/>
                                                 Delete admin
-                                            </div>
+                                            </button>
                                         </div>
                                     }
                                 </td>
@@ -97,9 +98,9 @@ export default function Page(){
         </table>
         </div>
         <Overlay className={`${showOverlay?'block':'hidden'}`} >
-            {overlay === 'edit' && <Edit control={setOverlay} />}
-            {overlay === 'delete' && <Delete control={setOverlay} />}
-            {overlay === 'new' && <New control={setOverlay} />}
+            {overlay === 'edit' && <Edit control={setOverlay} id={userID} />}
+            {overlay === 'delete' && <Delete control={setOverlay} id={userID} />}
+            {overlay === 'new' && <New control={setOverlay} id={userID} />}
         </Overlay>
         </div>
     )

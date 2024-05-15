@@ -63,13 +63,10 @@ export default function File({ files, setFiles, type }) {
                     image?
                     <img src={image} alt="profile" className='h-56 w-56 rounded-lg'/>
                     :
-                    <ViewfinderCircleIcon className='text-tertiary h-56 w-56'/>
+                    <ViewfinderCircleIcon className='text-tertiary w-24 h-24 md:w-56 md:h-56'/>
                 :
                 <img src="/icons/file.svg" className="w-24 h-24 md:w-56 md:h-56" alt="" />
             }
-            <label htmlFor="profile" className='py-4'>
-                <span className='text-secondary'>Browse Files</span> or Drag into area
-            </label>
             <input 
                 type="file"
                 id={`profile-${type}`} 
@@ -83,14 +80,16 @@ export default function File({ files, setFiles, type }) {
                 placeholder='Upload profile photo'
                 className="
                     text-sm text-stone-500
-                    file:mr-5 file:py-1 file:px-3 file:border-[1px]
-                    file:text-xs file:font-medium
-                    file:bg-stone-50 file:text-stone-700
-                    hover:file:cursor-pointer hover:file:bg-blue-50
-                    hover:file:text-blue-700
+                    file:bg-white file:border-none file:outline-none
+                    file:font-medium
+                    file:text-secondary file:text-lg
+                    hover:file:cursor-pointer hover:file:text-xl
                     file:hidden
                 " 
             />
+            <label htmlFor={`profile-${type}`}  className='py-4'>
+                <span className='text-secondary'>Browse Files</span> or Drag into area
+            </label>
             {files.map((file, index) => (
                 <div className="text-sm md:text-base grid grid-cols-3 gap-x-2 auto-rows-max mb-2" key={index}>
                     <span className="whitespace-pre-wrap col-span-2 text-left">{file.name}</span>

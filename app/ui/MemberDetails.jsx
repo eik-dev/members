@@ -1,31 +1,94 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useContext } from "react"
+import { Context } from "@/app/lib/ContextProvider";
 import Image from "next/image";
 import { XMarkIcon, PencilSquareIcon } from "@heroicons/react/24/outline"
 import Input from "./Input";
-import { getData } from "@/app/lib/data";
+import { getData, postData } from "@/app/lib/data";
 
-export default function MemberDetails({control}){
+export default function MemberDetails({control,id}){
+    let {Profile} = useContext(Context);
+    let [profile, setProfile] = Profile;
     let [data, setData] = useState();
-    let [fullName, setFullName] = useState('Sifa Kilomena');
-    let [email, setEmail] = useState('sifa@email.com');
-    let [category, setCategory] = useState('Associate');
-    let [nema, setNema] = useState('NEMA/IAE/NA/12345');
-    let [certificate, setCertificate] = useState('EIK/2/1234');
-    let [firm, setFirm] = useState('"');
-    let [pin, setPin] = useState('"');
-    let [nationality, setNationality] = useState('Kenyan');
-    let [id, setId] = useState('21315967');
-    let [postal, setPostal] = useState('987654 - 00100');
-    let [town, setTown] = useState('Nairobi');
-    let [county, setCounty] = useState('Nairobi');
-    let [phone, setPhone] = useState('+254 712345678');
-    let [alternative, setAlternative] = useState('x');
-
-    let [edit, setEdit] = useState(true);
+    let [fullName, setFullName] = useState('');
+    let [email, setEmail] = useState('');
+    let [category, setCategory] = useState('');
+    let [nema, setNema] = useState('');
+    let [certificate, setCertificate] = useState('');
+    let [firm, setFirm] = useState('');
+    let [pin, setPin] = useState('');
+    let [nationality, setNationality] = useState('');
+    let [nationalID, setNationalID] = useState('');
+    let [postal, setPostal] = useState('');
+    let [town, setTown] = useState('');
+    let [county, setCounty] = useState('');
+    let [phone, setPhone] = useState('');
+    let [alternative, setAlternative] = useState('');
 
     useEffect(()=>{
-        getData(setData, '/admin/members', {xyz:'opy',xy:'opy'})
+        if(Object.keys(profile).length > 0){
+            console.log('PROFILE ',profile);
+            setFullName(profile.profile['name']);
+            setEmail(profile.profile['email']);
+            setNema(profile.profile['nema']);
+            setCertificate(profile.certificate['number']);
+            setCategory(profile.profile['category']);
+            setFirm(profile.profile['firm']);
+            setPin(profile.profile['kra']);
+            setNationality(profile.profile['nationality']);
+            setNationalID(profile.profile['nationalID']);
+            setPostal(profile.profile['postal']);
+            setTown(profile.profile['town']);
+            setCounty(profile.profile['county']);
+            setPhone(profile.profile['phone']);
+            setAlternative(profile.profile['alternate']);
+        }
+        else getData(setData, '/admin/members', {id})
     },[])
+
+    useEffect(()=>{
+        if(data){
+            setFullName(data[0]['name']);
+            setEmail(data[0]['email']);
+            setNema(data[0]['nema']);
+            setCertificate(data[0]['certificates']['number']);
+            setCategory(data[0]['individual']['category']);
+            setFirm(data[0]['individual']['firm']);
+            setPin(data[0]['individual']['kra']);
+            setNationality(data[0]['individual']['nationality']);
+            setNationalID(data[0]['individual']['nationalID']);
+            setPostal(data[0]['individual']['postal']);
+            setTown(data[0]['individual']['town']);
+            setCounty(data[0]['individual']['county']);
+            setPhone(data[0]['individual']['phone']);
+            setAlternative(data[0]['individual']['alternate']);
+        }
+    },[data])
+
+    let submit = e=>{
+        e.preventDefault();
+        let data = {
+            id,
+            fullName,
+            email,
+            nema,
+            individual: {
+                category,
+                firm,
+                kra: pin,
+                nationalID,
+                nationality,
+                postal,
+                town,
+                county,
+                phone,
+                alternate: alternative
+            },
+            certificates: {
+                number: certificate
+            },
+        }
+        postData(data, '/admin/members')
+    }
 
     return(
     <div className="bg-white w-[80%] md:w-fit py-1 px-4 rounded-lg max-h-[89%] md:max-h-fit -mt-12 overflow-y-scroll">
@@ -47,67 +110,25 @@ export default function MemberDetails({control}){
             </div>
             </div>
             <div className="grid md:grid-cols-2 gap-4 md:gap-6 w-full">
-                <div className="border-2 rounded-md focus-within:border-primary text-gray-400 focus-within:text-primary py-2 relative h-fit">
-                    <span className="text-xs absolute -top-2 left-2 bg-white px-2 focus-within:text-primary font-semibold">Full name</span>
-                    <input disabled={!edit} className={`px-4 w-full ${edit?'text-black':'text-gray-600'}`} type="text" placeholder="Full name" value={fullName} onChange={e=>setFullName(e.target.value)} />
-                </div>
-                <div className="border-2 rounded-md focus-within:border-primary text-gray-400 focus-within:text-primary py-2 relative h-fit">
-                    <span className="text-xs absolute -top-2 left-2 bg-white px-2 focus-within:text-primary font-semibold">Category</span>
-                    <input disabled={!edit} className={`px-4 w-full ${edit?'text-black':'text-gray-600'}`} type="text" placeholder="Full name" value={category} onChange={e=>setCategory(e.target.value)} />
-                </div>
-                <div className="border-2 rounded-md focus-within:border-primary text-gray-400 focus-within:text-primary py-2 relative h-fit">
-                    <span className="text-xs absolute -top-2 left-2 bg-white px-2 focus-within:text-primary font-semibold">NEMA Registration Number</span>
-                    <input disabled={!edit} className={`px-4 w-full ${edit?'text-black':'text-gray-600'}`} type="text" placeholder="Full name" value={nema} onChange={e=>setNema(e.target.value)} />
-                </div>
-                <div className="border-2 rounded-md focus-within:border-primary text-gray-400 focus-within:text-primary py-2 relative h-fit">
-                    <span className="text-xs absolute -top-2 left-2 bg-white px-2 focus-within:text-primary font-semibold">Certificate Number</span>
-                    <input disabled={!edit} className={`px-4 w-full ${edit?'text-black':'text-gray-600'}`} type="text" placeholder="Full name" value={certificate} onChange={e=>setCertificate(e.target.value)} />
-                </div>
-                <div className="border-2 rounded-md focus-within:border-primary text-gray-400 focus-within:text-primary py-2 relative h-fit">
-                    <span className="text-xs absolute -top-2 left-2 bg-white px-2 focus-within:text-primary font-semibold">Firm of Experts</span>
-                    <input disabled={!edit} className={`px-4 w-full ${edit?'text-black':'text-gray-600'}`} type="text" placeholder="Full name" value={firm} onChange={e=>setFirm(e.target.value)} />
-                </div>
-                <div className="border-2 rounded-md focus-within:border-primary text-gray-400 focus-within:text-primary py-2 relative h-fit">
-                    <span className="text-xs absolute -top-2 left-2 bg-white px-2 focus-within:text-primary font-semibold">Firm of Experts PIN Number</span>
-                    <input disabled={!edit} className={`px-4 w-full ${edit?'text-black':'text-gray-600'}`} type="text" placeholder="Full name" value={pin} onChange={e=>setPin(e.target.value)} />
-                </div>
-                <div className="border-2 rounded-md focus-within:border-primary text-gray-400 focus-within:text-primary py-2 relative h-fit">
-                    <span className="text-xs absolute -top-2 left-2 bg-white px-2 focus-within:text-primary font-semibold">Nationality</span>
-                    <input disabled={!edit} className={`px-4 w-full ${edit?'text-black':'text-gray-600'}`} type="text" placeholder="Full name" value={nationality} onChange={e=>setNationality(e.target.value)} />
-                </div>
-                <div className="border-2 rounded-md focus-within:border-primary text-gray-400 focus-within:text-primary py-2 relative h-fit">
-                    <span className="text-xs absolute -top-2 left-2 bg-white px-2 focus-within:text-primary font-semibold">Identification Number</span>
-                    <input disabled={!edit} className={`px-4 w-full ${edit?'text-black':'text-gray-600'}`} type="text" placeholder="Full name" value={id} onChange={e=>setId(e.target.value)} />
-                </div>
-                <div className="border-2 rounded-md focus-within:border-primary text-gray-400 focus-within:text-primary py-2 relative h-fit">
-                    <span className="text-xs absolute -top-2 left-2 bg-white px-2 focus-within:text-primary font-semibold">Postal Address</span>
-                    <input disabled={!edit} className={`px-4 w-full ${edit?'text-black':'text-gray-600'}`} type="text" placeholder="Full name" value={postal} onChange={e=>setPostal(e.target.value)} />
-                </div>
-                <div className="border-2 rounded-md focus-within:border-primary text-gray-400 focus-within:text-primary py-2 relative h-fit">
-                    <span className="text-xs absolute -top-2 left-2 bg-white px-2 focus-within:text-primary font-semibold">Town</span>
-                    <input disabled={!edit} className={`px-4 w-full ${edit?'text-black':'text-gray-600'}`} type="text" placeholder="Full name" value={town} onChange={e=>setTown(e.target.value)} />
-                </div>
-                <div className="border-2 rounded-md focus-within:border-primary text-gray-400 focus-within:text-primary py-2 relative h-fit">
-                    <span className="text-xs absolute -top-2 left-2 bg-white px-2 focus-within:text-primary font-semibold">County</span>
-                    <input disabled={!edit} className={`px-4 w-full ${edit?'text-black':'text-gray-600'}`} type="text" placeholder="Full name" value={county} onChange={e=>setCounty(e.target.value)} />
-                </div>
-                <div className="border-2 rounded-md focus-within:border-primary text-gray-400 focus-within:text-primary py-2 relative h-fit">
-                    <span className="text-xs absolute -top-2 left-2 bg-white px-2 focus-within:text-primary font-semibold">Phone Number</span>
-                    <input disabled={!edit} className={`px-4 w-full ${edit?'text-black':'text-gray-600'}`} type="text" placeholder="Full name" value={phone} onChange={e=>setPhone(e.target.value)} />
-                </div>
-                <div className="border-2 rounded-md focus-within:border-primary text-gray-400 focus-within:text-primary py-2 relative h-fit">
-                    <span className="text-xs absolute -top-2 left-2 bg-white px-2 focus-within:text-primary font-semibold">Email Address</span>
-                    <input disabled={!edit} className={`px-4 w-full ${edit?'text-black':'text-gray-600'}`} type="text" placeholder="Full name" value={email} onChange={e=>setEmail(e.target.value)} />
-                </div>
-                <div className="border-2 rounded-md focus-within:border-primary text-gray-400 focus-within:text-primary py-2 relative h-fit">
-                    <span className="text-xs absolute -top-2 left-2 bg-white px-2 focus-within:text-primary font-semibold">Alternative Email Address</span>
-                    <input disabled={!edit} className={`px-4 w-full ${edit?'text-black':'text-gray-600'}`} type="text" placeholder="Full name" value={alternative} onChange={e=>setAlternative(e.target.value)} />
-                </div>
+                <Input value={fullName} setValue={setFullName} placeholder={''} type={'text'} name={'Full name'}/>
+                <Input value={category} setValue={setCategory} placeholder={''} type={'text'} name={'Category'}/>
+                <Input value={nema} setValue={setNema} placeholder={''} type={'text'} name={'NEMA Registration Number'}/>
+                <Input value={certificate} setValue={setCertificate} placeholder={''} type={'text'} name={'Certificate Number'}/>
+                <Input value={firm} setValue={setFirm} placeholder={''} type={'text'} name={'Firm of Experts'}/>
+                <Input value={pin} setValue={setPin} placeholder={''} type={'text'} name={'KRA pin'}/>
+                <Input value={nationality} setValue={setNationality} placeholder={''} type={'text'} name={'Nationality'}/>
+                <Input value={nationalID} setValue={setNationalID} placeholder={''} type={'text'} name={'Identification Number'}/>
+                <Input value={postal} setValue={setPostal} placeholder={''} type={'text'} name={'Postal Address'}/>
+                <Input value={town} setValue={setTown} placeholder={''} type={'text'} name={'Town'}/>
+                <Input value={county} setValue={setCounty} placeholder={''} type={'text'} name={'County'}/>
+                <Input value={phone} setValue={setPhone} placeholder={''} type={'text'} name={'Phone Number'}/>
+                <Input value={email} setValue={setEmail} placeholder={''} type={'email'} name={'Email Address'}/>
+                <Input value={alternative} setValue={setAlternative} placeholder={''} type={'text'} name={'Alternative Email Address'}/>
             </div>
         </div>
 
         <div className="flex md:w-1/2 md:float-right mt-4 md:mt-12 justify-between gap-4 my-4 text-sm">
-            <button className={`py-2 px-4 w-[50%] whitespace-nowrap rounded-md font-semibold bg-primary text-white`}>Save Changes</button>
+            <button className={`py-2 px-4 w-[50%] whitespace-nowrap rounded-md font-semibold bg-primary text-white`} onClick={e=>submit(e)}>Save Changes</button>
             <button className="border-2 py-2 px-4 w-[50%] whitespace-nowrap rounded-md font-semibold" onClick={e=>control('')}>Cancel</button>
         </div>
     </div>

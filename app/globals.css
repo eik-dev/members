@@ -3,8 +3,12 @@
 @tailwind utilities;
 
 /* Style scroll bar */
-::-webkit-scrollbar {
-  width: 10px;
+.large-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: black grey;
+}
+.no-scroll{
+  scrollbar-width: none;
 }
 
 input:focus, textarea:focus{

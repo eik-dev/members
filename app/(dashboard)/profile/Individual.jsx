@@ -5,11 +5,11 @@ import { PrinterIcon, EllipsisVerticalIcon, PencilSquareIcon } from "@heroicons/
 import Overlay from "@/app/ui/overlay"
 import MemberDetails from "@/app/ui/MemberDetails"
 import Attachments from "./Attachments"
-import Training from "./Training"
 import Qualifications from "./Qualifications"
 import Experience from "./Experience"
 import Introductory from "./Introductory"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useContext } from "react"
+import { Context } from "@/app/lib/ContextProvider"
 import { getData } from "@/app/lib/data"
 import { popupE } from "@/app/lib/trigger"
 
@@ -26,23 +26,25 @@ function SectionHead({section}){
         <>
         <div onClick={e=>{showEdit?setShowEdit(false):null}} className="flex justify-between border-b-2 py-4 my-4 mx-2 relative">
             <h3 className="font-bold text-lg">{section}</h3>
-            <button onClick={e=>setShowEdit(!showEdit)}>
-                <EllipsisVerticalIcon className="h-6 w-6" />
-            </button>
+            {
+                section!='Training' &&
+                <button onClick={e=>setShowEdit(!showEdit)}>
+                    <EllipsisVerticalIcon className="h-6 w-6" />
+                </button>
+            }
             {
                 showEdit &&
-                <div onClick={e=>setShowEdit(false)} className={`flex absolute z-50 right-4 top-10 md:right-0 bg-white flex-col gap-y-4 ${true?'block':'hidden'}`}>
-                    <div className="flex gap-x-2" onClick={e=>setOverlay(section)}>
+                <div onClick={e=>setShowEdit(false)} className={`flex shadow-lg p-4 absolute z-50 right-4 top-10 md:right-0 bg-white flex-col gap-y-4 ${true?'block':'hidden'}`}>
+                    <button className="flex gap-x-2" onClick={e=>setOverlay(section)}>
                         <PencilSquareIcon className="w-6 h-6"/>
                         Edit details
-                    </div>
+                    </button>
                 </div>
             }
         </div>
         <Overlay className={`${showOverlay?'block':'hidden'}`} >
             {overlay=='Basic Information'?<MemberDetails control={setOverlay} />:null}
             {overlay=='Introductory Statement'?<Introductory control={setOverlay} />:null}
-            {overlay=='Training'?<Training control={setOverlay} />:null}
             {overlay=='Professional Qualification'?<Qualifications control={setOverlay} />:null}
             {overlay=='Work Experience'?<Experience control={setOverlay} />:null}
             {overlay=='Attachments'?<Attachments control={setOverlay} />:null}
@@ -51,16 +53,21 @@ function SectionHead({section}){
     )
 }
 export default function Individual({id}){
-    let [files, setFiles] = useState([])
-    let [profilePhoto, setProfilePhoto] = useState([])
-    let [profile, setProfile] = useState({});
+    let {Profile} = useContext(Context);
+    let [profile, setProfile] = Profile;
     let router = useRouter();
 
     useEffect(() => {
-        getData(setFiles, '/files/requirements', {})
-        getData(setProfilePhoto, '/files/profile', {})
-        getData(setProfile, '/profile', {})
+        getData((profile)=>{
+            getData((requirements)=>{
+                getData((photo)=>{
+                    setProfile({...profile, requirements:requirements, photo: photo[0]})
+                }, '/files/profile', {})
+            }, '/files/requirements', {})
+        }, '/profile', {})
     }, [])
+
+    useEffect(()=>{console.log(profile)},[profile])
 
     let print = e => {
         e.preventDefault();
@@ -88,8 +95,8 @@ export default function Individual({id}){
             <div className="flex flex-col gap-x-3 md:flex-row w-full">
                 <div className="w-32 md:w-64 h-fit relative mr-4 mb-4">
                     {
-                        profilePhoto.length>0?
-                        <img src={profilePhoto[0].url} alt="" />
+                        profile.photo?
+                        <img src={profile.photo.url} alt="" />
                         :
                         <Image
                             src="/profile.png"
@@ -171,46 +178,58 @@ export default function Individual({id}){
         <section>
             <SectionHead section={'Training'}/>
             <div className="grid grid-cols-2 md:w-1/3 gap-y-1">
-                <span className="font-bold w-fit">Institution:</span>
-                <span className="md:whitespace-nowrap">Nairobi University</span>
+                <span className="font-bold w-fit">Title:</span>
+                <span className="md:whitespace-nowrap">ESG Training</span>
                 <span className="font-bold w-fit">Start & Finish Date:</span>
                 <span className="md:whitespace-nowrap">8th March, 2021 - 17th March, 2023</span>
-                <span className="font-bold w-fit">Certification</span>
-                <span className="md:whitespace-nowrap">Bachelors Degree in Environmental Studies and Community Development (Second Class Honours)</span>
+                <span className="font-bold w-fit">Teacher</span>
+                <span className="md:whitespace-nowrap">Anderson Rioba</span>
+                <a className="text-secondary text-sm mt-2" href="#">Download certificate</a>
             </div>
         </section>
         <section>
             <SectionHead section={'Professional Qualification'}/>
-            <div className="grid grid-cols-2 md:w-1/3 gap-y-1">
-                <span className="font-bold w-fit">Institution:</span>
-                <span className="md:whitespace-nowrap">Nairobi University</span>
-                <span className="font-bold w-fit">Start & Finish Date:</span>
-                <span className="md:whitespace-nowrap">8th March, 2021 - 17th March, 2023</span>
-                <span className="font-bold w-fit">Location</span>
-                <span className="md:whitespace-nowrap">Nairobi, Kenya</span>
-                <span className="font-bold w-fit">Specialization</span>
-                <span className="md:whitespace-nowrap">Bachelors Degree in Environmental Studies and Community Development (Second Class Honours)</span>
-            </div>
+            {
+                profile.education != undefined &&
+                profile.education.map((item, index) => {
+                    return(
+                        <div key={index} className="grid grid-cols-2 md:w-1/3 gap-y-1 mb-4">
+                            <span className="font-bold w-fit">Institution:</span>
+                            <span className="md:whitespace-nowrap">{item.Institution}</span>
+                            <span className="font-bold w-fit">Start & Finish Date:</span>
+                            <span className="md:whitespace-nowrap">{item.start} - {item.end}</span>
+                            <span className="font-bold w-fit">Specialization</span>
+                            <span className="md:whitespace-nowrap">{item.Certification}</span>
+                        </div>
+                    )
+                })
+            }
         </section>
         <section>
             <SectionHead section={'Work Experience'}/>
-            <div className="grid grid-cols-2 md:w-1/3 gap-y-1">
-                <span className="font-bold w-fit">Company:</span>
-                <span className="md:whitespace-nowrap">Nairobi County Government</span>
-                <span className="font-bold w-fit">Start & Finish Date:</span>
-                <span className="md:whitespace-nowrap">8th March, 2021 - 17th March, 2023</span>
-                <span className="font-bold w-fit">Job title</span>
-                <span className="md:whitespace-nowrap">Intern</span>
-                <span className="font-bold w-fit">Company Telephone</span>
-                <span className="md:whitespace-nowrap">+254 712345678</span>
-                <span className="font-bold w-fit">Company Email</span>
-                <span className="md:whitespace-nowrap">ncg@go.ke</span>
-            </div>
+            {
+                profile.profession != undefined &&
+                profile.profession.map((item, index) => {
+                    return(
+                        <div className="grid grid-cols-2 md:w-1/3 gap-y-1 mb-4">
+                            <span className="font-bold w-fit">Company:</span>
+                            <span className="md:whitespace-nowrap">{item.Organization}</span>
+                            <span className="font-bold w-fit">Location</span>
+                            <span className="md:whitespace-nowrap">{item.Location}</span>
+                            <span className="font-bold w-fit">Start & Finish Date:</span>
+                            <span className="md:whitespace-nowrap">{item.start} - {item.end}</span>
+                            <span className="font-bold w-fit">Job title</span>
+                            <span className="md:whitespace-nowrap">{item.Position}</span>
+                        </div>
+                    )
+                })
+            }
         </section>
         <section>
             <SectionHead section={'Attachments'}/>
             {
-                files.map((file, index) => (
+                profile.requirements != undefined &&
+                profile.requirements.map((file, index) => (
                     <div key={index}>
                         <a className="text-secondary underline mb-2 block" href={`${file.url}`} target='blank' download>{file.name}</a>
                     </div>
