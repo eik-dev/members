@@ -1,14 +1,12 @@
-import { useState } from "react"
 import { ExclamationTriangleIcon } from "@heroicons/react/24/outline"
+import { getData } from "@/app/lib/data";
 
-export default function Delete({control}){
-    let [fullName, setFullName] = useState('');
-    let [email, setEmail] = useState('');
-    let [username, setUsername] = useState('');
-
+export default function Delete({control, id}){
     let submit = e=>{
         e.preventDefault();
-        console.log('submitting')
+        console.log('Deleting')
+        getData((_)=>{}, '/admin/member/delete', {id})
+        control('');
     }
 
     return(
@@ -20,10 +18,10 @@ export default function Delete({control}){
             <span className="text-warning font-bold">Delete Member</span>
         </div>
         <p className="my-8 text-center text-sm">
-        Are you sure? This action cannot be undone. All values associated with this admin will be lost.
+        Are you sure? This action cannot be undone. All values associated with this user will be lost.
         </p>
         <div className="flex w-full justify-between gap-4 my-4 text-xs md:text-sm">
-            <button className="py-2 px-4 w-[50%] whitespace-nowrap rounded-md font-semibold bg-warning text-white">Yes, Delete Member</button>
+            <button className="py-2 px-4 w-[50%] whitespace-nowrap rounded-md font-semibold bg-warning text-white" onClick={e=>submit(e)}>Yes, Delete Member</button>
             <button className="border-2 py-2 px-4 w-[50%] whitespace-nowrap rounded-md font-semibold" onClick={e=>control('')}>Cancel</button>
         </div>
     </div>

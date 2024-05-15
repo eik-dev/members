@@ -5,7 +5,7 @@ export default function Qualifications({control}){
     let [institution, setInstitution] = useState('Nairobi University');
     let [start, setStart] = useState('8th March, 2021');
     let [finish, setFinish] = useState('20th April, 2023');
-    let [location, setLocation] = useState('BSc. Computer Science');
+    let [location, setLocation] = useState('Nairobi Kenya');
     let [specialization, setSpecialization] = useState('Second Class Honours');
 
     let [edit, setEdit] = useState(true);

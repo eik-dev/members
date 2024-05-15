@@ -15,22 +15,22 @@ export default function Page() {
     let [requirements, setRequirements] = useState([]);
 
     let [category, setCategory] = useState('Student');
-    let [name, setName] = useState('');
-    let [last, setLast] = useState('');
-    let [username, setUsername] = useState('');
+    let [name, setName] = useState('Samson');
+    let [last, setLast] = useState('Mongare');
+    let [username, setUsername] = useState('paradox');
+    let [email, setEmail] = useState('onyambusamson@gmail.com');
     let [nema, setNema] = useState('');
     let [firm, setFirm] = useState('');
     let [pin, setPin] = useState('');
     let [nationality, setNationality] = useState('');
-    let [ID, setID] = useState('');
+    let [ID, setID] = useState('39566590');
     let [postal, setPostal] = useState('');
     let [town, setTown] = useState('');
     let [county, setCounty] = useState('');
     let [phone, setPhone] = useState('');
-    let [email, setEmail] = useState('');
     let [alternate, setAlternate] = useState('');
-    let [note, setNote] = useState('');
-    let [password, setPassword] = useState('');
+    let [note, setNote] = useState('hakuna matata');
+    let [password, setPassword] = useState('sam');
     let [confirm, setConfirm] = useState('');
 
     let [institutions, setInstitutions] = useState([]);
@@ -72,7 +72,7 @@ export default function Page() {
 
     let validate = () => {
         //validate all required fields
-        if (name == '' || last == '' || username == '' || email == '' || ID == '' || password == '') {
+        if (name == '' || last == '' || username == '' || email == '' || ID == '' || password == '' || bio=='') {
             verifyE();
             popupE('error', 'Error', 'Fill all mandatory fields')
             return false;
@@ -83,6 +83,7 @@ export default function Page() {
     let submit = e => {
         e.preventDefault();
         if (validate()){
+            popupE('ok', 'Processing', 'Please wait...')
             fetch(`${process.env.NEXT_PUBLIC_API_URL}/register`, {
                 method: 'POST',
                 headers: {
@@ -107,7 +108,9 @@ export default function Page() {
                         kra: pin,
                         phone: phone,
                         note: note,
-                    }
+                    },
+                    education:institutions,
+                    profession:organizations
                 })
             })
             .then(res => res.json())
@@ -173,13 +176,14 @@ export default function Page() {
     let edit = true;
 
     return(
-        <div>
+        <div className=''>
             <h1 className='text-xl md:text-2xl font-medium mx-2 py-2 border-b-2 mb-8'>Profile info</h1>
-            <div className='flex flex-col gap-5'>
+            <div className='flex flex-col gap-5 mb-10'>
 
                 <div className='h-[50%]'>
                     <h4 className='mb-4'>Upload Profile Photo</h4>
-                    <div className='w-1/3'>
+                    <div className='md:w-1/3 mx-2'>
+                    {/* <div className='mx-2 md:w-1/3 md:mx-auto my-5'> */}
                         <File type='image' files={image} setFiles={setImage} />
                     </div>
                 </div>
@@ -216,12 +220,9 @@ export default function Page() {
                     </div>
                 </div>
             </div>
-            
-            <div className="border-2 rounded-md focus-within:border-primary text-gray-400 focus-within:text-primary py-2 relative h-fit mt-4 md:mt-8 md:w-2/3 mx-2">
-                <span className="text-xs absolute -top-2 left-2 bg-white px-2 focus-within:text-primary font-semibold">Bio</span>
-                <textarea disabled={!edit} className={`px-4 w-full h-48 ${edit?'text-black':'text-gray-600'}`} type="text" placeholder="Note" value={note} onChange={e=>setNote(e.target.value)} />
-            </div>
 
+            <Input required={true} value={note} setValue={setNote} placeholder={'Bio'} type={'textarea'} name={'Bio'}/>
+            
             <h1 className='text-xl md:text-2xl font-medium mx-2 py-2 border-b-2 my-8'>Requirements</h1>
             <div className='text-sm md:text-base mx-2'>
                 <p className=''>The following requirements must be satisfied for {category} Membership</p>
@@ -234,9 +235,21 @@ export default function Page() {
                 }
             </div>
             <div className='mt-4'>
-                {(category == 'Student' || category == 'Lead' || category == 'Associate') && <Institutions data={institutions} setData={setInstitutions}/> }
-                {(category == 'Fellow' || category == 'Lead' || category == 'Associate') && <Organizations data={organizations} setData={setOrganizations}/> }
+                {
+                (category == 'Student' || category == 'Lead' || category == 'Associate') && 
+                <>
+                <h1 className='text-xl md:text-2xl font-medium mx-2 py-2 border-b-2 my-8'>Education</h1>
+                <Institutions data={institutions} setData={setInstitutions}/>
+                </> 
+                }
+                {(category == 'Fellow' || category == 'Lead' || category == 'Associate') && 
+                <>
+                <h1 className='text-xl md:text-2xl font-medium mx-2 py-2 border-b-2 my-8'>Work Experience</h1>
+                <Organizations data={organizations} setData={setOrganizations}/>
+                </>
+                }
             </div>
+            <h1 className='text-xl md:text-2xl font-medium mx-2 py-2 border-b-2 my-8'>Upload Documents</h1>
             <div className='mx-2 md:w-1/3 md:mx-auto my-5'>
                 <File files={requirements} setFiles={setRequirements} type={'all'}/>
             </div>

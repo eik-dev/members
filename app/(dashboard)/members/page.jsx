@@ -75,15 +75,15 @@ export default function Page(){
                                     </button>
                                     {
                                         optionsAt === index &&
-                                        <div className={`flex absolute z-50 right-12 md:right-44 bg-white flex-col gap-y-4 ${true?'block':'hidden'}`} onClick={e=>setUserID(data['id'])}>
-                                            <div className="flex gap-x-2" onClick={e=>setOverlay('details')}>
+                                        <div className={`flex shadow-xl p-4 absolute z-50 right-12 md:right-44 bg-white flex-col gap-y-4 ${true?'block':'hidden'}`} onClick={e=>setUserID(data['id'])}>
+                                            <button className="flex gap-x-2" onClick={e=>setOverlay('details')}>
                                                 <UserCircleIcon className="w-6 h-6"/>
                                                 View details
-                                            </div>
-                                            <div className="flex gap-x-2 text-warning" onClick={e=>setOverlay('delete')}>
+                                            </button>
+                                            <button className="flex gap-x-2 text-warning" onClick={e=>setOverlay('delete')}>
                                                 <TrashIcon className="w-6 h-6"/>
                                                 Delete member
-                                            </div>
+                                            </button>
                                         </div>
                                     }
                                 </td>

@@ -38,8 +38,8 @@ export default function Dashboard(){
     },[])
     return(
         <>
-        <h1 className="my-2 ml-2 md:ml-0 text-primary font-bold text-2xl 2xl:text-4xl">Dashboard</h1>
-        <div className="mb-0 overflow-x-scroll w-[100%] px-4 ">
+        <h1 className="my-2 ml-2 md:ml-0 text-primary font-bold text-2xl 2xl:text-4xl overflow-hidden">Dashboard</h1>
+        <div className="mb-0 w-[100%] px-4 overflow-x-auto no-scroll">
             <div className="flex w-fit gap-10">
                 <div className="bg-tertiary bg-opacity-15 px-6 py-4 rounded-md w-80">
                     <div className="flex justify-between mb-4">

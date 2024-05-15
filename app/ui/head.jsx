@@ -10,7 +10,7 @@ export default function Head({children, Range, Search, Title, TH, placeholder, S
     return(
         <div className="mt-2 2xl:mt-4 mx-2 text-sm 2xl:text-base">
             <div className="flex justify-between my-6">
-                <h1 className="my-2 ml-2 md:ml-0 text-primary font-bold text-2xl 2xl:text-4xl">{Title}</h1>
+                <h1 className="my-2 ml-2 md:ml-0 text-primary font-bold text-2xl 2xl:text-4xl overflow-y-hidden">{Title}</h1>
                 <div className="md:flex items-center hidden">
                     <span className=" w-fit mr-2">1 - </span>
                     <input className="w-8 text-center bg-tertiary bg-opacity-55" placeholder={range} type="number" value={range} onChange={e=>{
