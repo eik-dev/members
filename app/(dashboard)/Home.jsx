@@ -20,7 +20,14 @@ export default function Home(){
             </p>
             <div className="flex">
                 <div>
-                    img
+                    <img src="" alt="" />
+                </div>
+                <div>
+                    <h3>Principles of Sustainable Waste Management</h3>
+                    <p className="">
+                    Discover innovative solutions and practical tips to reduce, reuse, and recycle waste effectively. Together, let's pave the way towards a greener, cleaner future. RSVP now and be part of the change!
+                    </p>
+                    <button className="bg-secondary text-white py-2 px-4 font-semibold mt-6">Register Now</button>
                 </div>
             </div>
         </div>

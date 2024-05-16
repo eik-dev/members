@@ -211,7 +211,7 @@ export default function Individual({id}){
                 profile.profession != undefined &&
                 profile.profession.map((item, index) => {
                     return(
-                        <div className="grid grid-cols-2 md:w-1/3 gap-y-1 mb-4">
+                        <div key={index} className="grid grid-cols-2 md:w-1/3 gap-y-1 mb-4">
                             <span className="font-bold w-fit">Company:</span>
                             <span className="md:whitespace-nowrap">{item.Organization}</span>
                             <span className="font-bold w-fit">Location</span>
