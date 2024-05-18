@@ -22,7 +22,7 @@ export default function Edit({control, id}){
     let submit = e=>{
         e.preventDefault();
         console.log('submitting')
-        postData({fullName, email, username, id}, '/admin/modify')
+        postData((_)=>{},{fullName, email, username, id}, '/admin/modify')
     }
 
     return(

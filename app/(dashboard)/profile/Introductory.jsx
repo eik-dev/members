@@ -15,7 +15,7 @@ export default function Introductory({control}){
 
     let submit = e=>{
         e.preventDefault();
-        postData({bio:note},'/profile/edit/bio')
+        postData((_)=>{},{bio:note},'/profile/edit/bio')
     }
 
     return(

@@ -79,12 +79,12 @@ export default function File({ files, setFiles, type }) {
                 multiple onChange={handleFileChange} 
                 placeholder='Upload profile photo'
                 className="
-                    text-sm text-stone-500
+                    text-sm text-black
                     file:bg-white file:border-none file:outline-none
                     file:font-medium
                     file:text-secondary file:text-lg
                     hover:file:cursor-pointer hover:file:text-xl
-                    file:hidden
+                    file:hidden text-center
                 " 
             />
             <label htmlFor={`profile-${type}`}  className='py-4'>

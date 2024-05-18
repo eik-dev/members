@@ -42,7 +42,7 @@ export function postFile(file,endpoint) {
         });
 }
 
-export async function postData(data,endpoint) {
+export async function postData(setData,data,endpoint) {
     let token = load('token');
     console.log(`Data:`, data)
     await fetch(`${process.env.NEXT_PUBLIC_API_URL}${endpoint}`, {
@@ -58,5 +58,6 @@ export async function postData(data,endpoint) {
         console.log(`From ${endpoint}`, data)
         if (data.error) popupE('error', 'Error', data.error)
         if (data.message) popupE('ok', 'Success', data.message)
+        setData(data);
     });
 }

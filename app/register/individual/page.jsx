@@ -7,6 +7,7 @@ import Pay from '@/app/ui/Pay'
 import File from '@/app/ui/File'
 import { Student, Affiliate, Honorary, Associate, Lead, Fellow } from '@/app/lib/instructions'
 import { popupE, verifyE } from '@/app/lib/trigger'
+import { postData } from '@/app/lib/data'
 
 export default function Page() {
     let router = useRouter()
@@ -15,26 +16,29 @@ export default function Page() {
     let [requirements, setRequirements] = useState([]);
 
     let [category, setCategory] = useState('Student');
-    let [name, setName] = useState('Samson');
-    let [last, setLast] = useState('Mongare');
-    let [username, setUsername] = useState('paradox');
-    let [email, setEmail] = useState('onyambusamson@gmail.com');
+    let [name, setName] = useState('');
+    let [last, setLast] = useState('');
+    let [username, setUsername] = useState('');
+    let [email, setEmail] = useState('');
     let [nema, setNema] = useState('');
     let [firm, setFirm] = useState('');
     let [pin, setPin] = useState('');
     let [nationality, setNationality] = useState('');
-    let [ID, setID] = useState('39566590');
+    let [ID, setID] = useState('');
     let [postal, setPostal] = useState('');
     let [town, setTown] = useState('');
     let [county, setCounty] = useState('');
     let [phone, setPhone] = useState('');
     let [alternate, setAlternate] = useState('');
-    let [note, setNote] = useState('hakuna matata');
-    let [password, setPassword] = useState('sam');
+    let [note, setNote] = useState('');
+    let [password, setPassword] = useState('');
     let [confirm, setConfirm] = useState('');
+    let [paymentMethod, setPaymentMethod] = useState('');
 
     let [institutions, setInstitutions] = useState([]);
+    let [checkInstituions, setCheckInstitutions] = useState(false);
     let [organizations, setOrganizations] = useState([]);
+    let [checkOrganizations, setCheckOrganizations] = useState(false);
 
     let [instructions, setInstructions] = useState(Student);
     let [amount, setAmount] = useState(300);
@@ -72,12 +76,21 @@ export default function Page() {
 
     let validate = () => {
         //validate all required fields
-        if (name == '' || last == '' || username == '' || email == '' || ID == '' || password == '' || bio=='') {
+        if (name == '' || last == '' || username == '' || email == '' || ID == '' || password == '' || bio=='' || (checkInstituions&&institutions.length==0) || (checkOrganizations&&organizations.length==0)){
             verifyE();
             popupE('error', 'Error', 'Fill all mandatory fields')
+            window.scrollTo({
+                top: 10,
+                behavior: 'smooth'
+            });
             return false;
         }
         return true;
+    }
+
+    let stk = e=>{
+        e.preventDefault();
+        postData((_)=>{},{phone, amount},'/pay/mpesa')
     }
 
     let submit = e => {
@@ -238,12 +251,14 @@ export default function Page() {
                 {
                 (category == 'Student' || category == 'Lead' || category == 'Associate') && 
                 <>
+                {()=>setCheckInstitutions(true)}
                 <h1 className='text-xl md:text-2xl font-medium mx-2 py-2 border-b-2 my-8'>Education</h1>
                 <Institutions data={institutions} setData={setInstitutions}/>
                 </> 
                 }
                 {(category == 'Fellow' || category == 'Lead' || category == 'Associate') && 
                 <>
+                {()=>setCheckOrganizations(true)}
                 <h1 className='text-xl md:text-2xl font-medium mx-2 py-2 border-b-2 my-8'>Work Experience</h1>
                 <Organizations data={organizations} setData={setOrganizations}/>
                 </>
@@ -256,6 +271,35 @@ export default function Page() {
 
             <h1 className='text-xl md:text-xl font-medium mx-2 py-2 border-b-2 mb-8'>Payment</h1>
             <div className='mx-2'>
+                <div className='flex gap-6 mb-6'>
+                    <button className='flex items-center font-semibold' onClick={e=>setPaymentMethod('mpesa')}>
+                        <div className={`rounded-full w-5 h-5 ${paymentMethod=='mpesa'?'bg-primary':'border-2'}`}></div>
+                        <img className='w-8' src="/icons/mpesa.svg" alt="" />
+                        Mpesa
+                    </button>
+                    <button className='flex items-center font-semibold' onClick={e=>setPaymentMethod('airtel')}>
+                        <div className={`rounded-full w-5 h-5 ${paymentMethod=='airtel'?'bg-primary':'border-2'}`}></div>
+                        <img className='w-8 mx-2 block' src="/icons/airtel.svg" alt="" />
+                        Airtel
+                    </button>
+                    <button className='flex items-center font-semibold' onClick={e=>setPaymentMethod('visa')}>
+                        <div className={`rounded-full w-5 h-5 ${paymentMethod=='visa'?'bg-primary':'border-2'}`}></div>
+                        <img className='w-10 mx-2 block' src="/icons/visa.svg" alt="" />
+                        Card
+                    </button>
+                </div>
+                {
+                    paymentMethod!='visa'?
+                    <div className='flex gap-2 mb-2'>
+                        <div>Phone number: </div>
+                        <div>{phone}</div>
+                    </div>
+                    :
+                    <div className='flex gap-2 mb-2'>
+                        <div>Name: </div>
+                        <div>{`${name} ${last}`}</div>
+                    </div>
+                }
                 <div className='flex gap-2 mb-2'>
                     <div>Amount due: </div>
                     <div>{amount} Ksh</div>
@@ -265,14 +309,20 @@ export default function Page() {
                     <div>{email}</div>
                 </div>
 
-                <div className='flex mt-4'>
-                    <Pay title={'Registration fee'} description={'First time registration fee'} amount={30} email={email} phone={phone} name={`${name} ${last}`} />
+                <div className='flex mt-4 gap-5'>
+                    <button className='py-2 px-6 border-2 bg-gray-200 hover:scale-105'>Edit</button>
+                    {
+                        paymentMethod=='mpesa'?
+                        <button onClick={e=>stk(e)} className='font-semibold leading-6 text-white bg-secondary w-fit text-center mr-4 py-2 px-6 rounded-md md:text-xl hover:scale-105'>Pay</button>
+                        :
+                        <Pay title={'Registration fee'} description={'First time registration fee'} amount={30} email={email} phone={phone} name={`${name} ${last}`} />
+                    }
                 </div>
             </div>
 
             <div className='flex justify-between'>
                 <div></div>
-                <button className="bg-primary px-4 md:px-6 py-2 text-white font-semibold my-8 rounded-md" onClick={e=>submit(e)}>Sign Up</button>
+                <button className="bg-primary px-4 md:px-6 py-2 text-white font-semibold my-8 rounded-md hover:scale-105" onClick={e=>submit(e)}>Sign Up</button>
             </div>
 
         </div>
