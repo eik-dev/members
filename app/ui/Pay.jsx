@@ -23,7 +23,7 @@ export default function Pay({tite, description, amount, email, phone, name}){
     return(
         <div>
             <button
-                className='font-semibold leading-6 text-white bg-secondary w-full text-center mr-4 py-2 px-4 rounded-md md:text-xl'
+                className='font-semibold leading-6 text-white bg-secondary w-fit text-center mr-4 py-2 px-6 rounded-md md:text-xl'
                 onClick={e => {
                     handleFlutterPayment({
                         callback: (response) => {

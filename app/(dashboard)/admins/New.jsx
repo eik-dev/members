@@ -11,7 +11,7 @@ export default function New({control}){
     let submit = e=>{
         e.preventDefault();
         console.log('submitting')
-        postData({fullName, email, username}, '/admin/add')
+        postData((_)=>{},{fullName, email, username}, '/admin/add')
         control('');
     }
 

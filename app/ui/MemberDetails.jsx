@@ -87,7 +87,7 @@ export default function MemberDetails({control,id}){
                 number: certificate
             },
         }
-        postData(data, '/admin/members')
+        postData((_)=>{},data, '/admin/members')
     }
 
     return(
