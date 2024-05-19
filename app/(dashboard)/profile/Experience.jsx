@@ -87,7 +87,7 @@ export default function Experience({control}){
             <div></div>
             <button onClick={e=>{
                 data['id']?delete_(e,data['id']):delete_(e,-1)
-            }} className="bg-warning font-semibold text-white px-4 py-1 rounded-sm">Delete</button>
+            }} className="font-semibold text-warning px-4 py-1 rounded-sm">Delete</button>
         </div>
 
         <div className="flex md:w-4/5 md:mx-auto flex-col justify-center gap-y-8 gap-x-10 mt-8 mb-4">

@@ -23,8 +23,7 @@ export function getData(setData,endpoint,parameters) {
     });
 }
 
-export function postFile(file,endpoint) {
-    let token = load('token');
+export function postFile(setData,file,endpoint,token = load('token')) {
     const formData = new FormData();
     formData.append(`file`, file);
     fetch(`${process.env.NEXT_PUBLIC_API_URL}${endpoint}`, {
@@ -36,14 +35,13 @@ export function postFile(file,endpoint) {
     })
         .then((res) => res.json())
         .then((data) => {
-            console.log(data);
             if (data.error==null)
-            popupE('ok', 'Success', 'File sent')
+            if (data.message) popupE('ok', 'Success', data.message)
+        setData(data);
         });
 }
 
-export async function postData(setData,data,endpoint) {
-    let token = load('token');
+export async function postData(setData,data,endpoint,token = load('token')) {
     console.log(`Data:`, data)
     await fetch(`${process.env.NEXT_PUBLIC_API_URL}${endpoint}`, {
         method: "POST",

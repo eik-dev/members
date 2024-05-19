@@ -12,12 +12,18 @@ export default function Layout({children}){
                 <span>Already have an account?</span>
                 <Link href={'/login'}> <span className="text-secondary font-semibold">Sign in</span> </Link>
             </div>
-            {
-                (pathname === '/register/individual' || pathname === '/register/firm') && 
-                <Link href={'/register'}>
-                    <ArrowLeftIcon className="w-6 h-6 ml-2"/>
-                </Link>
-            }
+            <div className="flex gap-4 items-center">
+                {
+                    (pathname === '/register/individual' || pathname === '/register/firm') && 
+                    <Link href={'/register'}>
+                        <ArrowLeftIcon className="w-6 h-6 ml-2"/>
+                    </Link>
+                }
+                <h3 className="text-primary font-semibold text-xl">
+                    {pathname === '/register/individual' && 'Individual Registration'}
+                    {pathname === '/register/firm' && 'Firm Registration'}
+                </h3>
+            </div>
             
             <div className="mt-6 mx-2">
                 {children}

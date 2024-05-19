@@ -2,16 +2,21 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Input from "@/app/ui/Input"
+import { Institutions, Organizations } from '@/app/ui/Input'
 import Pay from '@/app/ui/Pay'
 import File from '@/app/ui/File'
+import PaymentInfo from '@/app/ui/PaymentInfo'
+import Overlay from '@/app/ui/overlay'
 import { Corporate, Firms } from '@/app/lib/instructions'
 import { popupE, verifyE } from '@/app/lib/trigger'
+import { postData, postFile } from '@/app/lib/data'
 
 export default function Page() {
     let router = useRouter()
 
     let [image, setImage] = useState([]);
     let [requirements, setRequirements] = useState([]);
+    let [overlay, setOverlay] = useState('')
 
     let [category, setCategory] = useState('Corporate');
     let [firmName, setFirmName] = useState('');
@@ -30,6 +35,7 @@ export default function Page() {
 
     let [instructions, setInstructions] = useState(Corporate);
     let [amount, setAmount] = useState(300);
+    let [paymentMethod, setPaymentMethod] = useState('');
 
     useEffect(() => {
         switch (category) {
@@ -48,111 +54,67 @@ export default function Page() {
 
     let validate = () => {
         //validate all required fields
-        if (email == '' || password == '') {
+        if (false){
             verifyE();
             popupE('error', 'Error', 'Fill all mandatory fields')
+            window.scrollTo({
+                top: 10,
+                behavior: 'smooth'
+            });
             return false;
         }
         return true;
     }
 
+    let stk = e=>{
+        e.preventDefault();
+        popupE('ok', 'Processing', 'Please wait...')
+        postData((_)=>{},{phone, amount, email},'/pay/mpesa')
+    }
+
     let submit = e => {
         e.preventDefault();
         if (validate()){
-            fetch(`${process.env.NEXT_PUBLIC_API_URL}/register`, {
-                method: 'POST',
-                headers: {
-                'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    email: email,
-                    password: password,
-                    name: firmName,
-                    role: 'Firm',
-                    nema: nema,
-                    profile:{
-                        category: category,
-                        alternate: alternate,
-                        nationality: nationality,
-                        postal: postal,
-                        town: town,
-                        county: county,
-                        kra: pin,
-                        phone: phone,
-                        note: note,
-                    }
-                })
-            })
-            .then(res => res.json())
-            .then(data => {
-                if (data.error != null) {
-                    throw new Error(data.message)
+            popupE('ok', 'Processing', 'Please wait...')
+            postData((response)=>{
+                let token = response.token;
+                if (image.length>0) postFile((_)=>{},image[0],'/files/profile',token)
+                if (requirements.length>0) {
+                    requirements.forEach((file, index) => {
+                        postFile((_)=>{},file,'/files/requirements',token)
+                    });
                 }
-                if (data.success != null) {
-                    if (image.length>0) { //sending profile photo
-                        let token = data.token;
-                        console.log(`Token: ${token}`)
-                        let imageform = new FormData();
-                        imageform.append(`file`, image[0]);
-                        console.log(image[0].name)
-                        fetch(`${process.env.NEXT_PUBLIC_API_URL}/files/profile`, {
-                            method: "POST",
-                            headers:{
-                                'Authorization': `Bearer ${token}`,
-                            },
-                            body: imageform
-                        })
-                        .then((res) => res.json())
-                        .then((data) => {
-                            console.log(data);
-                            if (requirements.length>0){// sending requirements
-                                const formData = new FormData();
-                                requirements.forEach((file, index) => {
-                                    console.log(`${index} :: ${file.name}`);
-                                    formData.append(`file`, file);
-                                    fetch(`${process.env.NEXT_PUBLIC_API_URL}/files/requirements`, {
-                                        method: "POST",
-                                        headers:{
-                                            'Authorization': `Bearer ${token}`,
-                                        },
-                                        body: formData
-                                    })
-                                        .then((res) => res.json())
-                                        .then((data) => {
-                                            console.log(data);
-                                            popupE('ok', 'Success', 'Account created successfully')
-                                            router.push('/login')
-                                        });
-                                });
-                            } else { // no files
-                                popupE('ok', 'Success', 'Account created successfully')
-                                router.push('/login')
-                            }
-                        });
-                    } else { //no profile photo
-                        popupE('ok', 'Success', 'Account created successfully')
-                        router.push('/login')
-                    }
+                popupE('ok', 'Success', 'Account created successfully')
+                router.push('/login')
+            },{
+                email: email,
+                password: password,
+                name: firmName,
+                role: 'Firm',
+                nema: nema,
+                profile:{
+                    category: category,
+                    alternate: alternate,
+                    nationality: nationality,
+                    postal: postal,
+                    town: town,
+                    county: county,
+                    kra: pin,
+                    phone: phone,
+                    note: note,
                 }
-            })
-            .catch(err => {
-                console.log(err)
-                popupE('error', 'Server Error', err.message)
-            })
+            },'/register')
         }
     }
     
-
-    let edit = true;
-
     return(
-        <div>
-            <h1 className='text-xl md:text-2xl font-medium mx-2 py-2 border-b-2 mb-8'>Profile info</h1>
-            <div className='flex flex-col gap-5'>
+        <>
+            <h1 className='text-xl 2xl:text-2xl font-medium mx-2 py-2 border-b-2 mb-8'>Profile info</h1>
+            <div className='flex flex-col gap-5 mb-10'>
 
                 <div className='h-[50%]'>
                     <h4 className='mb-4'>Upload Profile Photo</h4>
-                    <div className='w-1/3'>
+                    <div className='md:w-1/3 mx-2'>
                         <File type='image' files={image} setFiles={setImage} />
                     </div>
                 </div>
@@ -161,8 +123,8 @@ export default function Page() {
                     <h3>Select Category</h3>
                     <div className='my-4 flex flex-col md:flex-row gap-4'>
                         <select className="bg-white border-[2px] rounded-lg p-2" name="" id="" onChange={e=>setCategory(e.target.value)}>
-                            <option className='bg-white hover:bg-white' value={'Corporate'}>Corporate Membership</option>
-                            <option className='bg-white hover:bg-white' value={'Firms'}>Firms Membership</option>
+                            <option className='bg-white hover:bg-white' value="Corporate">Corporate membership</option>
+                            <option className='bg-white hover:bg-white' value="Firms">Firms membership</option>
                         </select>
                     </div>
                     <div className='grid gap-x-6 gap-y-4 md:gap-y-8 md:grid-cols-2'>
@@ -181,14 +143,11 @@ export default function Page() {
                     </div>
                 </div>
             </div>
-            
-            <div className="border-2 rounded-md focus-within:border-primary text-gray-400 focus-within:text-primary py-2 relative h-fit mt-4 md:mt-8 md:w-2/3 mx-2">
-                <span className="text-xs absolute -top-2 left-2 bg-white px-2 focus-within:text-primary font-semibold">Bio</span>
-                <textarea disabled={!edit} className={`px-4 w-full h-48 ${edit?'text-black':'text-gray-600'}`} type="text" placeholder="Note" value={note} onChange={e=>setNote(e.target.value)} />
-            </div>
 
-            <h1 className='text-xl md:text-2xl font-medium mx-2 py-2 border-b-2 my-8'>Requirements</h1>
-            <div className='text-sm md:text-base mx-2'>
+            <Input required={true} value={note} setValue={setNote} placeholder={'Bio'} type={'textarea'} name={'Bio'}/>
+            
+            <h1 className='text-xl 2xl:text-2xl font-medium mx-2 py-2 border-b-2 my-8'>Requirements</h1>
+            <div className='text-sm 2xl:text-base mx-2'>
                 <p className=''>The following requirements must be satisfied for {category} Membership</p>
                 {
                     instructions.map((value,index)=>{
@@ -198,12 +157,42 @@ export default function Page() {
                     })
                 }
             </div>
+            <h1 className='text-xl 2xl:text-2xl font-medium mx-2 py-2 border-b-2 my-8'>Upload Documents</h1>
             <div className='mx-2 md:w-1/3 md:mx-auto my-5'>
                 <File files={requirements} setFiles={setRequirements} type={'all'}/>
             </div>
 
-            <h1 className='text-xl md:text-xl font-medium mx-2 py-2 border-b-2 mb-8'>Payment</h1>
+            <h1 className='text-xl 2xl:text-2xl font-medium mx-2 py-2 border-b-2 mb-8'>Payment</h1>
             <div className='mx-2'>
+                <div className='flex gap-6 mb-6'>
+                    <button className='flex items-center font-semibold' onClick={e=>setPaymentMethod('mpesa')}>
+                        <div className={`rounded-full md:w-5 md:h-5 w-7 h-4 ${paymentMethod=='mpesa'?'bg-primary':'border-2'}`}></div>
+                        <img className='w-8' src="/icons/mpesa.svg" alt="" />
+                        Mpesa
+                    </button>
+                    <button className='flex items-center font-semibold' onClick={e=>setPaymentMethod('airtel')}>
+                        <div className={`rounded-full md:w-5 md:h-5 w-7 h-4 ${paymentMethod=='airtel'?'bg-primary':'border-2'}`}></div>
+                        <img className='w-8 mx-2 block' src="/icons/airtel.svg" alt="" />
+                        Airtel
+                    </button>
+                    <button className='flex items-center font-semibold' onClick={e=>setPaymentMethod('visa')}>
+                        <div className={`rounded-full md:w-5 md:h-5 w-7 h-4 ${paymentMethod=='visa'?'bg-primary':'border-2'}`}></div>
+                        <img className='w-10 mx-2 block' src="/icons/visa.svg" alt="" />
+                        Card
+                    </button>
+                </div>
+                {
+                    paymentMethod!='visa'?
+                    <div className='flex gap-2 mb-2'>
+                        <div>Phone number: </div>
+                        <div>{phone}</div>
+                    </div>
+                    :
+                    <div className='flex gap-2 mb-2'>
+                        <div>Name: </div>
+                        <div>{`${name} ${last}`}</div>
+                    </div>
+                }
                 <div className='flex gap-2 mb-2'>
                     <div>Amount due: </div>
                     <div>{amount} Ksh</div>
@@ -213,16 +202,24 @@ export default function Page() {
                     <div>{email}</div>
                 </div>
 
-                <div className='flex mt-4'>
-                    <Pay title={'Registration fee'} description={'First time registration fee'} amount={30} email={email} phone={phone} name={`${firmName}`} />
+                <div className='flex mt-4 gap-5'>
+                    <button className='py-2 px-6 border-2 bg-gray-200 hover:scale-105' onClick={e=>setOverlay('payment')}>Edit</button>
+                    {
+                        paymentMethod=='mpesa'?
+                        <button onClick={e=>stk(e)} className='font-semibold leading-6 text-white bg-secondary w-fit text-center mr-4 py-2 px-6 rounded-md md:text-xl hover:scale-105'>Pay</button>
+                        :
+                        <Pay title={'Registration fee'} description={'First time registration fee'} amount={amount} email={email} phone={phone} name={firmName} />
+                    }
                 </div>
             </div>
 
             <div className='flex justify-between'>
                 <div></div>
-                <button className="bg-primary px-4 md:px-6 py-2 text-white font-semibold my-8 rounded-md" onClick={e=>submit(e)}>Sign Up</button>
+                <button className="bg-primary px-4 md:px-6 py-2 text-white font-semibold my-8 rounded-md hover:scale-105" onClick={e=>submit(e)}>Sign Up</button>
             </div>
-
-        </div>
+            <Overlay className={`${overlay!=''?'block':'hidden'}`} >
+                {overlay === 'payment' && <PaymentInfo control={setOverlay} amount={amount}/>}
+            </Overlay>
+        </>
     )
 }

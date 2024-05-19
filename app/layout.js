@@ -14,7 +14,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={montserrat.className}>
+      <body className={montserrat.className+' lg:text-sm 2xl:text-base'}>
         <ContextProvider>
           <Suspense>
             {children}

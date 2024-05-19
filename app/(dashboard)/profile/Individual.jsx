@@ -77,165 +77,167 @@ export default function Individual({id}){
             } else{
                 popupE('error','Error' ,'Certificate request has not been approved')
             }
-        }else  getData((_)=>{}, '/request', {})
+        }else  getData((response)=>{
+            setProfile({...profile, certificate:response.cert})
+        }, '/request', {})
     }
     
     return(
         <>
         <header className="flex flex-col gap-y-2 md:flex-row md:items-center md:justify-between ml-2 my-4">
             <h1 className="my-2 ml-2 md:ml-0 text-primary font-bold text-4xl">Profile</h1>
-            <button className="flex items-center h-fit bg-secondary w-fit text-white font-semibold px-4 py-2 rounded-md justify-between text-sm" onClick={e=>print(e)}>
+            <button className={`flex items-center h-fit bg-secondary w-fit text-white font-semibold px-4 py-2 rounded-md justify-between text-sm`} onClick={e=>print(e)}>
                 <PrinterIcon className="h-6 w-6 mr-2" />
-                Print Certificate Request
+                {profile['certificate']?'Print Certificate':'Print Certificate Request'}
             </button>
         </header>
-        <div className="mx-2">
-        <section>
-            <SectionHead section={'Basic Information'}/>
-            <div className="flex flex-col gap-x-3 md:flex-row w-full">
-                <div className="w-32 md:w-64 h-fit relative mr-4 mb-4">
+        <div className="mx-2 lg:text-sm 2xl:text-base">
+            <section>
+                <SectionHead section={'Basic Information'}/>
+                <div className="flex flex-col gap-x-3 md:flex-row w-full">
+                    <div className="w-32 md:w-64 h-fit relative mr-4 mb-4">
+                        {
+                            profile.photo?
+                            <img src={profile.photo.url} alt="" />
+                            :
+                            <Image
+                                src="/profile.svg"
+                                width={500}
+                                height={500}
+                                alt="Picture of the author"
+                            />
+                        }
+                    </div>
                     {
-                        profile.photo?
-                        <img src={profile.photo.url} alt="" />
-                        :
-                        <Image
-                            src="/profile.png"
-                            width={500}
-                            height={500}
-                            alt="Picture of the author"
-                        />
+                        profile.profile != undefined &&
+                        <div className="grid gap-x-5 gap-y-3 md:grid-cols-2 text-sm w-full">
+                            <div className="flex gap-4 justify-between">
+                                <span className="font-bold whitespace-nowrap w-1/2">Name of Expert:</span>
+                                <span className="w-1/2">{profile.profile.name}</span>
+                            </div>
+                            <div className="flex gap-4 justify-between">
+                                <span className="font-bold whitespace-nowrap w-1/2">Category:</span>
+                                <span className="w-1/2">{profile.profile.category}</span>
+                            </div>
+                            <div className="flex gap-4 justify-between">
+                                <span className="font-bold whitespace-nowrap w-1/2">Identification Number:</span>
+                                <span className="w-1/2">{profile.profile.nationalID}</span>
+                            </div>
+                            <div className="flex gap-4 justify-between">
+                                <span className="font-bold whitespace-nowrap w-1/2">Postal Address:</span>
+                                <span className="w-1/2">{profile.profile.postal}</span>
+                            </div>
+                            <div className="flex gap-4 justify-between">
+                                <span className="font-bold whitespace-nowrap md:whitespace-pre-wrap w-1/2">NEMA Registration Number:</span>
+                                <span className="w-1/2">{profile.profile.nema}</span>
+                            </div>
+                            <div className="flex gap-4 justify-between">
+                                <span className="font-bold whitespace-nowrap w-1/2">Town:</span>
+                                <span className="w-1/2">{profile.profile.town}</span>
+                            </div>
+                            <div className="flex gap-4 justify-between">
+                                <span className="font-bold whitespace-nowrap w-1/2">Certificate Number:</span>
+                                <span className="w-1/2">{profile['certificate'] && profile['certificate'].number}</span>
+                            </div>
+                            <div className="flex gap-4 justify-between">
+                                <span className="font-bold whitespace-nowrap w-1/2">County:</span>
+                                <span className="w-1/2">{profile.profile.county}</span>
+                            </div>
+                            <div className="flex gap-4 justify-between">
+                                <span className="font-bold whitespace-nowrap w-1/2">Firm of Experts:</span>
+                                <span className="w-1/2">{profile.profile.firm}</span>
+                            </div>
+                            <div className="flex gap-4 justify-between">
+                                <span className="font-bold whitespace-nowrap w-1/2">Phone Number:</span>
+                                <span className="w-1/2">{profile.profile.phone}</span>
+                            </div>
+                            <div className="flex gap-4 justify-between">
+                                <span className="font-bold whitespace-nowrap w-1/2">KRA PIN:</span>
+                                <span className="w-1/2">{profile.profile.kra}</span>
+                            </div>
+                            <div className="flex gap-4 justify-between">
+                                <span className="font-bold whitespace-nowrap w-1/2">Email:</span>
+                                <span className="w-1/2">{profile.profile.email}</span>
+                            </div>
+                            <div className="flex gap-4 justify-between">
+                                <span className="font-bold whitespace-nowrap w-1/2">Nationality:</span>
+                                <span className="w-1/2">{profile.profile.nationality}</span>
+                            </div>
+                            <div className="flex gap-4 justify-between">
+                                <span className="font-bold whitespace-nowrap w-1/2">Alternative Email Address:</span>
+                                <span className="w-1/2">{profile.profile.alternate}</span>
+                            </div>
+                        </div>
                     }
                 </div>
+            </section>
+            <section>
+                <SectionHead section={'Introductory Statement'}/>
+                <p className="font-light text-md">
+                    {profile.profile != undefined && profile.profile.bio}
+                </p>
+            </section>
+            <section>
+                <SectionHead section={'Training'}/>
+                <div className="grid grid-cols-2 md:w-1/3 gap-y-1">
+                    <span className="font-bold w-fit">Title:</span>
+                    <span className="md:whitespace-nowrap">ESG Training</span>
+                    <span className="font-bold w-fit">Start & Finish Date:</span>
+                    <span className="md:whitespace-nowrap">8th March, 2021 - 17th March, 2023</span>
+                    <span className="font-bold w-fit">Teacher</span>
+                    <span className="md:whitespace-nowrap">Anderson Rioba</span>
+                    <a className="text-secondary text-sm mt-2" href="#">Download certificate</a>
+                </div>
+            </section>
+            <section>
+                <SectionHead section={'Professional Qualification'}/>
                 {
-                    profile.profile != undefined &&
-                    <div className="grid gap-x-5 gap-y-3 md:grid-cols-2 text-sm w-full">
-                        <div className="flex gap-4 justify-between">
-                            <span className="font-bold whitespace-nowrap w-1/2">Name of Expert:</span>
-                            <span className="w-1/2">{profile.profile.name}</span>
-                        </div>
-                        <div className="flex gap-4 justify-between">
-                            <span className="font-bold whitespace-nowrap w-1/2">Category:</span>
-                            <span className="w-1/2">{profile.profile.category}</span>
-                        </div>
-                        <div className="flex gap-4 justify-between">
-                            <span className="font-bold whitespace-nowrap w-1/2">Identification Number:</span>
-                            <span className="w-1/2">{profile.profile.nationalID}</span>
-                        </div>
-                        <div className="flex gap-4 justify-between">
-                            <span className="font-bold whitespace-nowrap w-1/2">Postal Address:</span>
-                            <span className="w-1/2">{profile.profile.postal}</span>
-                        </div>
-                        <div className="flex gap-4 justify-between">
-                            <span className="font-bold whitespace-nowrap md:whitespace-pre-wrap w-1/2">NEMA Registration Number:</span>
-                            <span className="w-1/2">{profile.profile.nema}</span>
-                        </div>
-                        <div className="flex gap-4 justify-between">
-                            <span className="font-bold whitespace-nowrap w-1/2">Town:</span>
-                            <span className="w-1/2">{profile.profile.town}</span>
-                        </div>
-                        <div className="flex gap-4 justify-between">
-                            <span className="font-bold whitespace-nowrap w-1/2">Certificate Number:</span>
-                            <span className="w-1/2">{profile['certificate'] && profile['certificate'].number}</span>
-                        </div>
-                        <div className="flex gap-4 justify-between">
-                            <span className="font-bold whitespace-nowrap w-1/2">County:</span>
-                            <span className="w-1/2">{profile.profile.county}</span>
-                        </div>
-                        <div className="flex gap-4 justify-between">
-                            <span className="font-bold whitespace-nowrap w-1/2">Firm of Experts:</span>
-                            <span className="w-1/2">{profile.profile.firm}</span>
-                        </div>
-                        <div className="flex gap-4 justify-between">
-                            <span className="font-bold whitespace-nowrap w-1/2">Phone Number:</span>
-                            <span className="w-1/2">{profile.profile.phone}</span>
-                        </div>
-                        <div className="flex gap-4 justify-between">
-                            <span className="font-bold whitespace-nowrap w-1/2">KRA PIN:</span>
-                            <span className="w-1/2">{profile.profile.kra}</span>
-                        </div>
-                        <div className="flex gap-4 justify-between">
-                            <span className="font-bold whitespace-nowrap w-1/2">Email:</span>
-                            <span className="w-1/2">{profile.profile.email}</span>
-                        </div>
-                        <div className="flex gap-4 justify-between">
-                            <span className="font-bold whitespace-nowrap w-1/2">Nationality:</span>
-                            <span className="w-1/2">{profile.profile.nationality}</span>
-                        </div>
-                        <div className="flex gap-4 justify-between">
-                            <span className="font-bold whitespace-nowrap w-1/2">Alternative Email Address:</span>
-                            <span className="w-1/2">{profile.profile.alternate}</span>
-                        </div>
-                    </div>
+                    profile.education != undefined &&
+                    profile.education.map((item, index) => {
+                        return(
+                            <div key={index} className="grid grid-cols-2 md:w-1/3 gap-y-1 mb-4">
+                                <span className="font-bold w-fit">Institution:</span>
+                                <span className="md:whitespace-nowrap">{item.Institution}</span>
+                                <span className="font-bold w-fit">Start & Finish Date:</span>
+                                <span className="md:whitespace-nowrap">{item.start} - {item.end}</span>
+                                <span className="font-bold w-fit">Specialization</span>
+                                <span className="md:whitespace-nowrap">{item.Certification}</span>
+                            </div>
+                        )
+                    })
                 }
-            </div>
-        </section>
-        <section>
-            <SectionHead section={'Introductory Statement'}/>
-            <p className="font-light text-md">
-                {profile.profile != undefined && profile.profile.bio}
-            </p>
-        </section>
-        <section>
-            <SectionHead section={'Training'}/>
-            <div className="grid grid-cols-2 md:w-1/3 gap-y-1">
-                <span className="font-bold w-fit">Title:</span>
-                <span className="md:whitespace-nowrap">ESG Training</span>
-                <span className="font-bold w-fit">Start & Finish Date:</span>
-                <span className="md:whitespace-nowrap">8th March, 2021 - 17th March, 2023</span>
-                <span className="font-bold w-fit">Teacher</span>
-                <span className="md:whitespace-nowrap">Anderson Rioba</span>
-                <a className="text-secondary text-sm mt-2" href="#">Download certificate</a>
-            </div>
-        </section>
-        <section>
-            <SectionHead section={'Professional Qualification'}/>
-            {
-                profile.education != undefined &&
-                profile.education.map((item, index) => {
-                    return(
-                        <div key={index} className="grid grid-cols-2 md:w-1/3 gap-y-1 mb-4">
-                            <span className="font-bold w-fit">Institution:</span>
-                            <span className="md:whitespace-nowrap">{item.Institution}</span>
-                            <span className="font-bold w-fit">Start & Finish Date:</span>
-                            <span className="md:whitespace-nowrap">{item.start} - {item.end}</span>
-                            <span className="font-bold w-fit">Specialization</span>
-                            <span className="md:whitespace-nowrap">{item.Certification}</span>
+            </section>
+            <section>
+                <SectionHead section={'Work Experience'}/>
+                {
+                    profile.profession != undefined &&
+                    profile.profession.map((item, index) => {
+                        return(
+                            <div key={index} className="grid grid-cols-2 md:w-1/3 gap-y-1 mb-4">
+                                <span className="font-bold w-fit">Company:</span>
+                                <span className="md:whitespace-nowrap">{item.Organization}</span>
+                                <span className="font-bold w-fit">Location</span>
+                                <span className="md:whitespace-nowrap">{item.Location}</span>
+                                <span className="font-bold w-fit">Start & Finish Date:</span>
+                                <span className="md:whitespace-nowrap">{item.start} - {item.end}</span>
+                                <span className="font-bold w-fit">Job title</span>
+                                <span className="md:whitespace-nowrap">{item.Position}</span>
+                            </div>
+                        )
+                    })
+                }
+            </section>
+            <section>
+                <SectionHead section={'Attachments'}/>
+                {
+                    profile.requirements != undefined &&
+                    profile.requirements.map((file, index) => (
+                        <div key={index}>
+                            <a className="text-secondary underline mb-2 block" href={`${file.url}`} target='blank' download>{file.name}</a>
                         </div>
-                    )
-                })
-            }
-        </section>
-        <section>
-            <SectionHead section={'Work Experience'}/>
-            {
-                profile.profession != undefined &&
-                profile.profession.map((item, index) => {
-                    return(
-                        <div key={index} className="grid grid-cols-2 md:w-1/3 gap-y-1 mb-4">
-                            <span className="font-bold w-fit">Company:</span>
-                            <span className="md:whitespace-nowrap">{item.Organization}</span>
-                            <span className="font-bold w-fit">Location</span>
-                            <span className="md:whitespace-nowrap">{item.Location}</span>
-                            <span className="font-bold w-fit">Start & Finish Date:</span>
-                            <span className="md:whitespace-nowrap">{item.start} - {item.end}</span>
-                            <span className="font-bold w-fit">Job title</span>
-                            <span className="md:whitespace-nowrap">{item.Position}</span>
-                        </div>
-                    )
-                })
-            }
-        </section>
-        <section>
-            <SectionHead section={'Attachments'}/>
-            {
-                profile.requirements != undefined &&
-                profile.requirements.map((file, index) => (
-                    <div key={index}>
-                        <a className="text-secondary underline mb-2 block" href={`${file.url}`} target='blank' download>{file.name}</a>
-                    </div>
-                ))
-            }
-        </section>
+                    ))
+                }
+            </section>
         </div>
         </>
     )
