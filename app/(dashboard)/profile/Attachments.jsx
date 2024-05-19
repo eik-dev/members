@@ -23,7 +23,7 @@ export default function Attachments({control}){
     let save = e=>{
         e.preventDefault();
         files.forEach(file => {
-            postFile(file, '/files/requirements')
+            postFile((_)=>{},file, '/files/requirements')
         });
     }
 

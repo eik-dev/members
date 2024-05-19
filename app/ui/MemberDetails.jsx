@@ -100,7 +100,7 @@ export default function MemberDetails({control,id}){
         <div className="flex flex-col justify-center gap-y-8 gap-x-10 md:flex-row">
             <div className="w-32 md:w-64 h-fit relative">
             <Image
-                src="/profile.png"
+                src="/profile.svg"
                 width={500}
                 height={500}
                 alt="Picture of the author"
