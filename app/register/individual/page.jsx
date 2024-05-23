@@ -24,7 +24,6 @@ export default function Page() {
     let [username, setUsername] = useState('');
     let [email, setEmail] = useState('');
     let [nema, setNema] = useState('');
-    let [firm, setFirm] = useState('');
     let [pin, setPin] = useState('');
     let [nationality, setNationality] = useState('');
     let [ID, setID] = useState('');
@@ -120,14 +119,13 @@ export default function Page() {
                 nema: nema,
                 profile:{
                     category: category,
-                    firm: firm,
                     alternate: alternate,
                     nationality: nationality,
                     nationalID: ID,
                     postal: postal,
                     town: town,
                     county: county,
-                    kra: pin,
+                    firm: pin,
                     phone: phone,
                     note: note,
                 },
@@ -165,7 +163,6 @@ export default function Page() {
                         <Input required={true} value={name} setValue={setName} placeholder={'Jane'} type={'text'} name={'First name'}/>
                         <Input required={true} value={last} setValue={setLast} placeholder={'Doe'} type={'text'} name={'Last name'}/>
                         <Input required={true} value={username} setValue={setUsername} placeholder={'Username'} type={'username'} name={'username'}/>
-                        <Input value={firm} setValue={setFirm} placeholder={'Firm name'} type={'text'} name={'Firm'}/>
                         <Input required={true} value={email} setValue={setEmail} placeholder={'jane@gmail.com'} type={'email'} name={'Email'}/>
                         <Input value={alternate} setValue={setAlternate} placeholder={'jane@gmail.com'} type={'email'} name={'Alternate email'}/>
                         <Input value={nationality} setValue={setNationality} placeholder={'Kenya'} type={'text'} name={'Nationality'}/>
@@ -174,8 +171,10 @@ export default function Page() {
                         <Input value={town} setValue={setTown} placeholder={'Town'} type={'text'} name={'Town'}/>
                         <Input value={county} setValue={setCounty} placeholder={'County'} type={'text'} name={'County'}/>
                         <Input value={nema} setValue={setNema} placeholder={'AXR/321'} type={'text'} name={'NEMA'}/>
-                        <Input value={pin} setValue={setPin} placeholder={'4321'} type={'number'} name={'KRA PIN'}/>
+                        <Input value={pin} setValue={setPin} placeholder={'4321'} type={'number'} name={'FOE PIN'}/>
                         <Input value={phone} setValue={setPhone} placeholder={'0712345678'} type={'phone'} name={'Phone number'}/>
+                    </div>
+                    <div className='flex flex-col gap-x-6 gap-y-4 md:gap-y-8 md:flex-row mt-4 md:mt-8'>
                         <Input required={true} value={password} setValue={setPassword} placeholder={'******'} type={'password'} name={'Password'}/>
                         <Input value={confirm} setValue={setConfirm} placeholder={'******'} type={'password'} name={'Confirm password'}/>
                     </div>

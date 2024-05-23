@@ -1,10 +1,11 @@
 'use client'
 import { useState, useEffect } from "react"
+import { useRouter } from "next/navigation";
 import Head from '@/app/ui/head';
 import Overlay from "@/app/ui/overlay";
 import MemberDetails from "@/app/ui/MemberDetails";
 import Delete from "./Delete";
-import { EllipsisVerticalIcon, UserCircleIcon, TrashIcon, CheckIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import { EllipsisVerticalIcon, UserCircleIcon, TrashIcon, CheckIcon, XMarkIcon, DocumentIcon } from "@heroicons/react/24/outline";
 import { getData } from "@/app/lib/data";
 
 export default function Page(){
@@ -18,6 +19,7 @@ export default function Page(){
     let [userID, setUserID] = useState(null);
     
     let [data, setData] = useState([]);
+    let router = useRouter();
 
     useEffect(()=>{
         getData(setData, '/admin/members', {})
@@ -79,6 +81,10 @@ export default function Page(){
                                             <button className="flex gap-x-2" onClick={e=>setOverlay('details')}>
                                                 <UserCircleIcon className="w-6 h-6"/>
                                                 View details
+                                            </button>
+                                            <button className="flex gap-x-2" onClick={e=>router.push(`/profile?id=${data['id']}&role=Individual`)}>
+                                                <DocumentIcon className="w-6 h-6"/>
+                                                View Profile
                                             </button>
                                             <button className="flex gap-x-2 text-warning" onClick={e=>setOverlay('delete')}>
                                                 <TrashIcon className="w-6 h-6"/>
