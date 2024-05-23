@@ -7,7 +7,7 @@ import { getData } from "@/app/lib/data";
 export default function Experience({control}){
     let {Profile} = useContext(Context);
     let [profile, setProfile] = Profile;
-    let [note, setNote] = useState('As a dedicated member of the Environmental Institute of Kenya, I am committed to fostering sustainability and environmental stewardship within our community and beyond. With a passion for conservation and a drive to effect positive change, I actively engage in initiatives aimed at preserving our natural resources and promoting eco-friendly practices. Through collaboration, education, and advocacy, I strive to inspire others to join me in safeguarding our planet for future generations.');
+    let [note, setNote] = useState('');
     let [Organization, setInstitution] = useState('');
     let [start, setStart] = useState('');
     let [end, setFinish] = useState('');
@@ -27,6 +27,7 @@ export default function Experience({control}){
             setFinish(data[index].end)
             setTitle(data[index].Position)
             setLocation(data[index].Location)
+            setNote(data[index].Duties)
         }
     },[data])
     useEffect(()=>{
@@ -36,6 +37,7 @@ export default function Experience({control}){
             setFinish(data[index].end)
             setTitle(data[index].Position)
             setLocation(data[index].Location)
+            setNote(data[index].Duties)
         }
     },[index])
 
@@ -96,6 +98,7 @@ export default function Experience({control}){
             <Input value={Location} setValue={setLocation} placeholder={''} type={'text'} name={'Location'}/>
             <Input value={start} setValue={setStart} placeholder={''} type={'date'} name={'Start Date'}/>
             <Input value={end} setValue={setFinish} placeholder={''} type={'date'} name={'Finish Date'}/>
+            <Input value={note} setValue={setNote} placeholder={''} type={'textarea'} name={'Duties'}/>
         </div>
 
         <div className="flex items-center group md:px-8">

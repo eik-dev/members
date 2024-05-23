@@ -52,7 +52,7 @@ function SectionHead({section}){
         </>
     )
 }
-export default function Individual({id}){
+export default function Individual({id,role}){
     let {Profile} = useContext(Context);
     let [profile, setProfile] = Profile;
     let router = useRouter();
@@ -62,9 +62,9 @@ export default function Individual({id}){
             getData((requirements)=>{
                 getData((photo)=>{
                     setProfile({...profile, requirements:requirements, photo: photo[0]})
-                }, '/files/profile', {})
-            }, '/files/requirements', {})
-        }, '/profile', {})
+                }, '/files/profile', {id,role})
+            }, '/files/requirements', {id,role})
+        }, '/profile', {id,role})
     }, [])
 
     useEffect(()=>{console.log(profile)},[profile])
@@ -198,9 +198,11 @@ export default function Individual({id}){
                             <div key={index} className="grid grid-cols-2 md:w-1/3 gap-y-1 mb-4">
                                 <span className="font-bold w-fit">Institution:</span>
                                 <span className="md:whitespace-nowrap">{item.Institution}</span>
+                                <span className="font-bold w-fit">Title:</span>
+                                <span className="md:whitespace-nowrap">{item.Title}</span>
                                 <span className="font-bold w-fit">Start & Finish Date:</span>
                                 <span className="md:whitespace-nowrap">{item.start} - {item.end}</span>
-                                <span className="font-bold w-fit">Specialization</span>
+                                <span className="font-bold w-fit">Certification</span>
                                 <span className="md:whitespace-nowrap">{item.Certification}</span>
                             </div>
                         )
@@ -216,12 +218,18 @@ export default function Individual({id}){
                             <div key={index} className="grid grid-cols-2 md:w-1/3 gap-y-1 mb-4">
                                 <span className="font-bold w-fit">Company:</span>
                                 <span className="md:whitespace-nowrap">{item.Organization}</span>
+                                <span className="font-bold w-fit">Company Email:</span>
+                                <span className="md:whitespace-nowrap">{item.Email}</span>
+                                <span className="font-bold w-fit">Company Telephone:</span>
+                                <span className="md:whitespace-nowrap">{item.Phone}</span>
                                 <span className="font-bold w-fit">Location</span>
                                 <span className="md:whitespace-nowrap">{item.Location}</span>
                                 <span className="font-bold w-fit">Start & Finish Date:</span>
                                 <span className="md:whitespace-nowrap">{item.start} - {item.end}</span>
                                 <span className="font-bold w-fit">Job title</span>
                                 <span className="md:whitespace-nowrap">{item.Position}</span>
+                                <span className="font-bold w-fit">Duties</span>
+                                <span className="md:whitespace-nowrap">{item.Duties}</span>
                             </div>
                         )
                     })
@@ -238,6 +246,19 @@ export default function Individual({id}){
                     ))
                 }
             </section>
+            {
+                id &&
+                <section>
+                    <SectionHead section={'Payment History'}/>
+                    {
+                        profile.payments != undefined &&
+                        profile.payments.map((payment, index) => (
+                            <div key={index}>
+                            </div>
+                        ))
+                    }
+                </section>
+            }
         </div>
         </>
     )

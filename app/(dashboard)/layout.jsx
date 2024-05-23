@@ -88,7 +88,7 @@ export default async function Layout({children}){
                             <img className="w-6 h-6 rounded-full" src={user.photo?user.photo:'/profile.svg'} alt="" />
                             <span className="min-w-[2px] min-h-6 h-max bg-tertiary mx-4"></span>
                             <button className="flex items-center" onClick={e=>setShowOptions(!showOptions)}>
-                                <span className="mx-4 lg:text-xs 2xl:text-base text-primary">Active</span>
+                                <span className="mx-4 lg:text-xs 2xl:text-base text-primary font-semibold">Active</span>
                                 <ChevronDownIcon className="w-6 h-6"/>
                             </button>
                         </div>

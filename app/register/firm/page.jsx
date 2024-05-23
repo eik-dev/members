@@ -54,7 +54,7 @@ export default function Page() {
 
     let validate = () => {
         //validate all required fields
-        if (false){
+        if (pin==''){
             verifyE();
             popupE('error', 'Error', 'Fill all mandatory fields')
             window.scrollTo({

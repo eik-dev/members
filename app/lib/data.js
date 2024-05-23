@@ -5,6 +5,7 @@ export function getData(setData,endpoint,parameters) {
     let token = load('token');
     //map parameters to get parameter format
     let params = new URLSearchParams(parameters).toString();
+    console.log('Payload :: ', params)
     fetch(`${process.env.NEXT_PUBLIC_API_URL}${endpoint}?${params}`, {
     headers: {
         'Authorization': `Bearer ${token}`,
@@ -37,7 +38,11 @@ export function postFile(setData,file,endpoint,token = load('token')) {
         .then((data) => {
             if (data.error==null)
             if (data.message) popupE('ok', 'Success', data.message)
-        setData(data);
+            setData(data);
+        })
+        .catch(err => {
+            console.log(err)
+            popupE('error', 'Error', 'Server Error')
         });
 }
 
@@ -57,5 +62,9 @@ export async function postData(setData,data,endpoint,token = load('token')) {
         if (data.error) popupE('error', 'Error', data.error)
         if (data.message) popupE('ok', 'Success', data.message)
         setData(data);
+    })
+    .catch(err => {
+        console.log(err)
+        popupE('error', 'Error', 'Server Error')
     });
 }

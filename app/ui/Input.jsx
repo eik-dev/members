@@ -4,6 +4,7 @@ import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
 export function Institutions({data, setData}){
     let [Institution, setInstitution] = useState('');
     let [Certification, setCourse] = useState('');
+    let [Title, setTitle] = useState('');
     let [start, setStartDate] = useState('');
     let [end, setEndDate] = useState('');
 
@@ -23,6 +24,7 @@ export function Institutions({data, setData}){
         setData([...data, {
             Institution,
             Certification,
+            Title,
             start,
             end
         }])
@@ -55,8 +57,11 @@ export function Institutions({data, setData}){
                 })
             }
             <div className='my-8 flex flex-col gap-4 md:flex-row justify-between'>
+                <Input value={Title} setValue={setTitle} placeholder={''} type={'text'} name={'Title'}/>
                 <Input required={true} value={Institution} setValue={setInstitution} placeholder={'University of Nairobi'} type={'text'} name={'Institution'}/>
                 <Input value={Certification} setValue={setCourse} placeholder={'BSc. Enviromental Science'} type={'text'} name={'Certification'}/>
+            </div>
+            <div className='my-8 flex flex-col gap-4 md:flex-row justify-between'>
                 <Input value={start} setValue={setStartDate} placeholder={''} type={'date'} name={'Start date'}/>
                 <Input value={end} setValue={setEndDate} placeholder={''} type={'date'} name={'End date'}/>
             </div>
@@ -73,6 +78,9 @@ export function Organizations({data, setData}){
     let [Organization, setInstitution] = useState('');
     let [Position, setCourse] = useState('');
     let [Location, setLocation] = useState('');
+    let [note, setNote] = useState('');
+    let [email, setEmail] = useState('');
+    let [phone, setPhone] = useState('');
     let [start, setStartDate] = useState('');
     let [end, setEndDate] = useState('');
 
@@ -89,10 +97,13 @@ export function Organizations({data, setData}){
 
     let add = e => {
         e.preventDefault();
-        setData([...data, {Organization, Location, Position, start, end}])
+        setData([...data, {Organization, Location, Position, email, phone, note, start, end}])
         setInstitution('')
         setCourse('')
         setLocation('')
+        setNote('')
+        setEmail('')
+        setPhone('')
         setStartDate('')
         setEndDate('')
     }
@@ -109,13 +120,22 @@ export function Organizations({data, setData}){
             {
                 data.map((item, index)=>{
                     return(
-                        <div key={index} className='my-8 flex flex-col gap-4 md:flex-row justify-between items-center'>
-                            <Input disabled={true} value={item.Organization} placeholder={''} type={'text'} name={'Organization'}/>
-                            <Input disabled={true} value={item.Position} placeholder={''} type={'text'} name={'Position'}/>
-                            <Input disabled={true} value={item.Location} placeholder={''} type={'text'} name={'Location'}/>
-                            <Input disabled={true} value={item.start} placeholder={''} type={'date'} name={'Start date'}/>
-                            <Input disabled={true} value={item.end}  placeholder={''} type={'date'} name={'End date'}/>
-                            <button onClick={e=>remove(e,index)} className="text-2xl px-6 h-fit rounded-md bg-warning font-semibold text-white">-</button>
+                        <div key={index} className='my-8'>
+                            <div className='my-8 flex flex-col gap-4 md:flex-row justify-between items-center'>
+                                <Input  disabled={true} value={item.Organization} setValue={setInstitution} placeholder={''} type={'text'} name={'Organization'}/>
+                                <Input  disabled={true} value={item.Position} setValue={setCourse} placeholder={''} type={'text'} name={'Position'}/>
+                                <Input  disabled={true} value={item.Location} setValue={setLocation} placeholder={'Nairobi, Kenya'} type={'text'} name={'Location'}/>
+                                <button onClick={e=>remove(e,index)} className="text-2xl px-6 h-fit rounded-md bg-warning font-semibold text-white">-</button>
+                            </div>
+                            <div className='my-8 flex flex-col gap-4 md:flex-row justify-between'>
+                                <Input  disabled={true} value={item.email} setValue={setEmail} placeholder={''} type={'text'} name={'Company email'}/>
+                                <Input  disabled={true} value={item.phone} setValue={setPhone} placeholder={''} type={'text'} name={'Company phone'}/>
+                            </div>
+                            <p>{item.note}</p>
+                            <div className='my-8 flex flex-col gap-4 md:flex-row justify-between'>
+                                <Input  disabled={true} value={item.start} setValue={setStartDate} placeholder={''} type={'date'} name={'Start date'}/>
+                                <Input  disabled={true} value={item.end} setValue={setEndDate} placeholder={''} type={'date'} name={'End date'}/>
+                            </div>
                         </div>
                     )
                 })
@@ -124,6 +144,13 @@ export function Organizations({data, setData}){
                 <Input required={true} value={Organization} setValue={setInstitution} placeholder={''} type={'text'} name={'Organization'}/>
                 <Input value={Position} setValue={setCourse} placeholder={''} type={'text'} name={'Position'}/>
                 <Input value={Location} setValue={setLocation} placeholder={'Nairobi, Kenya'} type={'text'} name={'Location'}/>
+            </div>
+            <div className='my-8 flex flex-col gap-4 md:flex-row justify-between'>
+                <Input value={email} setValue={setEmail} placeholder={''} type={'text'} name={'Company email'}/>
+                <Input value={phone} setValue={setPhone} placeholder={''} type={'text'} name={'Company phone'}/>
+            </div>
+            <Input required={true} value={note} setValue={setNote} placeholder={''} type={'textarea'} name={'Duties'}/>
+            <div className='my-8 flex flex-col gap-4 md:flex-row justify-between'>
                 <Input value={start} setValue={setStartDate} placeholder={''} type={'date'} name={'Start date'}/>
                 <Input value={end} setValue={setEndDate} placeholder={''} type={'date'} name={'End date'}/>
             </div>
