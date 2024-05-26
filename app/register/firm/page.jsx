@@ -2,7 +2,6 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Input from "@/app/ui/Input"
-import { Institutions, Organizations } from '@/app/ui/Input'
 import Pay from '@/app/ui/Pay'
 import File from '@/app/ui/File'
 import PaymentInfo from '@/app/ui/PaymentInfo'
@@ -64,12 +63,6 @@ export default function Page() {
             return false;
         }
         return true;
-    }
-
-    let stk = e=>{
-        e.preventDefault();
-        popupE('ok', 'Processing', 'Please wait...')
-        postData((_)=>{},{phone, amount, email},'/pay/mpesa')
     }
 
     let submit = e => {
@@ -163,55 +156,7 @@ export default function Page() {
             </div>
 
             <h1 className='text-xl 2xl:text-2xl font-medium mx-2 py-2 border-b-2 mb-8'>Payment</h1>
-            <div className='mx-2'>
-                <div className='flex gap-6 mb-6'>
-                    <button className='flex items-center font-semibold' onClick={e=>setPaymentMethod('mpesa')}>
-                        <div className={`rounded-full md:w-5 md:h-5 w-7 h-4 ${paymentMethod=='mpesa'?'bg-primary':'border-2'}`}></div>
-                        <img className='w-8' src="/icons/mpesa.svg" alt="" />
-                        Mpesa
-                    </button>
-                    <button className='flex items-center font-semibold' onClick={e=>setPaymentMethod('airtel')}>
-                        <div className={`rounded-full md:w-5 md:h-5 w-7 h-4 ${paymentMethod=='airtel'?'bg-primary':'border-2'}`}></div>
-                        <img className='w-8 mx-2 block' src="/icons/airtel.svg" alt="" />
-                        Airtel
-                    </button>
-                    <button className='flex items-center font-semibold' onClick={e=>setPaymentMethod('visa')}>
-                        <div className={`rounded-full md:w-5 md:h-5 w-7 h-4 ${paymentMethod=='visa'?'bg-primary':'border-2'}`}></div>
-                        <img className='w-10 mx-2 block' src="/icons/visa.svg" alt="" />
-                        Card
-                    </button>
-                </div>
-                {
-                    paymentMethod!='visa'?
-                    <div className='flex gap-2 mb-2'>
-                        <div>Phone number: </div>
-                        <div>{phone}</div>
-                    </div>
-                    :
-                    <div className='flex gap-2 mb-2'>
-                        <div>Name: </div>
-                        <div>{`${name} ${last}`}</div>
-                    </div>
-                }
-                <div className='flex gap-2 mb-2'>
-                    <div>Amount due: </div>
-                    <div>{amount} Ksh</div>
-                </div>
-                <div className='flex gap-2'>
-                    <div>Receipt sent to: </div>
-                    <div>{email}</div>
-                </div>
-
-                <div className='flex mt-4 gap-5'>
-                    <button className='py-2 px-6 border-2 bg-gray-200 hover:scale-105' onClick={e=>setOverlay('payment')}>Edit</button>
-                    {
-                        paymentMethod=='mpesa'?
-                        <button onClick={e=>stk(e)} className='font-semibold leading-6 text-white bg-secondary w-fit text-center mr-4 py-2 px-6 rounded-md md:text-xl hover:scale-105'>Pay</button>
-                        :
-                        <Pay title={'Registration fee'} description={'First time registration fee'} amount={amount} email={email} phone={phone} name={firmName} />
-                    }
-                </div>
-            </div>
+            <Pay title={'Registration fee'} description={'First time registration fee'} amount={amount} email={email} phone={phone} name={`${firmName}`} />
 
             <div className='flex justify-between'>
                 <div></div>

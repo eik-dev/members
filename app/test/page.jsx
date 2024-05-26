@@ -23,6 +23,7 @@ export default function Page(){
     
     return(
         <div>
+            <h3>Iconify</h3>
             <h1>Mpesa STK</h1>
             <button onClick={e=>send(e)}>Send</button>
 

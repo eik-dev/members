@@ -22,10 +22,15 @@ export default function Page(){
     let router = useRouter();
 
     useEffect(()=>{
-        getData(setData, '/admin/members', {})
+        getData(setData, '/admin/members', {search:Search[0], limit:Range[0]})
     },[])
     useEffect(()=>{},[Sort[0]])
-    useEffect(()=>{console.log(`Pulling ${Range[0]} rows`)},[Range[0]])
+    useEffect(()=>{
+        console.log('Range:',typeof(Range[0]))
+        if (Range[0] > data.length) getData(setData, '/admin/members', {search:Search[0], limit:Range[0]})
+        if (Search[0].length > 3 && Search[0].length>0) getData(setData, '/admin/members', {search:Search[0], limit:Range[0]})
+        console.log('Searching for ::',Search[0])
+    },[Range[0],Search[0]])
     useEffect(()=>{
         if (overlay=='') setShowOverlay(false)
         else setShowOverlay(true)
@@ -34,7 +39,7 @@ export default function Page(){
     let action = (e,id, action) => {
         e.preventDefault();
         getData((_)=>{}, '/user/verify', {verify:action, user:id})
-        getData(setData, '/admin/members', {})
+        getData(setData, '/admin/members', {search:Search[0], limit:Range[0]})
     }
 
     return(
