@@ -5,8 +5,6 @@ import Input from "@/app/ui/Input"
 import { Institutions, Organizations } from '@/app/ui/Input'
 import Pay from '@/app/ui/Pay'
 import File from '@/app/ui/File'
-import PaymentInfo from '@/app/ui/PaymentInfo'
-import Overlay from '@/app/ui/overlay'
 import { Student, Affiliate, Honorary, Associate, Lead, Fellow } from '@/app/lib/instructions'
 import { popupE, verifyE } from '@/app/lib/trigger'
 import { postData, postFile } from '@/app/lib/data'
@@ -16,7 +14,6 @@ export default function Page() {
 
     let [image, setImage] = useState([]);
     let [requirements, setRequirements] = useState([]);
-    let [overlay, setOverlay] = useState('')
 
     let [category, setCategory] = useState('Student');
     let [name, setName] = useState('');
@@ -35,7 +32,6 @@ export default function Page() {
     let [note, setNote] = useState('');
     let [password, setPassword] = useState('');
     let [confirm, setConfirm] = useState('');
-    let [paymentMethod, setPaymentMethod] = useState('');
 
     let [institutions, setInstitutions] = useState([]);
     let [checkInstituions, setCheckInstitutions] = useState(false);
@@ -49,27 +45,27 @@ export default function Page() {
         switch (category) {
             case 'Student':
                 setInstructions(Student)
-                setAmount(300)
+                setAmount(700)
                 break;
             case 'Affiliate':
                 setInstructions(Affiliate)
-                setAmount(500)
+                setAmount(17500)
                 break;
             case 'Honorary':
                 setInstructions(Honorary)
-                setAmount(900)
+                setAmount(0)
                 break;
             case 'Associate':
                 setInstructions(Associate)
-                setAmount(1000)
+                setAmount(4500)
                 break;
             case 'Lead':
-                setInstructions(Fellow)
-                setAmount(1000)
+                setInstructions(Lead)
+                setAmount(7000)
                 break;
             case 'Fellow':
-                setInstructions(Lead)
-                setAmount(1500)
+                setInstructions(Fellow)
+                setAmount(0)
                 break;
             default:
                 break;
@@ -90,22 +86,16 @@ export default function Page() {
         return true;
     }
 
-    let stk = e=>{
-        e.preventDefault();
-        popupE('ok', 'Processing', 'Please wait...')
-        postData((_)=>{},{phone, amount, email},'/pay/mpesa')
-    }
-
     let submit = e => {
         e.preventDefault();
         if (validate()){
             popupE('ok', 'Processing', 'Please wait...')
             postData((response)=>{
                 let token = response.token;
-                if (image.length>0) postFile((_)=>{},image[0],'/files/profile',token)
+                if (image.length>0) postFile((_)=>{},image[0],'profile picture','/files/profile',token)
                 if (requirements.length>0) {
                     requirements.forEach((file, index) => {
-                        postFile((_)=>{},file,'/files/requirements',token)
+                        postFile((_)=>{},file,'requirements','/files/requirements',token)
                     });
                 }
                 popupE('ok', 'Success', 'Account created successfully')
@@ -217,63 +207,12 @@ export default function Page() {
             </div>
 
             <h1 className='text-xl 2xl:text-2xl font-medium mx-2 py-2 border-b-2 mb-8'>Payment</h1>
-            <div className='mx-2'>
-                <div className='flex gap-6 mb-6'>
-                    <button className='flex items-center font-semibold' onClick={e=>setPaymentMethod('mpesa')}>
-                        <div className={`rounded-full md:w-5 md:h-5 w-7 h-4 ${paymentMethod=='mpesa'?'bg-primary':'border-2'}`}></div>
-                        <img className='w-8' src="/icons/mpesa.svg" alt="" />
-                        Mpesa
-                    </button>
-                    <button className='flex items-center font-semibold' onClick={e=>setPaymentMethod('airtel')}>
-                        <div className={`rounded-full md:w-5 md:h-5 w-7 h-4 ${paymentMethod=='airtel'?'bg-primary':'border-2'}`}></div>
-                        <img className='w-8 mx-2 block' src="/icons/airtel.svg" alt="" />
-                        Airtel
-                    </button>
-                    <button className='flex items-center font-semibold' onClick={e=>setPaymentMethod('visa')}>
-                        <div className={`rounded-full md:w-5 md:h-5 w-7 h-4 ${paymentMethod=='visa'?'bg-primary':'border-2'}`}></div>
-                        <img className='w-10 mx-2 block' src="/icons/visa.svg" alt="" />
-                        Card
-                    </button>
-                </div>
-                {
-                    paymentMethod!='visa'?
-                    <div className='flex gap-2 mb-2'>
-                        <div>Phone number: </div>
-                        <div>{phone}</div>
-                    </div>
-                    :
-                    <div className='flex gap-2 mb-2'>
-                        <div>Name: </div>
-                        <div>{`${name} ${last}`}</div>
-                    </div>
-                }
-                <div className='flex gap-2 mb-2'>
-                    <div>Amount due: </div>
-                    <div>{amount} Ksh</div>
-                </div>
-                <div className='flex gap-2'>
-                    <div>Receipt sent to: </div>
-                    <div>{email}</div>
-                </div>
-
-                <div className='flex mt-4 gap-5'>
-                    <button className='py-2 px-6 border-2 bg-gray-200 hover:scale-105' onClick={e=>setOverlay('payment')}>Edit</button>
-                    {
-                        paymentMethod=='mpesa'?
-                        <button onClick={e=>stk(e)} className='font-semibold leading-6 text-white bg-secondary w-fit text-center mr-4 py-2 px-6 rounded-md md:text-xl hover:scale-105'>Pay</button>
-                        :
-                        <Pay title={'Registration fee'} description={'First time registration fee'} amount={amount} email={email} phone={phone} name={`${name} ${last}`} />
-                    }
-                </div>
-            </div>
+            <Pay title={'Registration fee'} description={'First time registration fee'} amount={amount} email={email} phone={phone} name={`${name} ${last}`} />
 
             <div className='flex justify-between'>
                 <div></div>
                 <button className="bg-primary px-4 md:px-6 py-2 text-white font-semibold my-8 rounded-md hover:scale-105" onClick={e=>submit(e)}>Sign Up</button>
             </div>
-            <Overlay className={`${overlay!=''?'block':'hidden'}`} >
-                {overlay === 'payment' && <PaymentInfo control={setOverlay} amount={amount}/>}
-            </Overlay>
         </>
     )
 }

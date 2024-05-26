@@ -24,9 +24,10 @@ export function getData(setData,endpoint,parameters) {
     });
 }
 
-export function postFile(setData,file,endpoint,token = load('token')) {
+export function postFile(setData,file,title,endpoint,token = load('token')) {
     const formData = new FormData();
     formData.append(`file`, file);
+    formData.append('title', title);
     fetch(`${process.env.NEXT_PUBLIC_API_URL}${endpoint}`, {
         method: "POST",
         headers:{

@@ -84,9 +84,9 @@ export default function SideNav({control}){
             }
         })
     }
-        <div className="flex items-center text-warning absolute bottom-10 2xl:bottom-20 ml-4" onClick={e=>logout(e)}>
+        <button className="flex items-center text-warning absolute bottom-10 2xl:bottom-20 ml-4" onClick={e=>logout(e)}>
             <ArrowLeftEndOnRectangleIcon className="w-6 h-8 mr-2"/>
             Logout
-        </div>
+        </button>
     </>)
 }

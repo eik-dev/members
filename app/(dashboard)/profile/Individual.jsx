@@ -240,7 +240,8 @@ export default function Individual({id,role}){
                 {
                     profile.requirements != undefined &&
                     profile.requirements.map((file, index) => (
-                        <div key={index}>
+                        <div className="flex gap-5" key={index}>
+                            <span>{file.title}</span>
                             <a className="text-secondary underline mb-2 block" href={`${file.url}`} target='blank' download>{file.name}</a>
                         </div>
                     ))
