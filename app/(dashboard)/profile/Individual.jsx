@@ -190,7 +190,7 @@ export default function Individual({id,role}){
                     <span className="md:whitespace-nowrap">Anderson Rioba</span>
                     <a className="text-secondary text-sm mt-2" href="#">Download certificate</a>
                 </div> */}
-                <p className="text-center my-8">You haven't participated in a training yet <a href="https://elearning.eik.co.ke/" target="blank" className="text-secondary">Sign up now</a></p>
+                <p className="text-center my-8">You {"haven't"} participated in a training yet <a href="https://elearning.eik.co.ke/" target="blank" className="text-secondary">Sign up now</a></p>
             </section>
             <section>
                 <SectionHead section={'Professional Qualification'}/>
