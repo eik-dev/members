@@ -19,6 +19,24 @@ export function Institutions({data, setData}){
         }
     },[])
 
+    useEffect(() => {
+        if (data.length > 0) {
+            setData(prevData => {
+                let newData = [...prevData];
+                newData[newData.length - 1] = {
+                    ...newData[newData.length - 1],
+                    Institution,
+                    Certification,
+                    Title,
+                    start,
+                    end
+                };
+                return newData;
+            });
+        }
+        console.log(data);
+    }, [Institution, Certification, Title, start, end]);
+
     let add = e => {
         e.preventDefault();
         setData([...data, {
@@ -28,10 +46,12 @@ export function Institutions({data, setData}){
             start,
             end
         }])
+        setTitle('')
         setInstitution('')
         setCourse('')
         setStartDate('')
         setEndDate('')
+        console.log(data);
     }
 
     let remove = (e, i) => {
@@ -44,14 +64,14 @@ export function Institutions({data, setData}){
         <>
         <div className="w-[90%]">
             {
-                data.map((item, index)=>{
+                data.slice(0,data.length-1).map((item, index)=>{
                     return(
                         <div key={index} className='my-8 flex flex-col gap-4 md:flex-row justify-between items-center'>
                             <Input disabled={true} value={item.Institution} placeholder={'University of Nairobi'} type={'text'} name={'Institution'}/>
                             <Input disabled={true} value={item.Certification} placeholder={'Enviromental Science'} type={'text'} name={'Course'}/>
                             <Input disabled={true} value={item.start} placeholder={''} type={'date'} name={'Start date'}/>
                             <Input disabled={true} value={item.end}  placeholder={''} type={'date'} name={'End date'}/>
-                            <button onClick={e=>remove(e,index)} className="text-2xl px-6 h-fit rounded-md bg-warning font-semibold text-white">-</button>
+                            <button onClick={e=>remove(e,index)} className="px-6 h-fit rounded-md text-warning">Delete</button>
                         </div>
                     )
                 })
@@ -95,6 +115,26 @@ export function Organizations({data, setData}){
         }
     },[])
 
+    useEffect(() => {
+        if (data.length > 0) {
+            setData(prevData => {
+                let newData = [...prevData];
+                newData[newData.length - 1] = {
+                    ...newData[newData.length - 1],
+                    Organization,
+                    Position,
+                    Location,
+                    note,
+                    email,
+                    phone,
+                    start,
+                    end
+                };
+                return newData;
+            });
+        }
+    }, [Organization, Position, Location, note, email, phone, start, end]);
+
     let add = e => {
         e.preventDefault();
         setData([...data, {Organization, Location, Position, email, phone, note, start, end}])
@@ -118,14 +158,14 @@ export function Organizations({data, setData}){
         <>
         <div className="w-[90%]">
             {
-                data.map((item, index)=>{
+                data.slice(0,data.length-1).map((item, index)=>{
                     return(
                         <div key={index} className='my-8'>
                             <div className='my-8 flex flex-col gap-4 md:flex-row justify-between items-center'>
                                 <Input  disabled={true} value={item.Organization} setValue={setInstitution} placeholder={''} type={'text'} name={'Organization'}/>
                                 <Input  disabled={true} value={item.Position} setValue={setCourse} placeholder={''} type={'text'} name={'Position'}/>
                                 <Input  disabled={true} value={item.Location} setValue={setLocation} placeholder={'Nairobi, Kenya'} type={'text'} name={'Location'}/>
-                                <button onClick={e=>remove(e,index)} className="text-2xl px-6 h-fit rounded-md bg-warning font-semibold text-white">-</button>
+                                <button onClick={e=>remove(e,index)} className="px-6 h-fit rounded-md text-warning">Delete</button>
                             </div>
                             <div className='my-8 flex flex-col gap-4 md:flex-row justify-between'>
                                 <Input  disabled={true} value={item.email} setValue={setEmail} placeholder={''} type={'text'} name={'Company email'}/>

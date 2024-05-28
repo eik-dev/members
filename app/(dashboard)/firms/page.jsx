@@ -1,10 +1,11 @@
 'use client'
 import { useState, useEffect } from "react"
+import { useRouter } from "next/navigation";
 import Head from '@/app/ui/head';
 import FirmDetails from "@/app/ui/FirmDetails";
 import Delete from "./Delete";
 import Overlay from "@/app/ui/overlay";
-import { EllipsisVerticalIcon, PencilSquareIcon, TrashIcon, CheckIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import { EllipsisVerticalIcon, PencilSquareIcon, TrashIcon, CheckIcon, XMarkIcon, DocumentIcon } from "@heroicons/react/24/outline";
 import { getData } from "@/app/lib/data";
 
 export default function Page(){
@@ -16,13 +17,17 @@ export default function Page(){
     let [overlay, setOverlay] = useState('');
     let [optionsAt, setOptionsAt] = useState(-1);
     
+    let router = useRouter();
+    
     let [data, setData] = useState([]);
 
     useEffect(()=>{
-        getData(setData, '/admin/firms', {})
+        getData(setData, '/admin/firms', {search:Search[0], limit:Range[0]})
     },[])
     useEffect(()=>{},[Sort[0]])
-    useEffect(()=>{console.log(`Pulling ${Range[0]} rows`)},[Range[0]])
+    useEffect(()=>{
+        getData(setData, '/admin/firms', {search:Search[0], limit:Range[0]})
+    },[Range[0]])
     useEffect(()=>{
         if (overlay=='') setShowOverlay(false)
         else setShowOverlay(true)
@@ -31,7 +36,7 @@ export default function Page(){
     let action = (e,id, action) => {
         e.preventDefault();
         getData((_)=>{}, '/user/verify', {verify:action, user:id})
-        getData(setData, '/admin/firms', {})
+        getData(setData, '/admin/firms', {search:Search[0], limit:Range[0]})
     }
 
     return(
@@ -80,6 +85,10 @@ export default function Page(){
                                                 <PencilSquareIcon className="w-6 h-6"/>
                                                 Edit details
                                             </div>
+                                            <button className="flex gap-x-2" onClick={e=>router.push(`/profile?id=${data['id']}&role=Firm`)}>
+                                                <DocumentIcon className="w-6 h-6"/>
+                                                View Profile
+                                            </button>
                                             <div className="flex gap-x-2 text-warning" onClick={e=>setOverlay('delete')}>
                                                 <TrashIcon className="w-6 h-6"/>
                                                 Delete firm

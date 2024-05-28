@@ -2,8 +2,9 @@
 import { useState, useEffect } from "react"
 import Head from '@/app/ui/head';
 import Overlay from "@/app/ui/overlay";
+import Delete from "./Delete";
 import { useRouter } from "next/navigation";
-import { EllipsisVerticalIcon, ArrowDownTrayIcon, CheckIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import { EllipsisVerticalIcon, ArrowDownTrayIcon, CheckIcon, XMarkIcon, TrashIcon } from "@heroicons/react/24/outline";
 import { getData } from "@/app/lib/data";
 
 export default function Page(){
@@ -15,14 +16,20 @@ export default function Page(){
     let [showOverlay, setShowOverlay] = useState(false);
     let [overlay, setOverlay] = useState('');
     let [optionsAt, setOptionsAt] = useState(-1);
+    let [userID, setUserID] = useState(null);
     
     let [data, setData] = useState([]);
 
     useEffect(()=>{
-        getData(setData,'/certificates',{})
+        getData(setData,'/certificates', {search:Search[0], limit:Range[0]})
     },[])
     useEffect(()=>{},[Sort[0]])
-    useEffect(()=>{console.log(`Pulling ${Range[0]} rows`)},[Range[0]])
+    useEffect(()=>{
+        console.log('Range:',typeof(Range[0]))
+        if (Range[0] > data.length) getData(setData,'/certificates', {search:Search[0], limit:Range[0]})
+        if (Search[0].length > 3 && Search[0].length>0) getData(setData,'/certificates', {search:Search[0], limit:Range[0]})
+        console.log('Searching for ::',Search[0])
+    },[Range[0]])
     useEffect(()=>{
         if (overlay=='') setShowOverlay(false)
         else setShowOverlay(true)
@@ -31,7 +38,7 @@ export default function Page(){
     let action = (e,id, action) => {
         e.preventDefault();
         getData((_)=>{}, '/certificate/validate', {validate:action, id:id})
-        getData(setData,'/certificates',{})
+        getData(setData,'/certificates', {search:Search[0], limit:Range[0]})
     }
 
     return(
@@ -74,10 +81,14 @@ export default function Page(){
                                     </button>
                                     {
                                         optionsAt === index &&
-                                        <div className={`flex absolute p-2 shadow-lg z-50 right-12 md:right-34 bg-white flex-col gap-y-4 ${true?'block':'hidden'}`}>
+                                        <div className={`flex absolute p-2 shadow-lg z-50 right-12 md:right-34 bg-white flex-col gap-y-4 ${true?'block':'hidden'}`} onClick={e=>setUserID(data['id'])}>
                                             <button className="flex gap-x-2" onClick={e=>router.push(`/download/certificate?id=${data['id']}`)}>
                                                 <ArrowDownTrayIcon className="w-6 h-6"/>
                                                 Download
+                                            </button>
+                                            <button className="flex gap-x-2 text-warning" onClick={e=>setOverlay('delete')}>
+                                                <TrashIcon className="w-6 h-6"/>
+                                                Delete Certificate
                                             </button>
                                         </div>
                                     }
@@ -99,6 +110,7 @@ export default function Page(){
         </table>
         </div>
         <Overlay className={`${showOverlay?'block':'hidden'}`} >
+            {overlay=='delete'?<Delete id={userID} control={setOverlay} />:null}
         </Overlay>
         </div>
     )
