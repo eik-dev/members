@@ -33,9 +33,9 @@ export default function Page() {
     let [password, setPassword] = useState('');
     let [confirm, setConfirm] = useState('');
 
-    let [institutions, setInstitutions] = useState([]);
+    let [institutions, setInstitutions] = useState([{}]);
     let [checkInstituions, setCheckInstitutions] = useState(false);
-    let [organizations, setOrganizations] = useState([]);
+    let [organizations, setOrganizations] = useState([{}]);
     let [checkOrganizations, setCheckOrganizations] = useState(false);
 
     let [instructions, setInstructions] = useState(Student);

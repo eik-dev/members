@@ -13,7 +13,7 @@ export default function Page(){
 
     return(
         <>
-        {(User[0].role=='Individual' || role=='Individual')?<Individual id={id} role={role}/>:<Firm/>}
+        {(User[0].role=='Individual' || role=='Individual')?<Individual id={id} role={role}/>:<Firm id={id} role={role}/>}
         </>
     )
 }

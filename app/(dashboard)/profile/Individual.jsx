@@ -79,7 +79,7 @@ export default function Individual({id,role}){
             }
         }else  getData((response)=>{
             setProfile({...profile, certificate:response.cert})
-        }, '/request', {})
+        }, '/request', {id})
     }
     
     return(
