@@ -105,7 +105,7 @@ export default function Pay({title, description, amount, email, phone, name}){
                 :
                 <div className='flex gap-2 mb-2'>
                     <div>Name: </div>
-                    <div>{`${name} ${last}`}</div>
+                    <div>{`${name}`}</div>
                 </div>
             }
             <div className='flex gap-2 mb-2'>

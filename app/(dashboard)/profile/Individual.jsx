@@ -1,8 +1,9 @@
 'use client'
 import Image from "next/image"
 import { useRouter } from "next/navigation"
-import { PrinterIcon, EllipsisVerticalIcon, PencilSquareIcon } from "@heroicons/react/24/outline"
+import { PrinterIcon, EllipsisVerticalIcon, PencilSquareIcon, XMarkIcon } from "@heroicons/react/24/outline"
 import Overlay from "@/app/ui/overlay"
+import Pay from "@/app/ui/Pay"
 import MemberDetails from "@/app/ui/MemberDetails"
 import Attachments from "./Attachments"
 import Qualifications from "./Qualifications"
@@ -27,7 +28,7 @@ function SectionHead({section}){
         <div onClick={e=>{showEdit?setShowEdit(false):null}} className="flex justify-between border-b-2 py-4 my-4 mx-2 relative">
             <h3 className="font-bold text-lg">{section}</h3>
             {
-                section!='Training' &&
+                section!='Trainings' &&
                 <button onClick={e=>setShowEdit(!showEdit)}>
                     <EllipsisVerticalIcon className="h-6 w-6" />
                 </button>
@@ -56,6 +57,7 @@ export default function Individual({id,role}){
     let {Profile} = useContext(Context);
     let [profile, setProfile] = Profile;
     let router = useRouter();
+    let [overlay, setOverlay] = useState('');
 
     useEffect(() => {
         getData((profile)=>{
@@ -77,9 +79,9 @@ export default function Individual({id,role}){
             } else{
                 popupE('error','Error' ,'Certificate request has not been approved')
             }
-        }else  getData((response)=>{
-            setProfile({...profile, certificate:response.cert})
-        }, '/request', {id})
+        }else{
+            setOverlay('Pay')
+        }
     }
     
     return(
@@ -178,8 +180,8 @@ export default function Individual({id,role}){
                 </p>
             </section>
             <section>
-                <SectionHead section={'Training'}/>
-                <div className="grid grid-cols-2 md:w-1/3 gap-y-1">
+                <SectionHead section={'Trainings'}/>
+                {/* <div className="grid grid-cols-2 md:w-1/3 gap-y-1">
                     <span className="font-bold w-fit">Title:</span>
                     <span className="md:whitespace-nowrap">ESG Training</span>
                     <span className="font-bold w-fit">Start & Finish Date:</span>
@@ -187,7 +189,8 @@ export default function Individual({id,role}){
                     <span className="font-bold w-fit">Teacher</span>
                     <span className="md:whitespace-nowrap">Anderson Rioba</span>
                     <a className="text-secondary text-sm mt-2" href="#">Download certificate</a>
-                </div>
+                </div> */}
+                <p className="text-center my-8">You haven't participated in a training yet <a href="https://elearning.eik.co.ke/" target="blank" className="text-secondary">Sign up now</a></p>
             </section>
             <section>
                 <SectionHead section={'Professional Qualification'}/>
@@ -261,6 +264,26 @@ export default function Individual({id,role}){
                 </section>
             }
         </div>
+        <Overlay className={`${overlay!=''?'block':'hidden'}`} >
+            {
+            overlay=='Pay' &&
+            <div className="bg-white px-8 py-6 rounded-md">
+                <div className="flex mb-8 justify-between items-center py-3 sticky -top-1 bg-white z-50 border-b-2">
+                    <span className="font-semibold">Payment</span>
+                    <XMarkIcon className="w-8 h-8" onClick={e=>setOverlay('')} />
+                </div>
+                <Pay title={'Registration fee'} description={'First time registration fee'} amount={0} email={profile.profile.email} phone={profile.profile.phone} name={`sam`} />
+                <p className=" text-primary font-semibold text-right cursor-pointer" onClick={e=>{
+                    getData((response)=>{
+                        setProfile({...profile, certificate:response.cert})
+                        setOverlay('')
+                    }, '/request', {id})
+                }}>
+                    Already paid
+                </p>
+            </div>
+            }
+        </Overlay>
         </>
     )
 }
