@@ -53,6 +53,26 @@ function SectionHead({section}){
         </>
     )
 }
+
+let getAmount = (role) => {
+    switch (role) {
+        case 'Student':
+            return 500;
+        case 'Affiliate':
+            return 7500;
+        case 'Honorary':
+            return 0;
+        case 'Associate':
+            return 3000;
+        case 'Lead':
+            return 5000;
+        case 'Fellow':
+            return 0;
+        default:
+            break;
+    }
+}
+
 export default function Individual({id,role}){
     let {Profile} = useContext(Context);
     let [profile, setProfile] = Profile;
@@ -272,8 +292,8 @@ export default function Individual({id,role}){
                     <span className="font-semibold">Payment</span>
                     <XMarkIcon className="w-8 h-8" onClick={e=>setOverlay('')} />
                 </div>
-                <Pay title={'Registration fee'} description={'First time registration fee'} amount={0} email={profile.profile.email} phone={profile.profile.phone} name={`sam`} />
-                <p className=" text-primary font-semibold text-right cursor-pointer" onClick={e=>{
+                <Pay title={'Annual Fees'} description={'First time registration fee'} amount={getAmount(profile.profile.category)} email={profile.profile.email} phone={profile.profile.phone} name={`sam`} />
+                <p className="text-primary font-semibold text-right cursor-pointer" onClick={e=>{
                     getData((response)=>{
                         setProfile({...profile, certificate:response.cert})
                         setOverlay('')

@@ -67,14 +67,14 @@ export default function Pay({title, description, amount, email, phone, name}){
         }
     },[callback])
 
-    let stk = e=>{
+    let stk = (e,phone,email)=>{
         e.preventDefault();
-        setOverlay('processing')
+        popupE('ok', 'Processing', 'Please wait...')
         postData((response)=>{
             if(response.ResponseCode=="0"){
                 getData(setCallback,'/mpesa/callback',{CheckoutRequestID: response.CheckoutRequestID})
             } else popupE('error', 'Error', response.ResponseDescription)
-        },{phone, amount, email},'/pay/mpesa')
+        },{phone, amount, email,AccountReference:title},'/pay/mpesa')
     }
 
     return (
@@ -113,7 +113,7 @@ export default function Pay({title, description, amount, email, phone, name}){
                 <div>{amount} Ksh</div>
             </div>
             <div className='flex gap-2'>
-                <div>Receipt sent to: </div>
+                <div>Receipt to: </div>
                 <div>{email}</div>
             </div>
 
@@ -121,13 +121,13 @@ export default function Pay({title, description, amount, email, phone, name}){
                 <button className='py-2 px-6 border-2 bg-gray-200 hover:scale-105' onClick={e=>setOverlay('payment')}>Edit</button>
                 {
                     paymentMethod=='mpesa'?
-                    <button onClick={e=>stk(e)} className='font-semibold leading-6 text-white bg-secondary w-fit text-center mr-4 py-2 px-6 rounded-md md:text-xl hover:scale-105'>Pay</button>
+                    <button onClick={e=>stk(e,phone,email)} className='font-semibold leading-6 text-white bg-secondary w-fit text-center mr-4 py-2 px-6 rounded-md md:text-xl hover:scale-105'>Pay</button>
                     :
                     <FlutterWave title={title} description={description} amount={amount} email={email} phone={phone} name={name} />
                 }
             </div>
             <Overlay className={`${overlay!=''?'block':'hidden'}`} >
-                {overlay === 'payment' && <PaymentInfo control={setOverlay} amount={amount}/>}
+                {overlay === 'payment' && <PaymentInfo control={setOverlay} amount={amount} trigger={stk}/>}
                 {overlay === 'processing' && <Processing control={setOverlay}/>}
             </Overlay>
         </div>

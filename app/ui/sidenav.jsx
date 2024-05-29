@@ -14,6 +14,7 @@ export default function SideNav({control}){
     let logout = e => {
         remove('token');
         setUser({});
+        router.push('/login')
     }
 
 
