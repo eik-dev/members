@@ -1,11 +1,12 @@
 'use client'
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { ChevronLeftIcon, ChevronRightIcon, MagnifyingGlassIcon, AdjustmentsVerticalIcon, ChevronDownIcon } from "@heroicons/react/24/outline";
 
-export default function Head({children, Range, Search, Title, TH, placeholder, Sort}){
+export default function Head({children, Range, Search, Title, TH, placeholder, Sort, total, Genesis}){
     let [range, setRange] = Range;
     let [search, setSearch] = Search;
     let [sort, setSort] = Sort;
+    let [genesis, setGenesis] = Genesis;
     let [showDropDown, setShowDropDown] = useState(false);
     return(
         <div className="mt-2 2xl:mt-4 mx-2 text-sm 2xl:text-base">
@@ -22,12 +23,12 @@ export default function Head({children, Range, Search, Title, TH, placeholder, S
                         }
                     }} />
                     <span className="mx-1">of</span>
-                    <span>{'100'}</span>
+                    <span>{total}</span>
                     <button>
-                        <ChevronLeftIcon className="w-4 h-4 2xl:w-6 2xl:h-6 mx-2 2xl:mx-1"/>
+                        <ChevronLeftIcon className="w-4 h-4 2xl:w-6 2xl:h-6 mx-2 2xl:mx-1" onClick={e=>genesis-range>=0?setGenesis(genesis-range):null}/>
                     </button>
                     <button>
-                        <ChevronRightIcon className="w-4 h-4 2xl:w-6 2xl:h-6 mx-2 2xl:mx-1"/>
+                        <ChevronRightIcon className="w-4 h-4 2xl:w-6 2xl:h-6 mx-2 2xl:mx-1" onClick={e=>genesis+range<=total?setGenesis(genesis+range):null}/>
                     </button>
                 </div>
             </div>

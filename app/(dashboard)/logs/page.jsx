@@ -5,6 +5,7 @@ import Head from '@/app/ui/head';
 export default function Page(){
     let Range = useState(20);
     let Search = useState("");
+    let Genesis = useState(0);
     let TH = ['Date', 'Username', 'Email', 'Action'];
     let Sort = useState(TH[0]);
     let [optionsAt, setOptionsAt] = useState(-1);
@@ -24,7 +25,7 @@ export default function Page(){
 
     return(
         <div onClick={e=>{optionsAt>=0?setOptionsAt(-1):null}}>
-        <Head Range={Range} Search={Search} Title={'User Logs'} TH={TH} Sort={Sort} placeholder={'Search user logs'}>
+        <Head Range={Range} Search={Search} Title={'User Logs'} TH={TH} Sort={Sort} placeholder={'Search user logs'} Genesis={Genesis}>
         </Head>
         <div className="overflow-x-scroll mt-2 md:mt-10 mx-2 lg:mx-0 max-h-[60vh] 2xl:max-h-[67vh] overflow-y-scroll">
         <table className="w-full text-sm lg:text-xs 2xl:text-sm text-left table-auto">

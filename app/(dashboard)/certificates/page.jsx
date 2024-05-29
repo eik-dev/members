@@ -10,6 +10,8 @@ import { getData } from "@/app/lib/data";
 export default function Page(){
     let Range = useState(20);
     let Search = useState("");
+    let Genesis = useState(0);
+    let [total, setTotal] = useState(0);
     let router = useRouter();
     let TH = ['Full name', 'Email', 'NEMA Reg. No.', 'Certificate No.', 'Date Requested', 'Action'];
     let Sort = useState(TH[0]);
@@ -21,15 +23,19 @@ export default function Page(){
     let [data, setData] = useState([]);
 
     useEffect(()=>{
-        getData(setData,'/certificates', {search:Search[0], limit:Range[0]})
+        getData((response)=>{
+            setData(response.certs)
+            setTotal(response.count)
+        }, '/certificates', {search:Search[0], limit:Range[0], Genesis:Genesis[0], count:true})
     },[])
     useEffect(()=>{},[Sort[0]])
     useEffect(()=>{
         console.log('Range:',typeof(Range[0]))
-        if (Range[0] > data.length) getData(setData,'/certificates', {search:Search[0], limit:Range[0]})
-        if (Search[0].length > 3 && Search[0].length>0) getData(setData,'/certificates', {search:Search[0], limit:Range[0]})
+        if (Range[0] > data.length) getData(setData,'/certificates', {search:Search[0], limit:Range[0], Genesis:Genesis[0]})
+        if (Search[0].length > 3) getData(setData,'/certificates', {search:Search[0], limit:Range[0], Genesis:Genesis[0]})
+        else getData(setData, '/certificates', {search:Search[0], limit:Range[0], Genesis:Genesis[0]})
         console.log('Searching for ::',Search[0])
-    },[Range[0]])
+    },[Range[0],Search[0], Genesis[0]])
     useEffect(()=>{
         if (overlay=='') setShowOverlay(false)
         else setShowOverlay(true)
@@ -38,12 +44,12 @@ export default function Page(){
     let action = (e,id, action) => {
         e.preventDefault();
         getData((_)=>{}, '/certificate/validate', {validate:action, id:id})
-        getData(setData,'/certificates', {search:Search[0], limit:Range[0]})
+        getData(setData,'/certificates', {search:Search[0], limit:Range[0], Genesis:Genesis[0]})
     }
 
     return(
         <div onClick={e=>{optionsAt>=0?setOptionsAt(-1):null}}>
-        <Head Range={Range} Search={Search} Title={'Certificates'} TH={TH} Sort={Sort} placeholder={'Search certificates'}>
+        <Head Range={Range} Search={Search} Title={'Certificates'} TH={TH} Sort={Sort} placeholder={'Search certificates'}  Genesis={Genesis} total={total}>
         </Head>
         <div className="overflow-x-scroll mt-2 md:mt-10 mx-2 lg:mx-0 max-h-96 md:max-h-[65vh] overflow-y-scroll">
         <table className="w-full text-sm lg:text-xs 2xl:text-sm text-left table-auto">
