@@ -11,6 +11,8 @@ import { getData } from "@/app/lib/data";
 export default function Page(){
     let Range = useState(20);
     let Search = useState("");
+    let Genesis = useState(0);
+    let [total, setTotal] = useState(0);
     let TH = ['Full name', 'Username', 'Email']
     let Sort = useState(TH[0]);
     let [showOverlay, setShowOverlay] = useState(false);
@@ -21,10 +23,17 @@ export default function Page(){
     let [data, setData] = useState([]);
 
     useEffect(()=>{
-        getData(setData, '/admins', {})
+        getData((response)=>{
+            setData(response.admins)
+            setTotal(response.count)
+        }, '/admins', {search:Search[0], limit:Range[0], Genesis:Genesis[0], count:true})
     },[])
     useEffect(()=>{},[Sort[0]])
-    useEffect(()=>{console.log(`Pulling ${Range[0]} rows`)},[Range[0]])
+    useEffect(()=>{
+        if (Range[0] > data.length) getData(setData, '/admins', {search:Search[0], limit:Range[0], Genesis:Genesis[0]})
+        if (Search[0].length > 3) getData(setData, '/admins', {search:Search[0], limit:Range[0], Genesis:Genesis[0]})
+        else getData(setData, '/admins', {search:Search[0], limit:Range[0], Genesis:Genesis[0]})
+    },[Range[0],Search[0], Genesis[0]])
     useEffect(()=>{
         if (overlay=='') setShowOverlay(false)
         else setShowOverlay(true)
@@ -32,7 +41,7 @@ export default function Page(){
 
     return(
         <div onClick={e=>{optionsAt>=0?setOptionsAt(-1):null}}>
-        <Head Range={Range} Search={Search} Title={'Admin panel'} TH={TH} Sort={Sort} placeholder={'Search registerd admins'}>
+        <Head Range={Range} Search={Search} Title={'Admin panel'} TH={TH} Sort={Sort} placeholder={'Search registerd admins'} total={total} Genesis={Genesis}>
             <span className="min-w-[2px] hidden md:block min-h-6 h-max bg-tertiary mx-4"></span>
             <button className="bg-secondary text-white flex md:w-fit px-4 py-2 rounded-lg mx-auto w-2/3 items-center justify-center text-base lg:text-xs 2xl:text-base" onClick={e=>setOverlay('new')}>
                 <UserPlusIcon className="w-6 h-6 lg:w-4 lg:h-4 2xl:w-6 2xl:h-6 mr-2"/>

@@ -11,6 +11,8 @@ import { getData } from "@/app/lib/data";
 export default function Page(){
     let Range = useState(20);
     let Search = useState("");
+    let Genesis = useState(0);
+    let [total, setTotal] = useState(0);
     let TH = ['Firm name', 'Email', 'NEMA Reg. No.', 'Certificate No.', 'PIN', 'Date Registered', 'Action'];
     let Sort = useState(TH[0]);
     let [showOverlay, setShowOverlay] = useState(false);
@@ -22,12 +24,17 @@ export default function Page(){
     let [data, setData] = useState([]);
 
     useEffect(()=>{
-        getData(setData, '/admin/firms', {search:Search[0], limit:Range[0]})
+        getData((response)=>{
+            setData(response.firms)
+            setTotal(response.count)
+        }, '/admin/firms', {search:Search[0], limit:Range[0], Genesis:Genesis[0], count:true})
     },[])
     useEffect(()=>{},[Sort[0]])
     useEffect(()=>{
-        getData(setData, '/admin/firms', {search:Search[0], limit:Range[0]})
-    },[Range[0]])
+        if (Range[0] > data.length) getData(setData, '/admin/firms', {search:Search[0], limit:Range[0], Genesis:Genesis[0]})
+        if (Search[0].length > 3) getData(setData, '/admin/firms', {search:Search[0], limit:Range[0], Genesis:Genesis[0]})
+        else getData(setData, '/admin/firms', {search:Search[0], limit:Range[0], Genesis:Genesis[0]})
+    },[Range[0],Search[0], Genesis[0]])
     useEffect(()=>{
         if (overlay=='') setShowOverlay(false)
         else setShowOverlay(true)
@@ -36,12 +43,12 @@ export default function Page(){
     let action = (e,id, action) => {
         e.preventDefault();
         getData((_)=>{}, '/user/verify', {verify:action, user:id})
-        getData(setData, '/admin/firms', {search:Search[0], limit:Range[0]})
+        getData(setData, '/admin/firms', {search:Search[0], limit:Range[0], Genesis:Genesis[0]})
     }
 
     return(
         <div onClick={e=>{optionsAt>=0?setOptionsAt(-1):null}}>
-        <Head Range={Range} Search={Search} Title={'Firms'} TH={TH} Sort={Sort} placeholder={'Search registered firms'}>
+        <Head Range={Range} Search={Search} Title={'Firms'} TH={TH} Sort={Sort} placeholder={'Search registered firms'} Genesis={Genesis} total={total}>
         </Head>
         <div className="overflow-x-scroll mt-2 md:mt-10 mx-2 lg:mx-0 max-h-96 md:max-h-[65vh] overflow-y-scroll">
         <table className="w-full text-sm lg:text-xs 2xl:text-sm text-left table-auto">
