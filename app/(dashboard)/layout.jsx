@@ -23,6 +23,7 @@ export default async function Layout({children}){
     let logout = e => {
         remove('token');
         setUser({});
+        router.push('/login')
     }
 
     useEffect(()=>{

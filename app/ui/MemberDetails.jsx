@@ -15,7 +15,6 @@ export default function MemberDetails({control,id}){
     let [nema, setNema] = useState('');
     let [certificate, setCertificate] = useState('');
     let [firm, setFirm] = useState('');
-    let [pin, setPin] = useState('');
     let [nationality, setNationality] = useState('');
     let [nationalID, setNationalID] = useState('');
     let [postal, setPostal] = useState('');
@@ -30,10 +29,9 @@ export default function MemberDetails({control,id}){
             setFullName(profile.profile['name']);
             setEmail(profile.profile['email']);
             setNema(profile.profile['nema']);
-            setCertificate(profile.certificate['number']);
+            if (profile.certificate) setCertificate(profile.certificate['number']);
             setCategory(profile.profile['category']);
             setFirm(profile.profile['firm']);
-            setPin(profile.profile['kra']);
             setNationality(profile.profile['nationality']);
             setNationalID(profile.profile['nationalID']);
             setPostal(profile.profile['postal']);
@@ -42,7 +40,7 @@ export default function MemberDetails({control,id}){
             setPhone(profile.profile['phone']);
             setAlternative(profile.profile['alternate']);
         }
-        else getData(setData, '/admin/members', {id})
+        else getData(setData, '/admin/member', {id})
     },[])
 
     useEffect(()=>{
@@ -53,7 +51,6 @@ export default function MemberDetails({control,id}){
             setCertificate(data[0]['certificates']['number']);
             setCategory(data[0]['individual']['category']);
             setFirm(data[0]['individual']['firm']);
-            setPin(data[0]['individual']['kra']);
             setNationality(data[0]['individual']['nationality']);
             setNationalID(data[0]['individual']['nationalID']);
             setPostal(data[0]['individual']['postal']);
@@ -74,7 +71,6 @@ export default function MemberDetails({control,id}){
             individual: {
                 category,
                 firm,
-                kra: pin,
                 nationalID,
                 nationality,
                 postal,
@@ -87,6 +83,7 @@ export default function MemberDetails({control,id}){
                 number: certificate
             },
         }
+        console.log('Sending :: ',data)
         postData((_)=>{},data, '/admin/members')
     }
 
@@ -115,7 +112,6 @@ export default function MemberDetails({control,id}){
                 <Input value={nema} setValue={setNema} placeholder={''} type={'text'} name={'NEMA Registration Number'}/>
                 <Input value={certificate} setValue={setCertificate} placeholder={''} type={'text'} name={'Certificate Number'}/>
                 <Input value={firm} setValue={setFirm} placeholder={''} type={'text'} name={'Firm of Experts'}/>
-                <Input value={pin} setValue={setPin} placeholder={''} type={'text'} name={'KRA pin'}/>
                 <Input value={nationality} setValue={setNationality} placeholder={''} type={'text'} name={'Nationality'}/>
                 <Input value={nationalID} setValue={setNationalID} placeholder={''} type={'text'} name={'Identification Number'}/>
                 <Input value={postal} setValue={setPostal} placeholder={''} type={'text'} name={'Postal Address'}/>

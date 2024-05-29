@@ -2,16 +2,11 @@ import { useState } from "react"
 import { XMarkIcon } from "@heroicons/react/24/outline"
 import Input from "@/app/ui/Input";
 import { postData } from "@/app/lib/data";
+import { popupE } from "@/app/lib/trigger";
 
-export default function PaymentInfo({control, amount}){
+export default function PaymentInfo({control, amount, trigger}){
     let [phone, setPhone] = useState('');
     let [email, setEmail] = useState('');
-
-    let stk = e=>{
-        e.preventDefault();
-        popupE('ok', 'Processing', 'Please wait...')
-        postData((_)=>{},{phone, amount, email},'/pay/mpesa')
-    }
 
     return(
         <div className="bg-white w-[80%] md:w-1/2 lg:w-1/3 2xl:w-[20%] py-1 px-4 rounded-lg">
@@ -25,7 +20,7 @@ export default function PaymentInfo({control, amount}){
             <Input required={true} value={email} setValue={setEmail} placeholder={'janedoe@eik.co.ke'} type={'email'} name={'Email'}/>
         </div>
 
-        <button className="bg-secondary text-white flex px-4 py-2 rounded-lg mx-auto w-full items-center justify-center my-6" onClick={e=>stk(e)}>
+        <button className="bg-secondary text-white flex px-4 py-2 rounded-lg mx-auto w-full items-center justify-center my-6" onClick={e=>trigger(e, phone, email)}>
             <span className="font-semibold">Pay</span>
         </button>
     </div>
