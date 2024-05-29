@@ -1,11 +1,13 @@
 'use client'
 import Image from "next/image"
 import { useRouter } from "next/navigation"
-import { PrinterIcon, EllipsisVerticalIcon, PencilSquareIcon } from "@heroicons/react/24/outline"
+import { PrinterIcon, EllipsisVerticalIcon, PencilSquareIcon, XMarkIcon } from "@heroicons/react/24/outline"
 import Overlay from "@/app/ui/overlay"
+import Pay from "@/app/ui/Pay"
 import FirmDetails from "@/app/ui/FirmDetails"
 import { useState, useEffect } from "react"
 import { getData } from "@/app/lib/data"
+import { popupE } from "@/app/lib/trigger"
 
 function SectionHead({section}){
     let [showEdit, setShowEdit] = useState(false);
@@ -41,6 +43,7 @@ function SectionHead({section}){
 }
 export default function Firm({id, role}){
     let [profile, setProfile] = useState({});
+    let [overlay, setOverlay] = useState('');
 
     let router = useRouter()
 
@@ -62,7 +65,7 @@ export default function Firm({id, role}){
             } else{
                 popupE('error','Error' ,'Certificate request has not been approved')
             }
-        }else  getData((_)=>{}, '/request', {id})
+        }else  setOverlay('Pay')
     }
     
     return(
@@ -71,7 +74,7 @@ export default function Firm({id, role}){
             <h1 className="my-2 ml-2 md:ml-0 text-primary font-bold text-4xl">Profile</h1>
             <button className="flex items-center h-fit bg-secondary w-fit text-white font-semibold px-4 py-2 rounded-md justify-between text-sm" onClick={e=>print(e)}>
                 <PrinterIcon className="h-6 w-6 mr-2" />
-                Print Certificate Request
+                {profile['certificate']?'Print Certificate':'Print Certificate Request'}
             </button>
         </header>
         <div className="mx-2">
@@ -151,6 +154,26 @@ export default function Firm({id, role}){
                 }
             </section>
         </div>
+        <Overlay className={`${overlay!=''?'block':'hidden'}`} >
+            {
+            overlay=='Pay' &&
+            <div className="bg-white px-8 py-6 rounded-md">
+                <div className="flex mb-8 justify-between items-center py-3 sticky -top-1 bg-white z-50 border-b-2">
+                    <span className="font-semibold">Payment</span>
+                    <XMarkIcon className="w-8 h-8" onClick={e=>setOverlay('')} />
+                </div>
+                <Pay title={'Annual Fees'} description={'Annual subscription fee'} amount={7500} email={profile.profile.email} phone={profile.profile.phone} name={profile.profile.name} />
+                <p className="text-primary font-semibold text-right cursor-pointer mt-4" onClick={e=>{
+                    getData((response)=>{
+                        setProfile({...profile, certificate:response.cert})
+                        setOverlay('')
+                    }, '/request', {id})
+                }}>
+                    Already paid? Proceed
+                </p>
+            </div>
+            }
+        </Overlay>
         </>
     )
 }

@@ -9,6 +9,7 @@ export default function Home(){
     useEffect(()=>{
         if(user.name){
             const name = user.name.split(' ');
+            if(name.length==1) name.push('');
             setDisplayName(`${name[0]}, ${name[1].charAt(0)}!`);
         }
     },[user]);
