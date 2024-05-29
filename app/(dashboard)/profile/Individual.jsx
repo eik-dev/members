@@ -99,9 +99,7 @@ export default function Individual({id,role}){
             } else{
                 popupE('error','Error' ,'Certificate request has not been approved')
             }
-        }else{
-            setOverlay('Pay')
-        }
+        }else setOverlay('Pay')
     }
     
     return(
@@ -292,14 +290,14 @@ export default function Individual({id,role}){
                     <span className="font-semibold">Payment</span>
                     <XMarkIcon className="w-8 h-8" onClick={e=>setOverlay('')} />
                 </div>
-                <Pay title={'Annual Fees'} description={'First time registration fee'} amount={getAmount(profile.profile.category)} email={profile.profile.email} phone={profile.profile.phone} name={`sam`} />
-                <p className="text-primary font-semibold text-right cursor-pointer" onClick={e=>{
+                <Pay title={'Annual Fees'} description={'Annual subscription fee'} amount={getAmount(profile.profile.category)} email={profile.profile.email} phone={profile.profile.phone} name={profile.profile.name} />
+                <p className="text-primary font-semibold text-right cursor-pointer mt-4" onClick={e=>{
                     getData((response)=>{
                         setProfile({...profile, certificate:response.cert})
                         setOverlay('')
                     }, '/request', {id})
                 }}>
-                    Already paid
+                    Already paid? Proceed
                 </p>
             </div>
             }

@@ -72,6 +72,7 @@ export default function Pay({title, description, amount, email, phone, name}){
         popupE('ok', 'Processing', 'Please wait...')
         postData((response)=>{
             if(response.ResponseCode=="0"){
+                popupE('ok', 'Success', 'PIN prompt sent to your phone. Please enter to complete payment.')
                 getData(setCallback,'/mpesa/callback',{CheckoutRequestID: response.CheckoutRequestID})
             } else popupE('error', 'Error', response.ResponseDescription)
         },{phone, amount, email,AccountReference:title},'/pay/mpesa')
