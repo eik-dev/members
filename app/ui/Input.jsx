@@ -77,13 +77,13 @@ export function Institutions({data, setData}){
                 })
             }
             <div className='my-8 flex flex-col gap-4 md:flex-row justify-between'>
-                <Input value={Title} setValue={setTitle} placeholder={''} type={'text'} name={'Title'}/>
+                <Input required={true} value={Title} setValue={setTitle} placeholder={''} type={'text'} name={'Title'}/>
                 <Input required={true} value={Institution} setValue={setInstitution} placeholder={'University of Nairobi'} type={'text'} name={'Institution'}/>
-                <Input value={Certification} setValue={setCourse} placeholder={'BSc. Enviromental Science'} type={'text'} name={'Certification'}/>
+                <Input required={true} value={Certification} setValue={setCourse} placeholder={'BSc. Enviromental Science'} type={'text'} name={'Certification'}/>
             </div>
             <div className='my-8 flex flex-col gap-4 md:flex-row justify-between'>
-                <Input value={start} setValue={setStartDate} placeholder={''} type={'date'} name={'Start date'}/>
-                <Input value={end} setValue={setEndDate} placeholder={''} type={'date'} name={'End date'}/>
+                <Input required={true} value={start} setValue={setStartDate} placeholder={''} type={'date'} name={'Start date'}/>
+                <Input required={true} value={end} setValue={setEndDate} placeholder={''} type={'date'} name={'End date'}/>
             </div>
         </div>
         <div className="flex items-center group">
@@ -182,17 +182,17 @@ export function Organizations({data, setData}){
             }
             <div className='my-8 flex flex-col gap-4 md:flex-row justify-between'>
                 <Input required={true} value={Organization} setValue={setInstitution} placeholder={''} type={'text'} name={'Organization'}/>
-                <Input value={Position} setValue={setCourse} placeholder={''} type={'text'} name={'Position'}/>
-                <Input value={Location} setValue={setLocation} placeholder={'Nairobi, Kenya'} type={'text'} name={'Location'}/>
+                <Input required={true} value={Position} setValue={setCourse} placeholder={''} type={'text'} name={'Position'}/>
+                <Input required={true} value={Location} setValue={setLocation} placeholder={'Nairobi, Kenya'} type={'text'} name={'Location'}/>
             </div>
             <div className='my-8 flex flex-col gap-4 md:flex-row justify-between'>
-                <Input value={email} setValue={setEmail} placeholder={''} type={'text'} name={'Company email'}/>
-                <Input value={phone} setValue={setPhone} placeholder={''} type={'text'} name={'Company phone'}/>
+                <Input required={true} value={email} setValue={setEmail} placeholder={''} type={'text'} name={'Company email'}/>
+                <Input required={true} value={phone} setValue={setPhone} placeholder={''} type={'text'} name={'Company phone'}/>
             </div>
             <Input required={true} value={note} setValue={setNote} placeholder={''} type={'textarea'} name={'Duties'}/>
             <div className='my-8 flex flex-col gap-4 md:flex-row justify-between'>
-                <Input value={start} setValue={setStartDate} placeholder={''} type={'date'} name={'Start date'}/>
-                <Input value={end} setValue={setEndDate} placeholder={''} type={'date'} name={'End date'}/>
+                <Input required={true} value={start} setValue={setStartDate} placeholder={''} type={'date'} name={'Start date'}/>
+                <Input required={true} value={end} setValue={setEndDate} placeholder={''} type={'date'} name={'End date'}/>
             </div>
         </div>
         <div className="flex items-center group">
@@ -208,6 +208,7 @@ export default function Input({type, value, setValue, placeholder, disabled, nam
     let [show, setShow] = useState(type=='password'?true:false)
 
     let handler = e => {
+        e.preventDefault();
         if (required && value=='') setError(true)
         else setError(false)
     }

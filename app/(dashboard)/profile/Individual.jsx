@@ -221,10 +221,10 @@ export default function Individual({id,role}){
                                 <span className="md:whitespace-nowrap">{item.Institution}</span>
                                 <span className="font-bold w-fit">Title:</span>
                                 <span className="md:whitespace-nowrap">{item.Title}</span>
-                                <span className="font-bold w-fit">Start & Finish Date:</span>
-                                <span className="md:whitespace-nowrap">{item.start} - {item.end}</span>
                                 <span className="font-bold w-fit">Certification</span>
                                 <span className="md:whitespace-nowrap">{item.Certification}</span>
+                                <span className="font-bold w-fit">Start & Finish Date:</span>
+                                <span className="md:whitespace-nowrap">{item.start} - {item.end}</span>
                             </div>
                         )
                     })
@@ -245,12 +245,12 @@ export default function Individual({id,role}){
                                 <span className="md:whitespace-nowrap">{item.Phone}</span>
                                 <span className="font-bold w-fit">Location</span>
                                 <span className="md:whitespace-nowrap">{item.Location}</span>
-                                <span className="font-bold w-fit">Start & Finish Date:</span>
-                                <span className="md:whitespace-nowrap">{item.start} - {item.end}</span>
                                 <span className="font-bold w-fit">Job title</span>
                                 <span className="md:whitespace-nowrap">{item.Position}</span>
                                 <span className="font-bold w-fit">Duties</span>
                                 <span className="md:whitespace-nowrap">{item.Duties}</span>
+                                <span className="font-bold w-fit">Start & Finish Date:</span>
+                                <span className="md:whitespace-nowrap">{item.start} - {item.end}</span>
                             </div>
                         )
                     })

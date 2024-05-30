@@ -34,9 +34,7 @@ export default function Page() {
     let [confirm, setConfirm] = useState('');
 
     let [institutions, setInstitutions] = useState([{}]);
-    let [checkInstituions, setCheckInstitutions] = useState(false);
     let [organizations, setOrganizations] = useState([{}]);
-    let [checkOrganizations, setCheckOrganizations] = useState(false);
 
     let [instructions, setInstructions] = useState(Student);
     let [amount, setAmount] = useState(300);
@@ -74,9 +72,35 @@ export default function Page() {
 
     let validate = () => {
         //validate all required fields
-        if (name == '' || last == '' || username == '' || email == '' || ID == '' || password == '' || bio=='' || (checkInstituions&&institutions.length==0) || (checkOrganizations&&organizations.length==0)){
+        console.log(institutions)
+        console.log(organizations)
+        let checkInstituions;
+        let checkOrganizations;
+        if ((category == 'Student' || category == 'Lead' || category == 'Associate')){
+            institutions.map((institution, index) => {
+                Object.keys(institution).map((key, index) => {
+                    if (institution[key] == '') checkInstituions = true;
+                })
+            })
+        }
+        if ((category == 'Fellow' || category == 'Lead' || category == 'Associate') ){
+            organizations.map((organization, index) => {
+                Object.keys(organization).map((key, index) => {
+                    if (organization[key] == '') checkOrganizations = true;
+                })
+            })
+        }
+        if (name == '' || last == '' || username == '' || email == '' || ID == '' || password == '' || bio=='' || checkInstituions || checkOrganizations){
             verifyE();
             popupE('error', 'Error', 'Fill all mandatory fields')
+            window.scrollTo({
+                top: 10,
+                behavior: 'smooth'
+            });
+            return false;
+        }
+        if (password!=confirm){
+            popupE('error', 'Error', 'Passwords do not match')
             window.scrollTo({
                 top: 10,
                 behavior: 'smooth'
@@ -188,14 +212,12 @@ export default function Page() {
                 {
                 (category == 'Student' || category == 'Lead' || category == 'Associate') && 
                 <>
-                {()=>setCheckInstitutions(true)}
                 <h1 className='text-xl 2xl:text-2xl font-medium mx-2 py-2 border-b-2 my-8'>Education</h1>
                 <Institutions data={institutions} setData={setInstitutions}/>
                 </> 
                 }
                 {(category == 'Fellow' || category == 'Lead' || category == 'Associate') && 
                 <>
-                {()=>setCheckOrganizations(true)}
                 <h1 className='text-xl 2xl:text-2xl font-medium mx-2 py-2 border-b-2 my-8'>Work Experience</h1>
                 <Organizations data={organizations} setData={setOrganizations}/>
                 </>
