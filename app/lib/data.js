@@ -1,8 +1,7 @@
 import {load} from './storage.js'
 import { popupE } from "@/app/lib/trigger"
 
-export function getData(setData,endpoint,parameters) {
-    let token = load('token');
+export function getData(setData,endpoint,parameters, token=load('token')) {
     //map parameters to get parameter format
     let params = new URLSearchParams(parameters).toString();
     console.log('Payload :: ', params)
@@ -16,7 +15,7 @@ export function getData(setData,endpoint,parameters) {
         console.log(`From ${endpoint}`, data)
         if (data.error) popupE('error', 'Error', data.error)
         else setData(data);
-        if (data.message) popupE('ok', 'Success', data.message)
+        if (data.message) popupE('ok', 'Success ✅', data.message)
     })
     .catch(err => {
         console.log(err)
@@ -68,4 +67,16 @@ export async function postData(setData,data,endpoint,token = load('token')) {
         console.log(err)
         popupE('error', 'Error', 'Server Error')
     });
+}
+
+export function fetcher([endpoint,parameters, token=load('token')]) {
+    if (load('token') == null) throw new Error('Session Expired')
+    let params = new URLSearchParams(parameters).toString();
+    console.log(`Payload to ${endpoint} :: `, params)
+    return fetch(`${process.env.NEXT_PUBLIC_API_URL}${endpoint}?${params}`, {
+    headers: {
+        'Authorization': `Bearer ${token}`,
+    }
+    })
+    .then(response => response.json())
 }

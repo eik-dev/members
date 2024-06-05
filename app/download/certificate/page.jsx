@@ -58,7 +58,7 @@ async function modifyPdf(e,data) {
     const blob = new Blob([pdfBytes], { type: 'application/pdf' });
     const link = document.createElement('a');
     link.href = window.URL.createObjectURL(blob);
-    link.download = 'certificate.pdf';
+    link.download = `EIK-${data['category']}-certificate.pdf`;
     link.click();
   }
 
@@ -79,7 +79,7 @@ export default function Page() {
                 <h3>Issued to: {data['user'].name}</h3>
                 <div className='my-3'>Category: {data['category']}</div>
                 <div className='my-3'>Member Number: {data['number']}</div>
-                <div className='my-3'>Valid upto: {data['expiry']}</div>
+                <div className='my-3'>Valid upto: 31-12-2024</div>
                 <button className=' px-5 py-2 bg-secondary hover:bg-primary text-white my-4 rounded-full' onClick={e=>modifyPdf(e,data)}>Download</button>
             </div>
         }

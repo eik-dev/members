@@ -1,19 +1,16 @@
 'use client'
 import Link from "next/link";
-import { useContext } from "react";
-import { Context } from "@/app/lib/ContextProvider";
+import useUser from "@/app/lib/hooks/useUser";
 import { usePathname } from "next/navigation";
 import {RectangleGroupIcon, UserPlusIcon, Square3Stack3DIcon, UserGroupIcon, BuildingLibraryIcon, AcademicCapIcon, ArrowLeftEndOnRectangleIcon, UserCircleIcon, HomeIcon} from '@heroicons/react/24/outline';
 import { remove } from "@/app/lib/storage";
 
 export default function SideNav({control}){
-    let {User} = useContext(Context);
-    let [user, setUser] = User;
     let pathname = usePathname();
+    const { user, isLoading, isError } = useUser()
 
     let logout = e => {
         remove('token');
-        setUser({});
         router.push('/login')
     }
 
@@ -69,6 +66,9 @@ export default function SideNav({control}){
             roles:['Admin']
         },
     ]
+
+    if (isLoading) return <></>
+    if (isError) return <></>
     return(<>
     <img className="w-48" src="/transparent-logo.svg" alt="" />
     {

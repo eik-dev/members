@@ -9,8 +9,9 @@ import Attachments from "./Attachments"
 import Qualifications from "./Qualifications"
 import Experience from "./Experience"
 import Introductory from "./Introductory"
-import { useState, useEffect, useContext } from "react"
-import { Context } from "@/app/lib/ContextProvider"
+import Spinner from "@/app/ui/Spinner"
+import { useState, useEffect } from "react"
+import useProfile from "@/app/lib/hooks/useProfile"
 import { getData } from "@/app/lib/data"
 import { popupE } from "@/app/lib/trigger"
 
@@ -74,22 +75,8 @@ let getAmount = (role) => {
 }
 
 export default function Individual({id,role}){
-    let {Profile} = useContext(Context);
-    let [profile, setProfile] = Profile;
     let router = useRouter();
     let [overlay, setOverlay] = useState('');
-
-    useEffect(() => {
-        getData((profile)=>{
-            getData((requirements)=>{
-                getData((photo)=>{
-                    setProfile({...profile, requirements:requirements, photo: photo[0]})
-                }, '/files/profile', {id,role})
-            }, '/files/requirements', {id,role})
-        }, '/profile', {id,role})
-    }, [])
-
-    useEffect(()=>{console.log(profile)},[profile])
 
     let print = e => {
         e.preventDefault();
@@ -101,6 +88,13 @@ export default function Individual({id,role}){
             }
         }else setOverlay('Pay')
     }
+
+    let { data:profile, isLoading, isError } = useProfile(id, role)
+
+    if (isLoading) return <Spinner />
+    if (isError) return <>xxx</>
+
+    console.log(profile)
     
     return(
         <>
@@ -293,7 +287,6 @@ export default function Individual({id,role}){
                 <Pay title={'Annual Fees'} description={'Annual subscription fee'} amount={getAmount(profile.profile.category)} email={profile.profile.email} phone={profile.profile.phone} name={profile.profile.name} />
                 <p className="text-primary font-semibold text-right cursor-pointer mt-4" onClick={e=>{
                     getData((response)=>{
-                        setProfile({...profile, certificate:response.cert})
                         setOverlay('')
                     }, '/request', {id})
                 }}>

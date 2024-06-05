@@ -1,18 +1,17 @@
 import Link from "next/link"
-import { useContext, Suspense, useEffect, useState } from "react"
-import { Context } from "@/app/lib/ContextProvider"
+import { Suspense } from "react"
+import useUser from "@/app/lib/hooks/useUser";
+import Spinner from "@/app/ui/Spinner";
 
 export default function Home(){
-    let {User} = useContext(Context);
-    let [user, setUser] = User;
-    let [displayName, setDisplayName] = useState('');
-    useEffect(()=>{
-        if(user.name){
-            const name = user.name.split(' ');
-            if(name.length==1) name.push('');
-            setDisplayName(`${name[0]}, ${name[1].charAt(0)}!`);
-        }
-    },[user]);
+    const { user, isLoading, isError } = useUser()
+    
+    if (isLoading) return <Spinner />
+    if (isError) return <></>
+
+    const name = user.name.split(' ');
+    if(name.length==1) name.push('');
+    let displayName = (`${name[0]}, ${name[1].charAt(0)}!`);
 
     return(
         <Suspense fallback={<div>Loading....</div>}>

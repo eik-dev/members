@@ -1,41 +1,27 @@
 'use client'
-import { Context } from "@/app/lib/ContextProvider"
-import { useState, useEffect, useContext } from "react"
+import useSWR from "swr";
+import { fetcher } from "@/app/lib/data";
+import useUser from "@/app/lib/hooks/useUser";
 import Bur from "@/app/ui/charts/Bar"
 import Lyn from "@/app/ui/charts/Line"
 import Py from "@/app/ui/charts/Pie"
+import Spinner from "@/app/ui/Spinner";
 import { ArrowTrendingUpIcon, ArrowTrendingDownIcon } from "@heroicons/react/24/outline"
 import { useRouter } from "next/navigation";
 import { getData } from "@/app/lib/data"
 
 export default function Dashboard(){
-    let {User} = useContext(Context)
-    let [data, setData] = useState({
-        revenue:{
-            quantity: '0'                ,
-            trend: false,
-            rate: 0
-        },
-        logins:{
-            quantity: 0,
-            trend: false,
-            rate: 0
-        },print:{
-            quantity: 0,
-            trend: false,
-            rate: 0
-        }
-    })
+    const { user } = useUser()
+    const { data, error, isLoading } = useSWR(['/summary',{}], fetcher)
+    console.log(data)
+
     let router = useRouter()
     
-    useEffect(()=>{
-        // if user role is not admin redirect to profile page
-        if (User[0].role != 'Admin') {
-            router.push('/profile')
-        }
-        getData(setData, '/summary',{})
-        console.log(data)
-    },[])
+    if (user.role != 'Admin') {
+        router.push('/profile')
+    }
+    if (isLoading) return <Spinner />
+    if (error) return <></>
     return(
         <>
         <h1 className="my-2 ml-2 md:ml-0 text-primary font-bold text-2xl 2xl:text-4xl overflow-hidden">Dashboard</h1>

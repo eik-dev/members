@@ -9,6 +9,7 @@ export default function MemberDetails({control,id}){
     let {Profile} = useContext(Context);
     let [profile, setProfile] = Profile;
     let [data, setData] = useState();
+
     let [fullName, setFullName] = useState('');
     let [email, setEmail] = useState('');
     let [category, setCategory] = useState('');
@@ -45,19 +46,22 @@ export default function MemberDetails({control,id}){
 
     useEffect(()=>{
         if(data){
-            setFullName(data[0]['name']);
-            setEmail(data[0]['email']);
-            setNema(data[0]['nema']);
-            setCertificate(data[0]['certificates']['number']);
-            setCategory(data[0]['individual']['category']);
-            setFirm(data[0]['individual']['firm']);
-            setNationality(data[0]['individual']['nationality']);
-            setNationalID(data[0]['individual']['nationalID']);
-            setPostal(data[0]['individual']['postal']);
-            setTown(data[0]['individual']['town']);
-            setCounty(data[0]['individual']['county']);
-            setPhone(data[0]['individual']['phone']);
-            setAlternative(data[0]['individual']['alternate']);
+            console.log('DAAATa', data)
+            setFullName(data['member']['name']);
+            setEmail(data['member']['email']);
+            setNema(data['member']['nema']);
+            if (data['certificates']) setCertificate(data['certificates']['number']);
+            if (data['individual']){
+                setCategory(data['individual']['category']);
+            setFirm(data['individual']['firm']);
+            setNationality(data['individual']['nationality']);
+            setNationalID(data['individual']['nationalID']);
+            setPostal(data['individual']['postal']);
+            setTown(data['individual']['town']);
+            setCounty(data['individual']['county']);
+            setPhone(data['individual']['phone']);
+            setAlternative(data['individual']['alternate']);
+            }
         }
     },[data])
 

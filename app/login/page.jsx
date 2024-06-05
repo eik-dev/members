@@ -1,15 +1,12 @@
 'use client'
-import { useState, useContext, useEffect } from 'react'
-import { Context } from '@/app/lib/ContextProvider';
+import { useState, useEffect } from 'react'
 import Link from 'next/link';
 import { useRouter } from "next/navigation";
 import Input from '@/app/ui/Input';
-import { save } from '@/app/lib/storage';
+import { save, load } from '@/app/lib/storage';
 import { popupE } from '@/app/lib/trigger';
 
 export default function Login() {
-    let { User } = useContext(Context);
-    let [user, setUser] = User;
     let [email, setEmail] = useState('')
     let [password, setPassword] = useState('')
 
@@ -35,7 +32,6 @@ export default function Login() {
                 throw new Error(data.error)
             }
             if(!save('token', data.user.token)) alert('Error saving token');
-            setUser({...data.user});
             popupE('ok', 'Success', 'Login successful')
             router.push('/')
         })
@@ -44,6 +40,10 @@ export default function Login() {
             console.log(err)
         })
     }
+
+    useEffect(()=>{
+        if (load('token')) router.push('/')
+    },[])
 
     // if(Object.keys(user).length>0) router.push('/')
     
