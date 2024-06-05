@@ -91,7 +91,7 @@ export default function Page(){
                                         <div className={`flex shadow-xl p-4 absolute z-50 right-12 md:right-44 bg-white flex-col gap-y-4 ${true?'block':'hidden'}`} onClick={e=>setUserID(data['id'])}>
                                             <button className="flex gap-x-2" onClick={e=>setOverlay('details')}>
                                                 <UserCircleIcon className="w-6 h-6"/>
-                                                View details
+                                                Edit details
                                             </button>
                                             <button className="flex gap-x-2" onClick={e=>router.push(`/profile?id=${data['id']}&role=Individual`)}>
                                                 <DocumentIcon className="w-6 h-6"/>
