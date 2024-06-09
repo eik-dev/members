@@ -36,7 +36,6 @@ export default function Page(){
         if (Range[0] > data.length) getData(setData, '/admin/members', {search:Search[0], limit:Range[0], Genesis:Genesis[0]})
         if (Search[0].length > 3) getData(setData, '/admin/members', {search:Search[0], limit:Range[0], Genesis:Genesis[0]})
         else getData(setData, '/admin/members', {search:Search[0], limit:Range[0], Genesis:Genesis[0]})
-        console.log('Searching for` ::',Search[0])
     },[Range[0],Search[0], Genesis[0]])
     useEffect(()=>{
         if (overlay=='') setShowOverlay(false)
