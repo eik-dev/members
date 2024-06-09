@@ -20,6 +20,8 @@ export default function Page() {
 
     if (isLoading) return <Spinner />
 
+    if (error || data.error) return <div className='flex justify-center items-center h-[100vh] text-center text-warning font-bold text-2xl'>Invalid certificate</div>
+
     console.log(data)
     
     return (
