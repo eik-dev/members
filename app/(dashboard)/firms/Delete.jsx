@@ -1,13 +1,11 @@
-import { useState } from "react"
 import { ExclamationTriangleIcon } from "@heroicons/react/24/outline"
+import { getData } from "@/app/lib/data";
+import { popupE } from "@/app/lib/trigger";
 
 export default function Delete({control}){
-    let [fullName, setFullName] = useState('');
-    let [email, setEmail] = useState('');
-    let [username, setUsername] = useState('');
-
-    let submit = e=>{
+    let deleteF = e=>{
         e.preventDefault();
+        popupE('ok', 'processing', 'Please wait...')
         console.log('submitting')
     }
 

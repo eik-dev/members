@@ -281,17 +281,16 @@ export default function Individual({id,role}){
             overlay=='Pay' &&
             <div className="bg-white px-8 py-6 rounded-md">
                 <div className="flex mb-8 justify-between items-center py-3 sticky -top-1 bg-white z-50 border-b-2">
-                    <span className="font-semibold">Payment</span>
-                    <XMarkIcon className="w-8 h-8" onClick={e=>setOverlay('')} />
-                </div>
-                <Pay title={'Annual Fees'} description={'Annual subscription fee'} amount={getAmount(profile.profile.category)} email={profile.profile.email} phone={profile.profile.phone} name={profile.profile.name} />
-                <p className="text-primary font-semibold text-right cursor-pointer mt-4" onClick={e=>{
+                <span className="text-primary font-semibold text-right cursor-pointer" onClick={e=>{
                     getData((response)=>{
                         setOverlay('')
                     }, '/request', {id})
                 }}>
                     Already paid? Proceed
-                </p>
+                </span>
+                    <XMarkIcon className="w-8 h-8" onClick={e=>setOverlay('')} />
+                </div>
+                <Pay title={'Annual Fees'} description={'Annual subscription fee'} amount={getAmount(profile.profile.category)} email={profile.profile.email} phone={profile.profile.phone} name={profile.profile.name} />
             </div>
             }
         </Overlay>

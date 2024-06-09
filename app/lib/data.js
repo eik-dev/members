@@ -31,6 +31,7 @@ export function postFile(setData,file,title,endpoint,token = load('token')) {
         method: "POST",
         headers:{
             'Authorization': `Bearer ${token}`,
+            'Content-Type': 'multipart/form-data'
         },
         body: formData
     })
@@ -46,9 +47,8 @@ export function postFile(setData,file,title,endpoint,token = load('token')) {
         });
 }
 
-export async function postData(setData,data,endpoint,token = load('token')) {
-    console.log(`Data:`, data)
-    await fetch(`${process.env.NEXT_PUBLIC_API_URL}${endpoint}`, {
+export function postData(setData,data,endpoint,token = load('token')) {
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}${endpoint}`, {
         method: "POST",
         headers:{
             'Authorization': `Bearer ${token}`,

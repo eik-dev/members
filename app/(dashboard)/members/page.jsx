@@ -7,6 +7,7 @@ import MemberDetails from "@/app/ui/MemberDetails";
 import Delete from "./Delete";
 import { EllipsisVerticalIcon, UserCircleIcon, TrashIcon, CheckIcon, XMarkIcon, DocumentIcon } from  "@heroicons/react/24/outline";
 import { getData } from "@/app/lib/data";
+import { popupE } from "@/app/lib/trigger";
 
 export default function Page(){
     let Range = useState(20);
@@ -44,6 +45,7 @@ export default function Page(){
 
     let action = (e,id, action) => {
         e.preventDefault();
+        popupE('ok', 'processing', 'Please wait...')
         getData((_)=>{}, '/user/verify', {verify:action, user:id})
         getData(setData, '/admin/members', {search:Search[0], limit:Range[0], Genesis:Genesis[0]})
     }
