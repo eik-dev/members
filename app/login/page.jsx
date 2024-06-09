@@ -15,6 +15,7 @@ export default function Login() {
 
     let login = (e) => {
         e.preventDefault()
+        popupE('ok', 'Loading', 'Please wait...')
         
         fetch(`${process.env.NEXT_PUBLIC_API_URL}/login`, {
             method: 'POST',

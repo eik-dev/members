@@ -6,6 +6,7 @@ import Delete from "./Delete";
 import { useRouter } from "next/navigation";
 import { EllipsisVerticalIcon, ArrowDownTrayIcon, CheckIcon, XMarkIcon, TrashIcon } from "@heroicons/react/24/outline";
 import { getData } from "@/app/lib/data";
+import { popupE } from "@/app/lib/trigger";
 
 export default function Page(){
     let Range = useState(20);
@@ -43,6 +44,7 @@ export default function Page(){
 
     let action = (e,id, action) => {
         e.preventDefault();
+        popupE('ok', 'processing', 'Please wait...')
         getData((_)=>{}, '/certificate/validate', {validate:action, id:id})
         getData(setData,'/certificates', {search:Search[0], limit:Range[0], Genesis:Genesis[0]})
     }

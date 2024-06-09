@@ -1,11 +1,12 @@
 import { ExclamationTriangleIcon } from "@heroicons/react/24/outline"
 import { getData } from "@/app/lib/data";
+import { popupE } from "@/app/lib/trigger";
 
 export default function Delete({control, id}){
 
     let deleteC = e=>{
         e.preventDefault();
-        console.log('deleting')
+        popupE('ok', 'processing', 'Please wait...')
         getData((_)=>{}, '/certificate/delete', {id})
     }
 
