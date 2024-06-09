@@ -1,27 +1,32 @@
 'use client'
 import { useState, useEffect } from "react"
 import Head from '@/app/ui/head';
+import { getData } from "@/app/lib/data";
 
 export default function Page(){
     let Range = useState(20);
     let Search = useState("");
     let Genesis = useState(0);
-    let TH = ['Date', 'Username', 'Email', 'Action'];
+    let TH = ['Date', 'User', 'Email', 'Action'];
     let Sort = useState(TH[0]);
     let [optionsAt, setOptionsAt] = useState(-1);
     
-    let [data, setData] = useState([
-        {
-            date: '12/12/2021',
-            username: 'johndoe',
-            email: 'admin@eik.co.ke',
-            action: 'login'
-        }
-    ]);
+    let [data, setData] = useState([]);
+    let [total, setTotal] = useState(0);
 
-    useEffect(()=>{},[])
+    useEffect(()=>{
+        getData((response)=>{
+            setData(response.logs)
+            setTotal(response.count)
+        }, '/logs', {search:Search[0], limit:Range[0], Genesis:Genesis[0], count:true})
+    },[])
     useEffect(()=>{},[Sort[0]])
-    useEffect(()=>{console.log(`Pulling ${Range[0]} rows`)},[Range[0]])
+    useEffect(()=>{
+        console.log('Genesis:',Genesis[0])
+        if (Range[0] > data.length) getData(setData, '/logs', {search:Search[0], limit:Range[0], Genesis:Genesis[0]})
+        if (Search[0].length > 3) getData(setData, '/logs', {search:Search[0], limit:Range[0], Genesis:Genesis[0]})
+        else getData(setData, '/logs', {search:Search[0], limit:Range[0], Genesis:Genesis[0]})
+    },[Range[0],Search[0], Genesis[0]])
 
     return(
         <div onClick={e=>{optionsAt>=0?setOptionsAt(-1):null}}>
