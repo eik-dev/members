@@ -7,6 +7,7 @@ import useSWR from 'swr';
 import Spinner from '@/app/ui/Spinner';
 import Certificate from '@/app/ui/Certificate';
 
+let category = '';
 export default function Page() {
     let params = useSearchParams();
     let id = params.get('id');
@@ -16,7 +17,7 @@ export default function Page() {
 
     let handlePrint = useReactToPrint({
         content: () => certificateRef.current,
-        documentTitle: `EIK-${data.category}-Certificate`,
+        documentTitle: `EIK-${category}-Certificate`,
     });
 
     if (isLoading) return <Spinner />
@@ -24,6 +25,7 @@ export default function Page() {
     if (error || data.error) return <div className='flex justify-center items-center h-[100vh] text-center text-warning font-bold text-2xl'>Invalid certificate</div>
 
     console.log(data)
+    category = data.category;
     
     return (
         
