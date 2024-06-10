@@ -1,5 +1,19 @@
 'use client'
 import { useState, useEffect } from 'react';
+import Echo from 'laravel-echo';
+ 
+import Pusher from 'pusher-js';
+// window.Pusher = Pusher;
+ 
+// window.Echo = new Echo({
+//     broadcaster: 'reverb',
+//     key: process.env.REVERB_APP_KEY,
+//     wsHost: process.env.REVERB_HOST,
+//     wsPort: process.env.REVERB_HOST,
+//     wssPort: process.env.REVERB_PORT,
+//     forceTLS: (process.env.REVERB_SCHEME ?? 'https') === 'https',
+//     enabledTransports: ['ws', 'wss'],
+// });
 
 export default function Page(){
     let [data, setData] = useState([])

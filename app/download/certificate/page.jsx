@@ -1,5 +1,5 @@
 'use client'
-import { useRef } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { useReactToPrint } from 'react-to-print';
 import { fetcher } from "@/app/lib/data";
@@ -12,11 +12,12 @@ export default function Page() {
     let id = params.get('id');
     let certificateRef = useRef();
 
+    let {data, isLoading, error} = useSWR(['/certificate/download', {id:id}, ''], fetcher);
+
     let handlePrint = useReactToPrint({
         content: () => certificateRef.current,
+        documentTitle: `EIK-${data.category}-Certificate`,
     });
-
-    let {data, isLoading, error} = useSWR(['/certificate/download', {id:id}, ''], fetcher);
 
     if (isLoading) return <Spinner />
 
