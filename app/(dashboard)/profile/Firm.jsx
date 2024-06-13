@@ -83,15 +83,7 @@ export default function Firm({id, role}){
                 <div className="flex flex-col gap-x-3 md:flex-row w-full">
                     <div className="w-32 md:w-64 h-fit relative mr-4 mb-4">
                     {
-                            profile.photo?
-                            <img src={profile.photo.url} alt="" />
-                            :
-                            <Image
-                                src="/profile_firm.png"
-                                width={500}
-                                height={500}
-                                alt="Picture of the author"
-                            />
+                            <img src={profile?.photo?.[0]?.url ?? "/profile_firm.png"} className="w-24 h-24 2xl:w-56 2xl:h-56 rounded-lg" alt="" />
                         }
                     </div>
                     {

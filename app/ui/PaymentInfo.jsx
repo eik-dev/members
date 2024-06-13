@@ -1,10 +1,8 @@
 import { useState } from "react"
 import { XMarkIcon } from "@heroicons/react/24/outline"
 import Input from "@/app/ui/Input";
-import { postData } from "@/app/lib/data";
-import { popupE } from "@/app/lib/trigger";
 
-export default function PaymentInfo({control, amount, trigger}){
+export default function PaymentInfo({control, trigger}){
     let [phone, setPhone] = useState('');
     let [email, setEmail] = useState('');
 

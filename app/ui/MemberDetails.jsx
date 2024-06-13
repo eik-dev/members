@@ -1,13 +1,10 @@
-import { useState, useEffect, useContext } from "react"
-import { Context } from "@/app/lib/ContextProvider";
+import { useState, useEffect } from "react"
 import Image from "next/image";
 import { XMarkIcon, PencilSquareIcon } from "@heroicons/react/24/outline"
 import Input from "./Input";
 import { getData, postData } from "@/app/lib/data";
 
 export default function MemberDetails({control,id}){
-    let {Profile} = useContext(Context);
-    let [profile, setProfile] = Profile;
     let [data, setData] = useState();
 
     let [fullName, setFullName] = useState('');
@@ -23,44 +20,29 @@ export default function MemberDetails({control,id}){
     let [county, setCounty] = useState('');
     let [phone, setPhone] = useState('');
     let [alternative, setAlternative] = useState('');
+    let [photo, setPhoto] = useState();
 
     useEffect(()=>{
-        if(Object.keys(profile).length > 0){
-            console.log('PROFILE ',profile);
-            setFullName(profile.profile['name']);
-            setEmail(profile.profile['email']);
-            setNema(profile.profile['nema']);
-            if (profile.certificate) setCertificate(profile.certificate['number']);
-            setCategory(profile.profile['category']);
-            setFirm(profile.profile['firm']);
-            setNationality(profile.profile['nationality']);
-            setNationalID(profile.profile['nationalID']);
-            setPostal(profile.profile['postal']);
-            setTown(profile.profile['town']);
-            setCounty(profile.profile['county']);
-            setPhone(profile.profile['phone']);
-            setAlternative(profile.profile['alternate']);
-        }
-        else getData(setData, '/admin/member', {id})
+       getData(setData, '/admin/member', {id})
     },[])
 
     useEffect(()=>{
         if(data){
-            console.log('DAAATa', data)
             setFullName(data['member']['name']);
             setEmail(data['member']['email']);
             setNema(data['member']['nema']);
+            setPhoto(data['photo']);
             if (data['certificates']) setCertificate(data['certificates']['number']);
             if (data['individual']){
                 setCategory(data['individual']['category']);
-            setFirm(data['individual']['firm']);
-            setNationality(data['individual']['nationality']);
-            setNationalID(data['individual']['nationalID']);
-            setPostal(data['individual']['postal']);
-            setTown(data['individual']['town']);
-            setCounty(data['individual']['county']);
-            setPhone(data['individual']['phone']);
-            setAlternative(data['individual']['alternate']);
+                setFirm(data['individual']['firm']);
+                setNationality(data['individual']['nationality']);
+                setNationalID(data['individual']['nationalID']);
+                setPostal(data['individual']['postal']);
+                setTown(data['individual']['town']);
+                setCounty(data['individual']['county']);
+                setPhone(data['individual']['phone']);
+                setAlternative(data['individual']['alternate']);
             }
         }
     },[data])
@@ -100,12 +82,9 @@ export default function MemberDetails({control,id}){
 
         <div className="flex flex-col justify-center gap-y-8 gap-x-10 md:flex-row">
             <div className="w-32 md:w-64 h-fit relative">
-            <Image
-                src="/profile.svg"
-                width={500}
-                height={500}
-                alt="Picture of the author"
-            />
+           {
+            <img src={photo ?? "/profile.svg"} className="w-24 h-24 2xl:w-48 2xl:h-48 rounded-lg" alt="" />
+           }
             <div className="bg-secondary p-1 rounded-md w-fit absolute -right-2 -bottom-2">
                 <PencilSquareIcon className="w-6 h-6 text-white"/>
             </div>

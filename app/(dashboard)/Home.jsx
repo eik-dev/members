@@ -38,7 +38,8 @@ export default function Home(){
                     <p className="mt-4">
                     Discover innovative solutions and practical tips to reduce, reuse, and recycle waste effectively. Together, lets pave the way towards a greener, cleaner future. RSVP now and be part of the change!
                     </p>
-                    <button className="bg-secondary text-white py-2 px-4 font-semibold mt-6 rounded-lg hover:scale-105">Register Now</button>
+                    <a href="https://elearning.eik.co.ke/" target="_blank" rel="noopener noreferrer">
+                    <button className="bg-secondary text-white py-2 px-4 font-semibold mt-6 rounded-lg hover:scale-105">Register Now</button></a>
                 </div>
             </div>
             <div className="w-4/5 2xl:w-2/3 mx-auto my-12">
