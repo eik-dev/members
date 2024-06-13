@@ -88,7 +88,7 @@ export default function Firm({id, role}){
                     </div>
                     {
                         profile.profile &&
-                        <div className="grid gap-x-5 gap-y-2 text-sm w-full lg:w-1/2 2xl:w-1/3">
+                        <div className="grid gap-x-5 gap-y-4 text-sm w-full lg:w-1/2 2xl:w-1/3">
                             <div className="flex gap-4 justify-between">
                                 <span className="font-bold whitespace-nowrap w-1/2">Firm of Expert</span>
                                 <span className="w-1/2">{profile.profile.name}</span>
@@ -99,7 +99,7 @@ export default function Firm({id, role}){
                             </div>
                             <div className="flex gap-4 justify-between">
                                 <span className="font-bold whitespace-nowrap w-1/2">Certificate Number:</span>
-                                <span className="w-1/2">EIK/2/1234</span>
+                                <span className="w-1/2">{profile?.certificate?.number}</span>
                             </div>
                             <div className="flex gap-4 justify-between">
                                 <span className="font-bold whitespace-nowrap w-1/2">Firm PIN Number:</span>
