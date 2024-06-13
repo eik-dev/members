@@ -61,7 +61,7 @@ export default function Pay({title, description, amount, email, phone, name}){
                 setCallback({CheckoutRequestID: response.CheckoutRequestID})
                 setOverlay('processing')
             } else popupE('error', 'Error', response.ResponseDescription)
-        },{phone, amount:5, email,AccountReference:title},'/pay/mpesa')
+        },{phone, amount, email,AccountReference:title},'/pay/mpesa')
     }
 
     return (
