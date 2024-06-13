@@ -53,29 +53,15 @@ export default function Pay({title, description, amount, email, phone, name}){
     let [overlay, setOverlay] = useState('')
     let [callback, setCallback] = useState(null)
 
-    useEffect(()=>{
-        if (callback){
-            let interval = setTimeout(()=>{
-                if (callback.ResponseCode){
-                    console.log('\nQWERTY!!\n')
-                    if (callback.ResultCode=='0'){}
-                    clearInterval(interval)
-                } else {
-                    getData(setCallback,'/mpesa/callback',{CheckoutRequestID: callback.requestId})
-                }
-            }, 5000)
-        }
-    },[callback])
-
     let stk = (e,phone,email)=>{
         e.preventDefault();
         popupE('ok', 'Processing', 'Please wait...')
         postData((response)=>{
             if(response.ResponseCode=="0"){
-                popupE('ok', 'Success', 'PIN prompt sent to your phone. Please enter to complete payment.')
-                getData(setCallback,'/mpesa/callback',{CheckoutRequestID: response.CheckoutRequestID})
+                setCallback({CheckoutRequestID: response.CheckoutRequestID})
+                setOverlay('processing')
             } else popupE('error', 'Error', response.ResponseDescription)
-        },{phone, amount, email,AccountReference:title},'/pay/mpesa')
+        },{phone, amount:5, email,AccountReference:title},'/pay/mpesa')
     }
 
     return (
@@ -129,7 +115,7 @@ export default function Pay({title, description, amount, email, phone, name}){
             </div>
             <Overlay className={`${overlay!=''?'block':'hidden'}`} >
                 {overlay === 'payment' && <PaymentInfo control={setOverlay} amount={amount} trigger={stk}/>}
-                {overlay === 'processing' && <Processing control={setOverlay}/>}
+                {overlay === 'processing' && <Processing control={setOverlay} callback={callback} phone={phone} email={email} amount={amount} trigger={stk}/>}
             </Overlay>
         </div>
     )

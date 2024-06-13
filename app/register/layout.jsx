@@ -21,7 +21,7 @@ export default function Layout({children}){
                 }
                 <h3 className="text-primary font-semibold text-xl">
                     {pathname === '/register/individual' && 'Individual Registration'}
-                    {pathname === '/register/firm' && 'Firm Registration'}
+                    {pathname === '/register/firm' && 'Business Registration'}
                 </h3>
             </div>
             

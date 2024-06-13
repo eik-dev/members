@@ -31,7 +31,6 @@ export function postFile(setData,file,title,endpoint,token = load('token')) {
         method: "POST",
         headers:{
             'Authorization': `Bearer ${token}`,
-            'Content-Type': 'multipart/form-data'
         },
         body: formData
     })
@@ -43,7 +42,7 @@ export function postFile(setData,file,title,endpoint,token = load('token')) {
         })
         .catch(err => {
             console.log(err)
-            popupE('error', 'Error', 'Server Error')
+            popupE('error', 'Error', 'File upload Error')
         });
 }
 

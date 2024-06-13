@@ -82,14 +82,14 @@ export default function Page() {
                     if (institution[key] == '') checkInstituions = true;
                 })
             })
-        }
+        } else setInstitutions([])
         if ((category == 'Fellow' || category == 'Lead' || category == 'Associate') ){
             organizations.map((organization, index) => {
                 Object.keys(organization).map((key, index) => {
                     if (organization[key] == '') checkOrganizations = true;
                 })
             })
-        }
+        } else setOrganizations([])
         if (name == '' || last == '' || username == '' || email == '' || ID == '' || password == '' || bio=='' || checkInstituions || checkOrganizations){
             verifyE();
             popupE('error', 'Error', 'Fill all mandatory fields')
@@ -163,7 +163,7 @@ export default function Page() {
 
                 <div>
                     <h3>Select Category</h3>
-                    <div className='my-4 flex flex-col md:flex-row gap-4'>
+                    <div className='my-6 flex flex-col md:flex-row gap-4'>
                         <select className="bg-white border-[2px] rounded-lg p-2" name="" id="" onChange={e=>setCategory(e.target.value)}>
                             <option className='bg-white hover:bg-white' value="Student">Student membership</option>
                             <option className='bg-white hover:bg-white' value="Fellow">Fellow membership</option>
@@ -173,7 +173,7 @@ export default function Page() {
                             <option className='bg-white hover:bg-white' value="Affiliate">Affiliate membership</option>
                         </select>
                     </div>
-                    <div className='grid gap-x-6 gap-y-4 md:gap-y-8 md:grid-cols-2'>
+                    <div className='grid gap-6 md:gap-y-8 md:grid-cols-2'>
                         <Input required={true} value={name} setValue={setName} placeholder={'Jane'} type={'text'} name={'First name'}/>
                         <Input required={true} value={last} setValue={setLast} placeholder={'Doe'} type={'text'} name={'Last name'}/>
                         <Input required={true} value={username} setValue={setUsername} placeholder={'Username'} type={'username'} name={'username'}/>

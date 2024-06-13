@@ -14,6 +14,26 @@ import { useState, useEffect } from "react"
 import useProfile from "@/app/lib/hooks/useProfile"
 import { getData } from "@/app/lib/data"
 import { popupE } from "@/app/lib/trigger"
+import useUser from "@/app/lib/hooks/useUser";
+
+let getAmount = (role) => {
+    switch (role) {
+        case 'Student':
+            return 500;
+        case 'Affiliate':
+            return 7500;
+        case 'Honorary':
+            return 0;
+        case 'Associate':
+            return 3000;
+        case 'Lead':
+            return 5000;
+        case 'Fellow':
+            return 0;
+        default:
+            break;
+    }
+}
 
 function SectionHead({section}){
     let [showEdit, setShowEdit] = useState(false);
@@ -24,12 +44,17 @@ function SectionHead({section}){
         if (overlay=='') setShowOverlay(false)
         else setShowOverlay(true)
     },[overlay])
+    
+    const { user, isLoading, isError } = useUser()
+    if (isLoading) return <></>
+    if (isError) return <></>
+    
     return(
         <>
         <div onClick={e=>{showEdit?setShowEdit(false):null}} className="flex justify-between border-b-2 py-4 my-4 mx-2 relative">
             <h3 className="font-bold text-lg">{section}</h3>
             {
-                section!='Trainings' &&
+                (section!='Trainings' && user.role!='Admin') &&
                 <button onClick={e=>setShowEdit(!showEdit)}>
                     <EllipsisVerticalIcon className="h-6 w-6" />
                 </button>
@@ -53,25 +78,6 @@ function SectionHead({section}){
         </Overlay>
         </>
     )
-}
-
-let getAmount = (role) => {
-    switch (role) {
-        case 'Student':
-            return 500;
-        case 'Affiliate':
-            return 7500;
-        case 'Honorary':
-            return 0;
-        case 'Associate':
-            return 3000;
-        case 'Lead':
-            return 5000;
-        case 'Fellow':
-            return 0;
-        default:
-            break;
-    }
 }
 
 export default function Individual({id,role}){
@@ -111,15 +117,7 @@ export default function Individual({id,role}){
                 <div className="flex flex-col gap-x-3 md:flex-row w-full">
                     <div className="w-32 md:w-64 h-fit relative mr-4 mb-4">
                         {
-                            profile.photo?
-                            <img src={profile.photo.url} alt="" />
-                            :
-                            <Image
-                                src="/profile.svg"
-                                width={500}
-                                height={500}
-                                alt="Picture of the author"
-                            />
+                            <img src={profile?.photo?.[0]?.url ?? "/profile.svg"} className="w-24 h-24 2xl:w-56 2xl:h-56 rounded-lg" alt="" />
                         }
                     </div>
                     {

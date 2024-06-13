@@ -63,7 +63,7 @@ export default function File({ files, setFiles, type }) {
             {
                 type === 'image' ?
                     image?
-                    <img src={image} alt="profile" className='h-56 w-56 rounded-lg'/>
+                    <img src={image} alt="profile" className='w-24 h-24 2xl:w-56 2xl:h-56 rounded-lg'/>
                     :
                     <ViewfinderCircleIcon className='text-tertiary w-24 h-24 2xl:w-56 2xl:h-56'/>
                 :
