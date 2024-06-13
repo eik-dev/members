@@ -72,7 +72,7 @@ export default function Page(){
                                 <td className="px-6 py-4 whitespace-nowrap">{data['name']}</td>
                                 <td className="px-6 py-4 whitespace-nowrap">{data['email']}</td>
                                 <td className="px-6 py-4 whitespace-nowrap">{data['nema']}</td>
-                                <td className="px-6 py-4 whitespace-nowrap">{data['certificates'] && data['certificates'].number}</td>
+                                <td className="px-6 py-4 whitespace-nowrap">{data['number']}</td>
                                 <td className="px-6 py-4 whitespace-nowrap">{data['firm'].kra}</td>
                                 <td className="px-6 py-4 whitespace-nowrap">{data['created_at']}</td>
                                 <td className="px-6 py-4 whitespace-nowrap">
