@@ -55,7 +55,7 @@ export default function Page(){
                                         if (key === 'ResultCode') {
                                             if (data[key]){
                                                 return(
-                                                    <td className="px-2 py-4 whitespace-nowrap">
+                                                    <td key={index} className="px-2 py-4 whitespace-nowrap">
                                                         <div className={`border-2 flex items-center justify-center ${data[key]=="0"?'border-primary text-primary':'border-warning text-warning'}`} onClick={e=>action(e, data['id'], 'true')}>
                                                             {data[key]=="0" && <CheckIcon className="w-5 h-5 my-1"/>}
                                                             {data[key]!="0" && <XMarkIcon className="w-5 h-5 my-1"/>}
@@ -63,7 +63,7 @@ export default function Page(){
                                                     </td>
                                                 )
                                             }
-                                            return (<td className="px-6 py-4 whitespace-nowrap"><img className="w-5 h-5" src="/icons/loading.svg" alt="" /></td>)
+                                            return (<td key={index} className="px-6 py-4 whitespace-nowrap"><img className="w-5 h-5" src="/icons/loading.svg" alt="" /></td>)
                                         }
                                         return(
                                             <td key={index} className="px-6 py-4 whitespace-nowrap">{data[key]}</td>
