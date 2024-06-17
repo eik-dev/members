@@ -8,7 +8,7 @@ export default function Page(){
     let Range = useState(20);
     let Search = useState("");
     let Genesis = useState(0);
-    let TH = [ 'Amount','Email','Phone','CheckoutRequestID', 'Date',];
+    let TH = [ 'Amount','Email','Phone','MpesaReceiptNumber', 'Date',];
     let Sort = useState(TH[0]);
     let [optionsAt, setOptionsAt] = useState(-1);
     

@@ -193,11 +193,11 @@ export default function Individual({id,role}){
                 <SectionHead section={'Trainings'}/>
                 {/* <div className="grid grid-cols-2 md:w-1/3 gap-y-1">
                     <span className="font-bold w-fit">Title:</span>
-                    <span className="md:whitespace-nowrap">ESG Training</span>
+                    <span className="md:whitespace-nowrap">Developing Quality Environment Audit Reports in 2024</span>
                     <span className="font-bold w-fit">Start & Finish Date:</span>
-                    <span className="md:whitespace-nowrap">8th March, 2021 - 17th March, 2023</span>
+                    <span className="md:whitespace-nowrap">31st January, 2024 - 31st January, 2024</span>
                     <span className="font-bold w-fit">Teacher</span>
-                    <span className="md:whitespace-nowrap">Anderson Rioba</span>
+                    <span className="md:whitespace-nowrap">Boniface Mambole</span>
                     <a className="text-secondary text-sm mt-2" href="#">Download certificate</a>
                 </div> */}
                 <p className="text-center my-8">You {"haven't"} participated in a training yet <a href="https://elearning.eik.co.ke/" target="blank" className="text-secondary">Sign up now</a></p>
