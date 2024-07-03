@@ -33,18 +33,18 @@ export default function Page() {
     let [confirm, setConfirm] = useState('');
 
     let [instructions, setInstructions] = useState(Corporate);
-    let [amount, setAmount] = useState(300);
+    let [amount, setAmount] = useState(12500);
     let [paymentMethod, setPaymentMethod] = useState('');
 
     useEffect(() => {
         switch (category) {
             case 'Corporate':
                 setInstructions(Corporate)
-                setAmount(300)
+                setAmount(12500)
                 break;
             case 'Firms':
                 setInstructions(Firms)
-                setAmount(500)
+                setAmount(12500)
                 break;
             default:
                 break;
@@ -116,7 +116,6 @@ export default function Page() {
                     <h3>Select Category</h3>
                     <div className='my-4 flex flex-col md:flex-row gap-4'>
                         <select className="bg-white border-[2px] rounded-lg p-2" name="" id="" onChange={e=>setCategory(e.target.value)}>
-                            <option className='bg-white hover:bg-white' value="Corporate">Corporate membership</option>
                             <option className='bg-white hover:bg-white' value="Firms">Firms membership</option>
                         </select>
                     </div>

@@ -1,5 +1,4 @@
 'use client'
-import Image from "next/image"
 import { useRouter } from "next/navigation"
 import { PrinterIcon, EllipsisVerticalIcon, PencilSquareIcon, XMarkIcon } from "@heroicons/react/24/outline"
 import Overlay from "@/app/ui/overlay"

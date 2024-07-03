@@ -23,6 +23,31 @@ export function getData(setData,endpoint,parameters, token=load('token')) {
     });
 }
 
+export function getFile(endpoint,parameters, token=load('token')) {
+    let params = new URLSearchParams(parameters).toString();
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}${endpoint}?${params}`, {
+    headers: {
+        'Authorization': `Bearer ${token}`,
+    }
+    })
+    .then(response => response.blob())
+    .then(blob => {
+        console.log(blob)
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.style.display = 'none';
+        a.href = url;
+        a.download = 'EIK.pdf';
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+    })
+    .catch(err => {
+        console.log(err)
+        popupE('error', 'Error', 'Server Error')
+    });
+}
+
 export function postFile(setData,file,title,endpoint,token = load('token')) {
     const formData = new FormData();
     formData.append(`file`, file);
@@ -36,7 +61,7 @@ export function postFile(setData,file,title,endpoint,token = load('token')) {
     })
         .then((res) => res.json())
         .then((data) => {
-            if (data.error==null)
+            if (data.error) popupE('error', 'Error', data.error)
             if (data.message) popupE('ok', 'Success', data.message)
             setData(data);
         })
