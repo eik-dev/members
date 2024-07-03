@@ -32,7 +32,7 @@ export default function Page() {
         <div className=''>
             <h1 className='text-primary text-center text-xl md:text-2xl font-bold mt-8 md:mb-8'>Download Certificate</h1>
             <div className='flex items-center justify-center gap-12'>
-                <div className=''>Valid upto: 31-12-2024</div>
+                <div className=''>V alid upto: 31-12-2024</div>
                 <button className=' px-5 py-2 bg-secondary hover:bg-primary text-white my-4 rounded-full' onClick={handlePrint}>Download</button>
             </div>
 

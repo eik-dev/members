@@ -2,7 +2,7 @@
 import Link from "next/link";
 import useUser from "@/app/lib/hooks/useUser";
 import { usePathname } from "next/navigation";
-import {RectangleGroupIcon, UserPlusIcon, Square3Stack3DIcon, UserGroupIcon, BuildingLibraryIcon, AcademicCapIcon, ArrowLeftEndOnRectangleIcon, UserCircleIcon, HomeIcon, CurrencyDollarIcon} from '@heroicons/react/24/outline';
+import {RectangleGroupIcon, UserPlusIcon, Square3Stack3DIcon, UserGroupIcon, BuildingLibraryIcon, AcademicCapIcon, ArrowLeftEndOnRectangleIcon, UserCircleIcon, HomeIcon, CurrencyDollarIcon, NewspaperIcon} from '@heroicons/react/24/outline';
 import { remove } from "@/app/lib/storage";
 
 export default function SideNav({control}){
@@ -71,6 +71,12 @@ export default function SideNav({control}){
             href: "/payments",
             roles:['Admin']
         },
+        {
+            name: "Trainings",
+            icon: NewspaperIcon,
+            href: "/trainings",
+            roles:['Admin']
+        },
     ]
 
     if (isLoading) return <></>
@@ -82,7 +88,7 @@ export default function SideNav({control}){
             if(link.roles.includes(user.role)){
                 return(
                     <Link key={index} href={link.href} onClick={e=>control(false)}>
-                        <div className={`flex items-center p-4 ${pathname === link.href ? ' border-l-8 border-primary text-primary bg-tertiary bg-opacity-10' : ''}`}>
+                        <div className={`flex items-center p-4 lg:p-2 2xl:p-4 ${pathname === link.href ? ' border-l-8 border-primary text-primary bg-tertiary bg-opacity-10' : ''}`}>
                             <link.icon className="w-6 h-8 mr-2"/>
                             <span className="text-sm">{link.name}</span>
                         </div>

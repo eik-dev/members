@@ -10,7 +10,7 @@ let checkPractising = (category) => {
 }
 
 const Certificate = forwardRef((props, ref) => {
-    const [qrCodeURL, setQrCodeURL] = useState('');
+    const [qrCodeURL, setQrCodeURL] = useState('');  
 
     useEffect(() => {
         QRCode.toDataURL(`https://portal.eik.co.ke/verify?id=${props.data.number}`)

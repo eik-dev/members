@@ -72,7 +72,7 @@ export default function Pay({title, description, amount, email, phone, name}){
                     <img className='w-8' src="/icons/mpesa.svg" alt="" />
                     Mpesa
                 </button>
-                <button className='flex items-center font-semibold' onClick={e=>setPaymentMethod('airtel')}>
+                {/* <button className='flex items-center font-semibold' onClick={e=>setPaymentMethod('airtel')}>
                     <div className={`rounded-full md:w-5 md:h-5 w-7 h-4 ${paymentMethod=='airtel'?'bg-primary':'border-2'}`}></div>
                     <img className='w-8 mx-2 block' src="/icons/airtel.svg" alt="" />
                     Airtel
@@ -81,7 +81,7 @@ export default function Pay({title, description, amount, email, phone, name}){
                     <div className={`rounded-full md:w-5 md:h-5 w-7 h-4 ${paymentMethod=='visa'?'bg-primary':'border-2'}`}></div>
                     <img className='w-10 mx-2 block' src="/icons/visa.svg" alt="" />
                     Card
-                </button>
+                </button> */}
             </div>
             {
                 paymentMethod!='visa'?
