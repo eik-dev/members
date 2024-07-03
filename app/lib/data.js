@@ -23,7 +23,7 @@ export function getData(setData,endpoint,parameters, token=load('token')) {
     });
 }
 
-export function getFile(endpoint,parameters, token=load('token')) {
+export function getFile(name,endpoint,parameters, token=load('token')) {
     let params = new URLSearchParams(parameters).toString();
     fetch(`${process.env.NEXT_PUBLIC_API_URL}${endpoint}?${params}`, {
     headers: {
@@ -37,7 +37,7 @@ export function getFile(endpoint,parameters, token=load('token')) {
         const a = document.createElement('a');
         a.style.display = 'none';
         a.href = url;
-        a.download = 'EIK.pdf';
+        a.download = name;
         document.body.appendChild(a);
         a.click();
         window.URL.revokeObjectURL(url);
