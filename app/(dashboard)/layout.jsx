@@ -7,8 +7,8 @@ import ChangePassword from "../ui/Password";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import {load, remove} from '@/app/lib/storage';
-import { popupE } from "@/app/lib/trigger";
 import Spinner from "@/app/ui/Spinner";
+import { hide, show } from "@/app/lib/controlls";
 
 export default async function Layout({children}){
     let [showMenu, setShowMenu] = useState(false);

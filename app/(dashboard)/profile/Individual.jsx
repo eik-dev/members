@@ -11,7 +11,7 @@ import Introductory from "./Introductory"
 import Spinner from "@/app/ui/Spinner"
 import { useState, useEffect } from "react"
 import useProfile from "@/app/lib/hooks/useProfile"
-import { getData } from "@/app/lib/data"
+import { getData, getFile } from "@/app/lib/data"
 import { popupE } from "@/app/lib/trigger"
 import useUser from "@/app/lib/hooks/useUser";
 
@@ -87,7 +87,7 @@ export default function Individual({id,role}){
         e.preventDefault();
         if(profile['certificate']){
             if(profile['certificate'].verified){
-                router.push(`/download/certificate?id=${profile['certificate'].id}`)
+                router.push(`/download/certificate?id=${profile['certificate'].number}`)
             } else{
                 popupE('error','Error' ,'Certificate request has not been approved')
             }
@@ -190,16 +190,24 @@ export default function Individual({id,role}){
             </section>
             <section>
                 <SectionHead section={'Trainings'}/>
-                {/* <div className="grid grid-cols-2 md:w-1/3 gap-y-1">
-                    <span className="font-bold w-fit">Title:</span>
-                    <span className="md:whitespace-nowrap">Developing Quality Environment Audit Reports in 2024</span>
-                    <span className="font-bold w-fit">Start & Finish Date:</span>
-                    <span className="md:whitespace-nowrap">31st January, 2024 - 31st January, 2024</span>
-                    <span className="font-bold w-fit">Teacher</span>
-                    <span className="md:whitespace-nowrap">Boniface Mambole</span>
-                    <a className="text-secondary text-sm mt-2" href="#">Download certificate</a>
-                </div> */}
-                <p className="text-center my-8">You {"haven't"} participated in a training yet <a href="https://elearning.eik.co.ke/" target="blank" className="text-secondary">Sign up now</a></p>
+                {
+                    (profile.trainings != undefined && profile.trainings.length>0)?
+                    profile.trainings.map((training, index) => {
+                        return(
+                            <div key={index} className="grid grid-cols-2 md:w-1/3 gap-y-1">
+                                <span className="font-bold w-fit">Title:</span>
+                                <span className="md:whitespace-nowrap">{training.Name}</span>
+                                <span className="font-bold w-fit">Start & Finish Date:</span>
+                                <span className="md:whitespace-nowrap">{training.Start} - {training.End}</span>
+                                <span className="font-bold w-fit">Info</span>
+                                <p className="md:whitespace-nowrap">{training.Info}</p>
+                                <button className="text-secondary text-sm mt-2" onClick={e=>getFile(`${training.Name}.pdf`,'/training/download',{number:training.Number,training:training.id})}>Download certificate</button>
+                            </div>
+                        )
+                    })
+                    :
+                    <p className="text-center my-8">You {"haven't"} participated in a training yet <a href="https://elearning.eik.co.ke/" target="blank" className="text-secondary">Sign up now</a></p>
+                }
             </section>
             <section>
                 <SectionHead section={'Professional Qualification'}/>
