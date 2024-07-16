@@ -10,6 +10,7 @@ export default function MemberDetails({control,id}){
     let [fullName, setFullName] = useState('');
     let [email, setEmail] = useState('');
     let [category, setCategory] = useState('');
+    let [practicing, setPracticing] = useState(null);
     let [nema, setNema] = useState('');
     let [certificate, setCertificate] = useState('');
     let [firm, setFirm] = useState('');
@@ -31,6 +32,7 @@ export default function MemberDetails({control,id}){
             setFullName(data['member']['name']);
             setEmail(data['member']['email']);
             setNema(data['member']['nema']);
+            setPracticing(data['member']['practicing']);
             setPhoto(data['photo']);
             if (data['certificates']) setCertificate(data['certificates']['number']);
             if (data['individual']){
@@ -54,6 +56,7 @@ export default function MemberDetails({control,id}){
             fullName,
             email,
             nema,
+            practicing,
             individual: {
                 category,
                 firm,
@@ -90,8 +93,20 @@ export default function MemberDetails({control,id}){
             </div>
             </div>
             <div className="grid md:grid-cols-2 gap-4 md:gap-6 w-full">
+                <select className="bg-white border-[2px] rounded-lg p-2" name="" id="" value={category} onChange={e=>setCategory(e.target.value)}>
+                    <option className='bg-white hover:bg-white' value="Student">Student membership</option>
+                    <option className='bg-white hover:bg-white' value="Fellow">Fellow membership</option>
+                    <option className='bg-white hover:bg-white' value="Lead">Lead membership</option>
+                    <option className='bg-white hover:bg-white' value="Associate">Associate membership</option>
+                    <option className='bg-white hover:bg-white' value="Honorary">Honorary membership</option>
+                    <option className='bg-white hover:bg-white' value="Affiliate">Affiliate membership</option>
+                    <option className='bg-white hover:bg-white' value="Firm">Firm membership</option>
+                </select>
+                <select className="bg-white border-[2px] rounded-lg p-2" value={practicing} name="" id="" onChange={e=>setPracticing(e.target.value)}>
+                    <option className='bg-white hover:bg-white' value={0}>Non-practicing</option>
+                    <option className='bg-white hover:bg-white' value={1}>Practicing</option>
+                </select>
                 <Input value={fullName} setValue={setFullName} placeholder={''} type={'text'} name={'Full name'}/>
-                <Input value={category} setValue={setCategory} placeholder={''} type={'text'} name={'Category'}/>
                 <Input value={nema} setValue={setNema} placeholder={''} type={'text'} name={'NEMA Registration Number'}/>
                 <Input value={certificate} setValue={setCertificate} placeholder={''} type={'text'} name={'Certificate Number'}/>
                 <Input value={firm} setValue={setFirm} placeholder={''} type={'text'} name={'Firm of Experts'}/>

@@ -58,14 +58,10 @@ export default function Login() {
             <div className="mt-10 sm:mx-auto w-full max-w-sm">
             <form className="space-y-6">
                 <Input value={email} setValue={setEmail} placeholder={'janedoe@gmail.com'} type={'email'} name={'Email'}/>
-                <div className="text-sm text-right">
-                    <Link href={'/recover'}>
-                        <span className="font-semibold leading-6 text-secondary hover:text-blue-500">Forgot password?</span>
-                    </Link>
-                </div>
                 <Input value={password} setValue={setPassword} placeholder={''} type={'password'} name={'Password'}/>
-
-
+                <Link href={'/recover'} className="block text-sm text-right">
+                    <span className="font-semibold text-secondary hover:text-blue-500">Forgot password?</span>
+                </Link>
                 <div>
                 <button
                     onClick={e=>login(e)}

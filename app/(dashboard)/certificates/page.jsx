@@ -90,7 +90,7 @@ export default function Page(){
                                     {
                                         optionsAt === index &&
                                         <div className={`flex absolute p-2 shadow-lg z-50 right-12 md:right-34 bg-white flex-col gap-y-4 ${true?'block':'hidden'}`} onClick={e=>setUserID(data['id'])}>
-                                            <button className="flex gap-x-2" onClick={e=>router.push(`/download/certificate?id=${data['id']}`)}>
+                                            <button className="flex gap-x-2" onClick={e=>router.push(`/download/certificate?id=${data['number']}`)}>
                                                 <ArrowDownTrayIcon className="w-6 h-6"/>
                                                 Download
                                             </button>

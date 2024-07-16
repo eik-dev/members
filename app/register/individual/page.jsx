@@ -32,6 +32,7 @@ export default function Page() {
     let [note, setNote] = useState('');
     let [password, setPassword] = useState('');
     let [confirm, setConfirm] = useState('');
+    let [practicing, setPracticing] = useState(false);
 
     let [institutions, setInstitutions] = useState([{}]);
     let [organizations, setOrganizations] = useState([{}]);
@@ -68,6 +69,8 @@ export default function Page() {
             default:
                 break;
         }
+        if (category == 'Fellow' || category == 'Lead' || category == 'Associate' || category == 'Firms') setPracticing(1)
+        else setPracticing(0)
     }, [category])
 
     let validate = () => {
@@ -131,6 +134,7 @@ export default function Page() {
                 username: username,
                 role: 'Individual',
                 nema: nema,
+                practicing: practicing,
                 profile:{
                     category: category,
                     alternate: alternate,
@@ -163,7 +167,7 @@ export default function Page() {
 
                 <div>
                     <h3>Select Category</h3>
-                    <div className='my-6 flex flex-col md:flex-row gap-4'>
+                    <div className='my-6 flex flex-col md:flex-row gap-x-16 gap-y-4'>
                         <select className="bg-white border-[2px] rounded-lg p-2" name="" id="" onChange={e=>setCategory(e.target.value)}>
                             <option className='bg-white hover:bg-white' value="Student">Student membership</option>
                             <option className='bg-white hover:bg-white' value="Fellow">Fellow membership</option>
@@ -171,6 +175,10 @@ export default function Page() {
                             <option className='bg-white hover:bg-white' value="Associate">Associate membership</option>
                             <option className='bg-white hover:bg-white' value="Honorary">Honorary membership</option>
                             <option className='bg-white hover:bg-white' value="Affiliate">Affiliate membership</option>
+                        </select>
+                        <select className="bg-white border-[2px] rounded-lg p-2" name="" id="" value={practicing} onChange={e=>setPracticing(e.target.value)}>
+                            <option className='bg-white hover:bg-white' value={0}>Non-practicing</option>
+                            <option className='bg-white hover:bg-white' value={1}>Practicing</option>
                         </select>
                     </div>
                     <div className='grid gap-6 md:gap-y-8 md:grid-cols-2'>

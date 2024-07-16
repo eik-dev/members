@@ -31,10 +31,10 @@ export default function Page() {
     let [note, setNote] = useState('');
     let [password, setPassword] = useState('');
     let [confirm, setConfirm] = useState('');
+    let [practicing, setPracticing] = useState(true);
 
     let [instructions, setInstructions] = useState(Corporate);
     let [amount, setAmount] = useState(12500);
-    let [paymentMethod, setPaymentMethod] = useState('');
 
     useEffect(() => {
         switch (category) {
@@ -85,6 +85,7 @@ export default function Page() {
                 name: firmName,
                 role: 'Firm',
                 nema: nema,
+                practicing: practicing,
                 profile:{
                     category: category,
                     alternate: alternate,
@@ -117,6 +118,10 @@ export default function Page() {
                     <div className='my-4 flex flex-col md:flex-row gap-4'>
                         <select className="bg-white border-[2px] rounded-lg p-2" name="" id="" onChange={e=>setCategory(e.target.value)}>
                             <option className='bg-white hover:bg-white' value="Firms">Firms membership</option>
+                        </select>
+                        <select className="bg-white border-[2px] rounded-lg p-2" name="" id="" onChange={e=>setPracticing(e.target.value)}>
+                            <option className='bg-white hover:bg-white' value={1}>Practicing</option>
+                            <option className='bg-white hover:bg-white' value={0}>Non-practicing</option>
                         </select>
                     </div>
                     <div className='grid gap-x-6 gap-y-4 md:gap-y-8 md:grid-cols-2'>
