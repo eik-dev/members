@@ -20,9 +20,12 @@ function Name({content, setContent}){
 }
 
 function Info({content, setContent}){
+    let [info, setInfo] = useState('')
+
     return(
         <>
-        <h3>Info Settings</h3>
+        <h3 className="mb-2">Info Settings</h3>
+        <Input required={true} value={info} setValue={setInfo} placeholder={'Training XYZ'} type={'textarea'} name={'Info'}/>
         </>
     )
 }
