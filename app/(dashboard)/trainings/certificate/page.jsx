@@ -1,0 +1,30 @@
+'use client'
+import { useState } from "react"
+import { useSearchParams } from "next/navigation"
+import Modify from "./Modify";
+import { PhotoIcon, QrCodeIcon, CalendarDaysIcon, UserIcon, IdentificationIcon, ChatBubbleBottomCenterTextIcon } from '@heroicons/react/24/outline';
+
+export default function Certificate(){
+    let params = useSearchParams();
+    let id = params.get('id')
+    let [action, setAction] = useState('');
+    return(
+        <>
+        <div className='hidden md:flex justify-between bg-gray-200/70 py-8 px-4 mt-4'>
+            {/* <TrainingCert data={{}} /> */}
+            <div className='bg-white px-4 py-4 flex flex-col h-3/4 w-56 gap-5 rounded-lg mr-2'>
+                <button className={`flex items-center gap-2 flex-grow hover:scale-105 ${action=='Background'?'text-primary scale-105':''}`} onClick={e=>setAction('Background')}><PhotoIcon className='w-8 h-8'/> <span className=''>Background</span></button>
+                <button className={`flex items-center gap-2 flex-grow hover:scale-105 ${action=='Name'?'text-primary scale-105':''}`} onClick={e=>setAction('Name')}><UserIcon className='w-8 h-8'/> <span className=''>Name</span></button>
+                <button className={`flex items-center gap-2 flex-grow hover:scale-105 ${action=='Info'?'text-primary scale-105':''}`} onClick={e=>setAction('Info')}><ChatBubbleBottomCenterTextIcon className='w-8 h-8'/> <span className=''>Info</span></button>
+                <button className={`flex items-center gap-2 flex-grow hover:scale-105 ${action=='Number'?'text-primary scale-105':''}`} onClick={e=>setAction('Number')}><IdentificationIcon className='w-8 h-8'/> <span className=''>Number</span></button>
+                <button className={`flex items-center gap-2 flex-grow hover:scale-105 ${action=='QRcode'?'text-primary scale-105':''}`} onClick={e=>setAction('QRcode')}><QrCodeIcon className='w-8 h-8'/> <span className=''>QRcode</span></button>
+                <button className={`flex items-center gap-2 flex-grow hover:scale-105 ${action=='Date'?'text-primary scale-105':''}`} onClick={e=>setAction('Date')}><CalendarDaysIcon className='w-8 h-8'/> <span className=''>Date</span></button>
+            </div>
+            <iframe className='w-[1045px] h-[740px]' src={`${process.env.NEXT_PUBLIC_BASE_URL}/view/certificates/training/${id}`} frameborder="0"></iframe>
+            {
+                action!='' && <Modify control={setAction} action={action} />
+            }
+        </div>
+        </>
+    )
+}
