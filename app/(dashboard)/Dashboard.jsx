@@ -1,4 +1,5 @@
 'use client'
+import { useState, useEffect } from "react";
 import useSWR from "swr";
 import { fetcher } from "@/app/lib/data";
 import useUser from "@/app/lib/hooks/useUser";
@@ -12,6 +13,11 @@ import { getData } from "@/app/lib/data"
 
 export default function Dashboard(){
     const { user } = useUser()
+    let [category, setCategory] = useState('');
+    let [members, setMembers] = useState(0);
+    useEffect(()=>{
+        getData(setMembers,'/stats/members',{category})
+    },[category])
     const { data, error, isLoading } = useSWR(['/summary',{}], fetcher)
     console.log(data)
 
@@ -83,7 +89,22 @@ export default function Dashboard(){
         <Lyn/>
         <div className="flex flex-col md:flex-row gap-y-10 gap-x-10 justify-between mt-16">
             <Bur/>
-            <Py/>
+            <div className="flex-grow flex flex-col relative items-center h-96">
+                <select className="bg-white border-[2px] rounded-lg p-2 mb-7 absolute right-0 w-1/3" name="" id="" value={category} onChange={e=>setCategory(e.target.value)}>
+                    <option className='bg-white hover:bg-white' value="">Select member category</option>
+                    <option className='bg-white hover:bg-white' value="Student">Student membership</option>
+                    <option className='bg-white hover:bg-white' value="Fellow">Fellow membership</option>
+                    <option className='bg-white hover:bg-white' value="Lead">Lead membership</option>
+                    <option className='bg-white hover:bg-white' value="Associate">Associate membership</option>
+                    <option className='bg-white hover:bg-white' value="Honorary">Honorary membership</option>
+                    <option className='bg-white hover:bg-white' value="Affiliate">Affiliate membership</option>
+                    <option className='bg-white hover:bg-white' value="Firm">Firm membership</option>
+                </select>
+                <div className="text-xl 2xl:text-3xl font-semibold mt-">
+                    <p className="text-base">Member count</p>
+                    {members}
+                </div>
+            </div>
         </div>
         </>
     )
