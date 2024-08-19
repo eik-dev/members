@@ -53,7 +53,7 @@ function SectionHead({section}){
         <div onClick={e=>{showEdit?setShowEdit(false):null}} className="flex justify-between border-b-2 py-4 my-4 mx-2 relative">
             <h3 className="font-bold text-lg">{section}</h3>
             {
-                (section!='Trainings' && user.role!='Admin') &&
+                (section!='Trainings') &&
                 <button onClick={e=>setShowEdit(!showEdit)}>
                     <EllipsisVerticalIcon className="h-6 w-6" />
                 </button>
