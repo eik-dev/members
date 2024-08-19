@@ -1,5 +1,5 @@
+'use client'
 import { useState, useEffect } from "react"
-import Image from "next/image";
 import { XMarkIcon, PencilSquareIcon } from "@heroicons/react/24/outline"
 import Input from "./Input";
 import { getData, postData } from "@/app/lib/data";
@@ -10,7 +10,7 @@ export default function MemberDetails({control,id}){
     let [fullName, setFullName] = useState('');
     let [email, setEmail] = useState('');
     let [category, setCategory] = useState('');
-    let [practicing, setPracticing] = useState(null);
+    let [practicing, setPracticing] = useState('');
     let [nema, setNema] = useState('');
     let [certificate, setCertificate] = useState('');
     let [firm, setFirm] = useState('');
