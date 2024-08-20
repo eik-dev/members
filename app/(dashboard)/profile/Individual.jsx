@@ -34,7 +34,7 @@ let getAmount = (role) => {
     }
 }
 
-function SectionHead({section}){
+function SectionHead({section, id}){
     let [showEdit, setShowEdit] = useState(false);
     let [showOverlay, setShowOverlay] = useState(false);
     let [overlay, setOverlay] = useState('');
@@ -69,11 +69,11 @@ function SectionHead({section}){
             }
         </div>
         <Overlay className={`${showOverlay?'block':'hidden'}`} >
-            {overlay=='Basic Information'?<MemberDetails control={setOverlay} />:null}
-            {overlay=='Introductory Statement'?<Introductory control={setOverlay} />:null}
-            {overlay=='Professional Qualification'?<Qualifications control={setOverlay} />:null}
-            {overlay=='Work Experience'?<Experience control={setOverlay} />:null}
-            {overlay=='Attachments'?<Attachments control={setOverlay} />:null}
+            {overlay=='Basic Information'?<MemberDetails id={id} control={setOverlay} />:null}
+            {overlay=='Introductory Statement'?<Introductory id={id} control={setOverlay} />:null}
+            {overlay=='Professional Qualification'?<Qualifications id={id} control={setOverlay} />:null}
+            {overlay=='Work Experience'?<Experience id={id} control={setOverlay} />:null}
+            {overlay=='Attachments'?<Attachments id={id} control={setOverlay} />:null}
         </Overlay>
         </>
     )
@@ -112,7 +112,7 @@ export default function Individual({id,role}){
         </header>
         <div className="mx-2 lg:text-sm 2xl:text-base">
             <section>
-                <SectionHead section={'Basic Information'}/>
+                <SectionHead id={id} section={'Basic Information'}/>
                 <div className="flex flex-col gap-x-3 md:flex-row w-full">
                     <div className="w-32 md:w-64 h-fit relative mr-4 mb-4">
                         {
@@ -183,7 +183,7 @@ export default function Individual({id,role}){
                 </div>
             </section>
             <section>
-                <SectionHead section={'Introductory Statement'}/>
+                <SectionHead id={id} section={'Introductory Statement'}/>
                 <p className="font-light text-md">
                     {profile.profile != undefined && profile.profile.bio}
                 </p>
@@ -210,7 +210,7 @@ export default function Individual({id,role}){
                 }
             </section>
             <section>
-                <SectionHead section={'Professional Qualification'}/>
+                <SectionHead id={id} section={'Professional Qualification'}/>
                 {
                     profile.education != undefined &&
                     profile.education.map((item, index) => {
@@ -230,7 +230,7 @@ export default function Individual({id,role}){
                 }
             </section>
             <section>
-                <SectionHead section={'Work Experience'}/>
+                <SectionHead id={id} section={'Work Experience'}/>
                 {
                     profile.profession != undefined &&
                     profile.profession.map((item, index) => {
@@ -256,7 +256,7 @@ export default function Individual({id,role}){
                 }
             </section>
             <section>
-                <SectionHead section={'Attachments'}/>
+                <SectionHead id={id} section={'Attachments'}/>
                 {
                     profile.requirements != undefined &&
                     profile.requirements.map((file, index) => (
@@ -270,7 +270,7 @@ export default function Individual({id,role}){
             {
                 id &&
                 <section>
-                    <SectionHead section={'Payment History'}/>
+                    <SectionHead id={id} section={'Payment History'}/>
                     {
                         profile.payments != undefined &&
                         profile.payments.map((payment, index) => (
@@ -286,7 +286,7 @@ export default function Individual({id,role}){
             overlay=='Pay' &&
             <div className="bg-white px-8 py-6 rounded-md">
                 <div className="flex mb-8 justify-between items-center py-3 sticky -top-1 bg-white z-50 border-b-2">
-                <span className="text-primary font-semibold text-right cursor-pointer" onClick={e=>{
+                <span className="text-primary font-semibold text-right cursor-pointer text-lg hover:scale-105" onClick={e=>{
                     getData((response)=>{
                         setOverlay('')
                     }, '/request', {id})

@@ -7,7 +7,7 @@ import Bur from "@/app/ui/charts/Bar"
 import Lyn from "@/app/ui/charts/Line"
 import Py from "@/app/ui/charts/Pie"
 import Spinner from "@/app/ui/Spinner";
-import { ArrowTrendingUpIcon, ArrowTrendingDownIcon } from "@heroicons/react/24/outline"
+import { ArrowTrendingUpIcon, ArrowTrendingDownIcon, UsersIcon } from "@heroicons/react/24/outline"
 import { useRouter } from "next/navigation";
 import { getData } from "@/app/lib/data"
 
@@ -33,6 +33,27 @@ export default function Dashboard(){
         <h1 className="my-2 ml-2 md:ml-0 text-primary font-bold text-2xl 2xl:text-4xl overflow-hidden">Dashboard</h1>
         <div className="mb-0 w-[100%] px-4 overflow-x-auto no-scroll">
             <div className="flex w-fit gap-10">
+                <div className="bg-tertiary bg-opacity-15 px-6 py-4 rounded-md w-80">
+                    <div className="flex justify-between">
+                        <div>
+                            <div className="mb-4 lg:text-xs 2xl:text-base">Member Count</div>
+                            <div className="text-2xl font-bold lg:text-xl 2xl:text-2xl">{members}</div>
+                        </div>
+                        <div className="flex bg-primary bg-opacity-25 px-4 mb-4 items-center rounded-lg">
+                            <UsersIcon className="text-primary w-8 h-8 block"/>
+                        </div>
+                    </div>
+                    <select className="border-[2px] rounded-lg p-2 mb-7 " name="" id="" value={category} onChange={e=>setCategory(e.target.value)}>
+                        <option className=' hover:' value="">Select member category</option>
+                        <option className=' hover:' value="Student">Student membership</option>
+                        <option className=' hover:' value="Fellow">Fellow membership</option>
+                        <option className=' hover:' value="Lead">Lead membership</option>
+                        <option className=' hover:' value="Associate">Associate membership</option>
+                        <option className=' hover:' value="Honorary">Honorary membership</option>
+                        <option className=' hover:' value="Affiliate">Affiliate membership</option>
+                        <option className=' hover:' value="Firm">Firm membership</option>
+                    </select>
+                </div>
                 <div className="bg-tertiary bg-opacity-15 px-6 py-4 rounded-md w-80">
                     <div className="flex justify-between mb-4">
                         <div>
@@ -89,22 +110,7 @@ export default function Dashboard(){
         <Lyn/>
         <div className="flex flex-col md:flex-row gap-y-10 gap-x-10 justify-between mt-16">
             <Bur/>
-            <div className="flex-grow flex flex-col relative items-center h-96">
-                <select className="bg-white border-[2px] rounded-lg p-2 mb-7 absolute right-0 w-1/3" name="" id="" value={category} onChange={e=>setCategory(e.target.value)}>
-                    <option className='bg-white hover:bg-white' value="">Select member category</option>
-                    <option className='bg-white hover:bg-white' value="Student">Student membership</option>
-                    <option className='bg-white hover:bg-white' value="Fellow">Fellow membership</option>
-                    <option className='bg-white hover:bg-white' value="Lead">Lead membership</option>
-                    <option className='bg-white hover:bg-white' value="Associate">Associate membership</option>
-                    <option className='bg-white hover:bg-white' value="Honorary">Honorary membership</option>
-                    <option className='bg-white hover:bg-white' value="Affiliate">Affiliate membership</option>
-                    <option className='bg-white hover:bg-white' value="Firm">Firm membership</option>
-                </select>
-                <div className="text-xl 2xl:text-3xl font-semibold mt-">
-                    <p className="text-base">Member count</p>
-                    {members}
-                </div>
-            </div>
+            <Py/>
         </div>
         </>
     )

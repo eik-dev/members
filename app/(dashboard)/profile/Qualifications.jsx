@@ -27,7 +27,7 @@ export default function Qualifications({control}){
 
         {isLoading && <Spinner internal={true}/>}
         {isError && <p>Error fetching education </p>}
-        {data && <Institutions data={education} setData={setEducation}/>}
+        {(data && !isLoading && !isError) && <Institutions data={education} setData={setEducation}/>}
 
         <div className="flex w-full justify-between gap-4 my-4 text-sm">
             <button onClick={e=>submit(e)} className="py-2 px-4 w-[50%] whitespace-nowrap rounded-md font-semibold bg-primary text-white">Save Changes</button>
