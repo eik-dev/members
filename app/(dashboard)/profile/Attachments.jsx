@@ -4,7 +4,7 @@ import { XMarkIcon } from "@heroicons/react/24/outline"
 import File from "@/app/ui/File";
 import { getData, postFile } from "@/app/lib/data";
 
-export default function Attachments({control}){
+export default function Attachments({control,id}){
     let {Profile} = useContext(Context);
     let [profile, setProfile] = Profile;
     let [files, setFiles] = useState([]);
@@ -23,7 +23,10 @@ export default function Attachments({control}){
     let save = e=>{
         e.preventDefault();
         files.forEach(file => {
-            postFile((_)=>{},file, '/files/requirements')
+            postFile((_)=>{},file,{
+                title:'Docs',
+                id
+            }, '/files/requirements')
         });
     }
 

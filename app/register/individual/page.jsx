@@ -122,7 +122,7 @@ export default function Page() {
                 if (image.length>0) postFile((_)=>{},image[0],'profile picture','/files/profile',token)
                 if (requirements.length>0) {
                     requirements.forEach((file, index) => {
-                        postFile((_)=>{},file,'requirements','/files/requirements',token)
+                        postFile((_)=>{},file,{title:'requirements'},'/files/requirements',token)
                     });
                 }
                 popupE('ok', 'Success', 'Account created successfully')

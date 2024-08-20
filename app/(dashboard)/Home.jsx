@@ -1,13 +1,38 @@
+'use client'
 import Link from "next/link"
-import { Suspense } from "react"
+import { Suspense, useState } from "react"
 import useUser from "@/app/lib/hooks/useUser";
+import useProfile from "@/app/lib/hooks/useProfile"
 import Spinner from "@/app/ui/Spinner";
+import Overlay from "@/app/ui/overlay"
+import Pay from "@/app/ui/Pay"
+import { XMarkIcon } from "@heroicons/react/24/outline";
 
+let getAmount = (role) => {
+    switch (role) {
+        case 'Student':
+            return 500;
+        case 'Affiliate':
+            return 7500;
+        case 'Honorary':
+            return 0;
+        case 'Associate':
+            return 3000;
+        case 'Lead':
+            return 5000;
+        case 'Fellow':
+            return 0;
+        default:
+            break;
+    }
+}
 export default function Home(){
+    let [overlay, setOverlay] = useState('');
     const { user, isLoading, isError } = useUser()
+    let { data:profile, isProfileLoading, isProfileError } = useProfile()
     
-    if (isLoading) return <Spinner />
-    if (isError) return <></>
+    if (isLoading  || isProfileLoading) return <Spinner />
+    if (isError || isProfileError) return <div>Server error</div>
 
     const name = user.name.split(' ');
     if(name.length==1) name.push('');
@@ -16,10 +41,38 @@ export default function Home(){
     return(
         <Suspense fallback={<div>Loading....</div>}>
             <div className="m-2">
+                {
+                    !user?.active &&
+                    <div className="bg-warning text-white flex flex-col md:flex-row gap-3 px-4 py-5 rounded-md mb-10 items-center">
+                        <p>Your membership with the EIK has expired. Please renew your membership to continue receiving member privileges.</p>
+                        <button onClick={e=>setOverlay('Pay')} className="bg-secondary text-white font-semibold ml-5 py-3 rounded-md px-4 hover:scale-105">Renew Membership</button>
+                    </div>
+                }
             <div className="flex flex-col md:flex-row">
                 <div>
                     <h2 className="text-3xl 2xl:text-4xl text-right md:text-left mb-6 font-bold">Hello, <span className="text-primary">{displayName}</span></h2>
-                    <p className="w-2/3 hidden md:block text-base 2xl:text-lg">This portal is your gateway to exclusive resources, networking opportunities, and support to enhance your professional journey.</p>
+                    <p className="w-2/3 hidden md:block text-base 2xl:text-base">This portal is your gateway to exclusive resources, networking opportunities, and support to enhance your professional journey.</p>
+                    <div className="my-5">
+                        <div className="grid grid-cols-2 md:w-1/2 gap-y-1">
+                            <div className="font-semibold text-lg">Membership status:</div>
+                            <div className={`${user?.active?'':'text-warning'}`}>{user?.active?'Active':'Expired'}</div>
+                            <div className="font-semibold text-lg">Membership type:</div>
+                            <div>{profile?.profile?.category}</div>
+                            <div className="font-semibold text-lg">Expiry date:</div>
+                            <div>{`31st December, ${user?.active?'2024':'2023'}`}</div>
+                            <div className="font-semibold text-lg">CPD Points:</div>
+                            <div>{user?.points} points.</div>
+                        </div>
+                        {
+                            !user?.active &&
+                            <div className="md:w-1/2 mt-4">
+                                <p>
+                                Your membership expired on <span className="font-semibold">31st December, 2023.</span> Please make a payment to renew your subscription and continue enjoying the benefits of being an EIK member.
+                                </p>
+                                <button onClick={e=>setOverlay('Pay')} className="bg-secondary text-white font-semibold mt-5 py-3 rounded-md px-4 hover:scale-105">Make Payment</button>
+                            </div>
+                        }
+                    </div>
                 </div>
                 <div>
                     <img src="/icons/Home.svg" className="" alt="" />
@@ -27,7 +80,7 @@ export default function Home(){
                 <p className="block md:hidden">This portal is your gateway to exclusive resources, networking opportunities, and support to enhance your professional journey.</p>
             </div>
             <div>
-                <h3 className="text-2xl 2xl:text-3xl text-right md:text-left mb-6 font-bold">Upcoming <span className="text-primary">Trainings</span></h3>
+                <h3 className="text-2xl 2xl:text-3xl text-right md:text-left my-6 font-bold">Upcoming <span className="text-primary">Trainings</span></h3>
             </div>
             <div className="flex flex-col md:flex-row gap-12 mt-12 bg-gradient-to-r from-white from-70% to-primary/70 to-95% py-12">
                 <div>
@@ -82,6 +135,18 @@ export default function Home(){
             </div>
             <h3 className="text-2xl 2xl:text-3xl my-10 font-bold text-center">Frequently Asked <span className="text-primary">Questions (FAQs) </span></h3>
         </div>
+        <Overlay className={`${overlay!=''?'block':'hidden'}`} >
+            {
+            overlay=='Pay' &&
+            <div className="bg-white px-8 py-6 rounded-md md:w-1/3">
+                <div className="flex justify-between mb-6">
+                    <h6 className="font-semibold text-lg">Make Payment</h6>
+                    <button onClick={e=>setOverlay('')}><XMarkIcon className="w-8 h-8"/></button>
+                </div>
+                <Pay title={'Annual Fees'} description={'Annual subscription fee'} amount={getAmount(profile?.profile?.category)} email={profile?.profile?.email} phone={profile?.profile?.phone} name={profile?.profile?.name} />
+            </div>
+            }
+        </Overlay>
         </Suspense>
     )
 }

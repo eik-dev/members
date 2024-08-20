@@ -5,6 +5,7 @@ import PaymentInfo from '@/app/ui/PaymentInfo'
 import Overlay from '@/app/ui/overlay';
 import { popupE } from '@/app/lib/trigger';
 import { postData, getData } from '@/app/lib/data';
+import Input from '@/app/ui/Input';
 
 export function FlutterWave({tite, description, amount, email, phone, name}){
     const config = {
@@ -52,6 +53,9 @@ export default function Pay({title, description, amount, email, phone, name}){
     let [paymentMethod, setPaymentMethod] = useState('mpesa');
     let [overlay, setOverlay] = useState('')
     let [callback, setCallback] = useState(null)
+    let [inputPhone, setInputPhone] = useState(phone)
+    let [inputEmail, setInputEmail] = useState(email)
+    let [inputName, setInputName] = useState(name)
 
     let stk = (e,phone,email)=>{
         e.preventDefault();
@@ -66,11 +70,10 @@ export default function Pay({title, description, amount, email, phone, name}){
 
     return (
         <div className='mx-2'>
-            <div className='flex gap-6 mb-6'>
+            <div className='flex gap-6 mb-2'>
                 <button className='flex items-center font-semibold' onClick={e=>setPaymentMethod('mpesa')}>
-                    <div className={`rounded-full md:w-5 md:h-5 w-7 h-4 ${paymentMethod=='mpesa'?'bg-primary':'border-2'}`}></div>
-                    <img className='w-8' src="/icons/mpesa.svg" alt="" />
-                    Mpesa
+                    {/* <div className={`rounded-full md:w-5 md:h-5 w-7 h-4 ${paymentMethod=='mpesa'?'bg-primary':'border-2'}`}></div> */}
+                    <img className='' src="/icons/saf-mpesa.png" alt="" />
                 </button>
                 {/* <button className='flex items-center font-semibold' onClick={e=>setPaymentMethod('airtel')}>
                     <div className={`rounded-full md:w-5 md:h-5 w-7 h-4 ${paymentMethod=='airtel'?'bg-primary':'border-2'}`}></div>
@@ -83,32 +86,27 @@ export default function Pay({title, description, amount, email, phone, name}){
                     Card
                 </button> */}
             </div>
-            {
-                paymentMethod!='visa'?
-                <div className='flex gap-2 mb-2'>
-                    <div>Phone number: </div>
-                    <div>{phone}</div>
-                </div>
-                :
-                <div className='flex gap-2 mb-2'>
-                    <div>Name: </div>
-                    <div>{`${name}`}</div>
-                </div>
-            }
-            <div className='flex gap-2 mb-2'>
-                <div>Amount due: </div>
-                <div>{amount} Ksh</div>
+            <p className='my-4 font-bold text-lg'>Pay via M-Pesa Xpress</p>
+            <ol className='list-decimal m-4'>
+                <li className='mb-2'>Confirm phone & email address. Edit incase you wish to use a different phone number/email adddress. </li>
+                <li className='mb-2'>Click {"\'"}Initiate Payment{"\'"}.</li>
+                <li className='mb-2'>You will receive a prompt asking you to pay KES {amount} to EIK.</li>
+                <li className='mb-2'>Enter M-Pesa PIN to confirm.</li>
+            </ol>
+            <div className='flex flex-col m-5 gap-5'>
+                {
+                    paymentMethod!='visa'?
+                    <Input required={true} value={inputPhone} setValue={setInputPhone} placeholder={'0712345678'} type={'phone'} name={'Phone number'}/>
+                    :
+                    <Input required={true} value={inputName} setValue={setInputName} placeholder={'Jane'} type={'text'} name={'First name'}/>
+                }
+                <Input disabled={true} value={amount} setValue={(_)=>{}} placeholder={amount} type={'number'} name={'Amount'}/>
+                <Input required={false} value={inputEmail} setValue={setInputEmail} placeholder={'jane@gmail.com'} type={'email'} name={'Receipt to:'}/>
             </div>
-            <div className='flex gap-2'>
-                <div>Receipt to: </div>
-                <div>{email}</div>
-            </div>
-
             <div className='flex mt-4 gap-5'>
-                <button className='py-2 px-6 border-2 bg-gray-200 hover:scale-105' onClick={e=>setOverlay('payment')}>Edit</button>
                 {
                     paymentMethod=='mpesa'?
-                    <button onClick={e=>stk(e,phone,email)} className='font-semibold leading-6 text-white bg-secondary w-fit text-center mr-4 py-2 px-6 rounded-md md:text-xl hover:scale-105'>Pay</button>
+                    <button onClick={e=>stk(e,phone,email)} className='font-semibold leading-6 text-white bg-secondary w-fit text-center mr-4 py-2 px-6 rounded-md md:text-lg hover:scale-105'>Initiate Payment</button>
                     :
                     <FlutterWave title={title} description={description} amount={amount} email={email} phone={phone} name={name} />
                 }

@@ -60,6 +60,8 @@ export function Institutions({data, setData}){
         setData(temp)
     }
 
+    console.log('In Institutuions :: ',data)
+
     return(
         <>
         <div className="w-[90%]">

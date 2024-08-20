@@ -9,6 +9,7 @@ import Overlay from '@/app/ui/overlay'
 import { Corporate, Firms } from '@/app/lib/instructions'
 import { popupE, verifyE } from '@/app/lib/trigger'
 import { postData, postFile } from '@/app/lib/data'
+import { title } from 'process'
 
 export default function Page() {
     let router = useRouter()
@@ -74,7 +75,7 @@ export default function Page() {
                 if (image.length>0) postFile((_)=>{},image[0],'/files/profile',token)
                 if (requirements.length>0) {
                     requirements.forEach((file, index) => {
-                        postFile((_)=>{},file,'/files/requirements',token)
+                        postFile((_)=>{},file,{title:'requirements'},'/files/requirements',token)
                     });
                 }
                 popupE('ok', 'Success', 'Account created successfully')

@@ -5,7 +5,7 @@ import { XMarkIcon } from "@heroicons/react/24/outline"
 import Input from "@/app/ui/Input";
 import { postData, fetcher } from "@/app/lib/data";
 
-export default function Introductory({control}){
+export default function Introductory({control, id}){
     const { data, isError, isLoading } = useSWR(['/profile/get/bio',{}], fetcher, {revalidateIfStale: false})
     let [note, setNote] = useState('');
     useEffect(()=>{
@@ -13,7 +13,7 @@ export default function Introductory({control}){
     },[isLoading, isError])
     let submit = e=>{
         e.preventDefault();
-        postData((_)=>{},{bio:note},'/profile/edit/bio')
+        postData((_)=>{},{bio:note,id},'/profile/edit/bio')
     }
 
     return(
