@@ -185,7 +185,13 @@ export default function Individual({id,role}){
             <section>
                 <SectionHead id={id} section={'Introductory Statement'}/>
                 <p className="font-light text-md">
-                    {profile.profile != undefined && profile.profile.bio}
+                    {
+                        profile.profile != undefined && 
+                        <div 
+                        className="" 
+                        dangerouslySetInnerHTML={{ __html: profile.profile.bio }} 
+                        />
+                    }
                 </p>
             </section>
             <section>
