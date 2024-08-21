@@ -2,7 +2,7 @@ import { useState, useEffect } from "react"
 import useSWR from "swr";
 import Spinner from "@/app/ui/Spinner";
 import { XMarkIcon } from "@heroicons/react/24/outline"
-import Input from "@/app/ui/Input";
+import Quill from "@/app/ui/Quill";
 import { postData, fetcher } from "@/app/lib/data";
 
 export default function Introductory({control, id}){
@@ -25,7 +25,21 @@ export default function Introductory({control, id}){
 
         {isLoading && <Spinner internal={true}/>}
         {isError && <p>Error fetching bio </p>}
-        {(!isLoading && !isError) && <Input required={true} value={note} setValue={setNote} placeholder={'Bio'} type={'textarea'} name={'Introductory Note'}/>}
+        {
+            (!isLoading && !isError) &&
+            <div className='flex flex-col md:flex-row justify-center gap-y-7 gap-x-7 mb-12'>
+                <div className='flex-grow md:h-96'>
+                    <Quill placeholder={'Bio'} value={note} setValue={setNote}/>
+                </div>
+                <div className='flex-grow'>
+                    <p className='font-bold mb-5'>*Bio Preview</p>
+                    <div 
+                    className="" 
+                    dangerouslySetInnerHTML={{ __html: note }} 
+                    />
+                </div>
+            </div>
+            }
 
         <div className="flex lg:w-1/2 lg:float-right justify-between gap-4 my-4 text-sm">
             <button onClick={e=>submit(e)} className="py-2 px-4 w-[50%] whitespace-nowrap rounded-md font-semibold bg-primary text-white">Save Changes</button>

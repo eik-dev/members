@@ -5,6 +5,7 @@ import Input from "@/app/ui/Input"
 import { Institutions, Organizations } from '@/app/ui/Input'
 import Pay from '@/app/ui/Pay'
 import File from '@/app/ui/File'
+import Quill from '@/app/ui/Quill'
 import { Student, Affiliate, Honorary, Associate, Lead, Fellow } from '@/app/lib/instructions'
 import { popupE, verifyE } from '@/app/lib/trigger'
 import { postData, postFile } from '@/app/lib/data'
@@ -29,7 +30,7 @@ export default function Page() {
     let [county, setCounty] = useState('');
     let [phone, setPhone] = useState('');
     let [alternate, setAlternate] = useState('');
-    let [note, setNote] = useState('');
+    let [note, setNote] = useState(' ');
     let [password, setPassword] = useState('');
     let [confirm, setConfirm] = useState('');
     let [practicing, setPracticing] = useState(false);
@@ -203,7 +204,18 @@ export default function Page() {
                 </div>
             </div>
 
-            <Input required={true} value={note} setValue={setNote} placeholder={'Bio'} type={'textarea'} name={'Bio'}/>
+            <div className='flex flex-col md:flex-row justify-center gap-y-7 gap-x-7 mb-12'>
+                <div className='flex-grow md:h-96'>
+                    <Quill placeholder={'Bio'} value={note} setValue={setNote}/>
+                </div>
+                <div className='flex-grow'>
+                    <p className='font-bold mb-5'>*Bio Preview</p>
+                    <div 
+                    className="" 
+                    dangerouslySetInnerHTML={{ __html: note }} 
+                    />
+                </div>
+            </div>
             
             <h1 className='text-xl 2xl:text-2xl font-medium mx-2 py-2 border-b-2 my-8'>Requirements</h1>
             <div className='text-sm 2xl:text-base mx-2'>
