@@ -94,7 +94,7 @@ export default function Page() {
                 })
             })
         } else setOrganizations([])
-        if (name == '' || last == '' || username == '' || email == '' || ID == '' || password == '' || bio=='' || checkInstituions || checkOrganizations){
+        if (name == '' || last == '' || username == '' || email == '' || ID == '' || password == '' || note=='' || checkInstituions || checkOrganizations){
             verifyE();
             popupE('error', 'Error', 'Fill all mandatory fields')
             window.scrollTo({
