@@ -5,9 +5,9 @@ import { fetcher, postData } from "@/app/lib/data";
 import { Institutions } from '@/app/ui/Input'
 import { XMarkIcon } from "@heroicons/react/24/outline"
 
-export default function Qualifications({control}){
+export default function Qualifications({control,id}){
     let [education, setEducation] = useState([{}]);
-    const { data, isError, isLoading } = useSWR(['/profile/get/education',{}], fetcher, {revalidateIfStale: false})
+    const { data, isError, isLoading } = useSWR(['/profile/get/education',{id}], fetcher, {revalidateIfStale: false})
     useEffect(()=>{
         if(!isError && !isLoading && data) setEducation(data.education)
     },[isLoading, isError])
@@ -15,7 +15,7 @@ export default function Qualifications({control}){
 
     let submit = e=>{
         e.preventDefault();
-        postData((_)=>{},{education},'/profile/edit/education')
+        postData((_)=>{},{education,id},'/profile/edit/education')
     }
 
     return(
