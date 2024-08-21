@@ -6,7 +6,7 @@ import Quill from "@/app/ui/Quill";
 import { postData, fetcher } from "@/app/lib/data";
 
 export default function Introductory({control, id}){
-    const { data, isError, isLoading } = useSWR(['/profile/get/bio',{}], fetcher, {revalidateIfStale: false})
+    const { data, isError, isLoading } = useSWR(['/profile/get/bio',{id}], fetcher, {revalidateIfStale: false})
     let [note, setNote] = useState('');
     useEffect(()=>{
         if(!isError && !isLoading) setNote(data.bio)
@@ -17,7 +17,7 @@ export default function Introductory({control, id}){
     }
 
     return(
-    <div className="bg-white w-[80%] md:w-[50%] py-1 px-4 rounded-lg max-h-[89%] md:max-h-fit -mt-12 overflow-y-scroll">
+    <div className="bg-white w-[80%] md:w-3/4 py-1 px-4 rounded-lg max-h-9/12 overflow-y-scroll">
         <div className="flex md:mx-2 mb-4 justify-between items-center py-3 sticky -top-1 bg-white z-50 border-b-2">
             <span className="font-semibold">Edit Introductory Statement</span>
             <XMarkIcon className="w-8 h-8" onClick={e=>control('')} />
@@ -27,11 +27,11 @@ export default function Introductory({control, id}){
         {isError && <p>Error fetching bio </p>}
         {
             (!isLoading && !isError) &&
-            <div className='flex flex-col md:flex-row justify-center gap-y-7 gap-x-7 mb-12'>
+            <div className='flex flex-col md:flex-row justify-center gap-y-7 gap-x-7 mb-12 max-h-96 overflow-y-scroll'>
                 <div className='flex-grow md:h-96'>
                     <Quill placeholder={'Bio'} value={note} setValue={setNote}/>
                 </div>
-                <div className='flex-grow'>
+                <div className='flex-grow max-h-96 overflow-y-scroll'>
                     <p className='font-bold mb-5'>*Bio Preview</p>
                     <div 
                     className="" 

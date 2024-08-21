@@ -184,7 +184,7 @@ export default function Individual({id,role}){
             </section>
             <section>
                 <SectionHead id={id} section={'Introductory Statement'}/>
-                <p className="font-light text-md">
+                <p className="max-h-96 overflow-y-scroll large-scroll">
                     {
                         profile.profile != undefined && 
                         <div 
