@@ -5,19 +5,19 @@ import { XMarkIcon } from "@heroicons/react/24/outline"
 import { Organizations } from '@/app/ui/Input'
 import { fetcher, postData } from "@/app/lib/data";
 
-export default function Experience({control}){
-    let [organizations, setOrganizations] = useState([{}]);
-    const { data, isError, isLoading } = useSWR(['/profile/get/profession',{}], fetcher, {revalidateIfStale: false})
+export default function Experience({control,id}){
+    let [organizations, setOrganizations] = useState([{id}]);
+    const { data, isError, isLoading } = useSWR(['/profile/get/profession',{id}], fetcher, {revalidateIfStale: false})
     let submit = e=>{
         e.preventDefault();
-        postData((_)=>{},{profession:organizations},'/profile/edit/profession')
+        postData((_)=>{},{profession:organizations,id},'/profile/edit/profession')
     }
     useEffect(()=>{
         if(!isError && !isLoading && data) setOrganizations(data.profession)
     },[isLoading, isError])
     
     return(
-    <div className="bg-white w-[80%] md:w-1/3 py-1 px-4 rounded-lg max-h-[89%] -mt-12 overflow-y-scroll">
+    <div className="bg-white w-[80%] md:w-fit py-1 px-4 rounded-lg max-h-[89%] md:max-h-fit -mt-12 overflow-y-scroll">
         <div className="flex md:mx-2 mb-4 justify-between items-center py-3 sticky -top-1 bg-white z-50 border-b-2">
             <span className="font-semibold">Edit Work Experience</span>
             <XMarkIcon className="w-8 h-8" onClick={e=>control('')} />

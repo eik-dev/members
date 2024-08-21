@@ -3,6 +3,7 @@ import { Context } from "@/app/lib/ContextProvider"
 import { XMarkIcon } from "@heroicons/react/24/outline"
 import File from "@/app/ui/File";
 import { getData, postFile } from "@/app/lib/data";
+import { popupE } from "@/app/lib/trigger";
 
 export default function Attachments({control,id}){
     let {Profile} = useContext(Context);
@@ -28,6 +29,7 @@ export default function Attachments({control,id}){
                 id
             }, '/files/requirements')
         });
+        popupE('ok', 'Success', 'Files uploaded')
     }
 
     return(

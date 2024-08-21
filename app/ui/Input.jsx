@@ -59,8 +59,15 @@ export function Institutions({data, setData}){
         let temp = data.filter((item, index)=>index!=i)
         setData(temp)
     }
-
-    console.log('In Institutuions :: ',data)
+    let modify = (e, i) => {
+        e.preventDefault();
+        setTitle(data[i].Institution)
+        setInstitution(data[i].Certification)
+        setCourse(data[i].Title)
+        setStartDate(data[i].start)
+        setEndDate(data[i].end)
+        remove(e,i);
+    }
 
     return(
         <>
@@ -73,7 +80,8 @@ export function Institutions({data, setData}){
                             <Input disabled={true} value={item.Certification} placeholder={'Enviromental Science'} type={'text'} name={'Course'}/>
                             <Input disabled={true} value={item.start} placeholder={''} type={'date'} name={'Start date'}/>
                             <Input disabled={true} value={item.end}  placeholder={''} type={'date'} name={'End date'}/>
-                            <button onClick={e=>remove(e,index)} className="px-6 h-fit rounded-md text-warning">Delete</button>
+                            <button onClick={e=>modify(e,index)} className="px-6 h-fit rounded-md hover:font-semibold text-secondary">Modify</button>
+                            <button onClick={e=>remove(e,index)} className="px-6 h-fit rounded-md hover:font-semibold text-warning">Delete</button>
                         </div>
                     )
                 })
@@ -100,9 +108,9 @@ export function Organizations({data, setData}){
     let [Organization, setInstitution] = useState('');
     let [Position, setCourse] = useState('');
     let [Location, setLocation] = useState('');
-    let [note, setNote] = useState('');
-    let [email, setEmail] = useState('');
-    let [phone, setPhone] = useState('');
+    let [Duties, setNote] = useState('');
+    let [Email, setEmail] = useState('');
+    let [Phone, setPhone] = useState('');
     let [start, setStartDate] = useState('');
     let [end, setEndDate] = useState('');
 
@@ -126,20 +134,20 @@ export function Organizations({data, setData}){
                     Organization,
                     Position,
                     Location,
-                    note,
-                    email,
-                    phone,
+                    Duties,
+                    Email,
+                    Phone,
                     start,
                     end
                 };
                 return newData;
             });
         }
-    }, [Organization, Position, Location, note, email, phone, start, end]);
+    }, [Organization, Position, Location, Duties, Email, Phone, start, end]);
 
     let add = e => {
         e.preventDefault();
-        setData([...data, {Organization, Location, Position, email, phone, note, start, end}])
+        setData([...data, {Organization, Location, Position, Email, Phone, Duties, start, end}])
         setInstitution('')
         setCourse('')
         setLocation('')
@@ -155,6 +163,18 @@ export function Organizations({data, setData}){
         let temp = data.filter((item, index)=>index!=i)
         setData(temp)
     }
+    let modify = (e, i) => {
+        e.preventDefault();
+        setInstitution(data[i].Organization)
+        setCourse(data[i].Position)
+        setLocation(data[i].Location)
+        setNote(data[i].Duties)
+        setEmail(data[i].Email)
+        setPhone(data[i].Phone)
+        setStartDate(data[i].start)
+        setEndDate(data[i].end)
+        remove(e,i);
+    }
 
     return(
         <>
@@ -167,16 +187,17 @@ export function Organizations({data, setData}){
                                 <Input  disabled={true} value={item.Organization} setValue={setInstitution} placeholder={''} type={'text'} name={'Organization'}/>
                                 <Input  disabled={true} value={item.Position} setValue={setCourse} placeholder={''} type={'text'} name={'Position'}/>
                                 <Input  disabled={true} value={item.Location} setValue={setLocation} placeholder={'Nairobi, Kenya'} type={'text'} name={'Location'}/>
-                                <button onClick={e=>remove(e,index)} className="px-6 h-fit rounded-md text-warning">Delete</button>
                             </div>
                             <div className='my-8 flex flex-col gap-4 md:flex-row justify-between'>
-                                <Input  disabled={true} value={item.email} setValue={setEmail} placeholder={''} type={'text'} name={'Company email'}/>
-                                <Input  disabled={true} value={item.phone} setValue={setPhone} placeholder={''} type={'text'} name={'Company phone'}/>
+                                <Input  disabled={true} value={item.Email} setValue={setEmail} placeholder={''} type={'text'} name={'Company email'}/>
+                                <Input  disabled={true} value={item.Phone} setValue={setPhone} placeholder={''} type={'text'} name={'Company phone'}/>
                             </div>
                             <p>{item.note}</p>
-                            <div className='my-8 flex flex-col gap-4 md:flex-row justify-between'>
+                            <div className='my-8 flex flex-col gap-4 md:flex-row justify-between items-center'>
                                 <Input  disabled={true} value={item.start} setValue={setStartDate} placeholder={''} type={'date'} name={'Start date'}/>
                                 <Input  disabled={true} value={item.end} setValue={setEndDate} placeholder={''} type={'date'} name={'End date'}/>
+                                <button onClick={e=>modify(e,index)} className="px-6 h-fit rounded-md hover:font-semibold text-secondary">Modify</button>
+                                <button onClick={e=>remove(e,index)} className="px-6 h-fit rounded-md hover:font-semibold text-warning">Delete</button>
                             </div>
                         </div>
                     )
@@ -188,10 +209,10 @@ export function Organizations({data, setData}){
                 <Input required={true} value={Location} setValue={setLocation} placeholder={'Nairobi, Kenya'} type={'text'} name={'Location'}/>
             </div>
             <div className='my-8 flex flex-col gap-4 md:flex-row justify-between'>
-                <Input required={true} value={email} setValue={setEmail} placeholder={''} type={'text'} name={'Company email'}/>
-                <Input required={true} value={phone} setValue={setPhone} placeholder={''} type={'text'} name={'Company phone'}/>
+                <Input required={true} value={Email} setValue={setEmail} placeholder={''} type={'text'} name={'Company email'}/>
+                <Input required={true} value={Phone} setValue={setPhone} placeholder={''} type={'text'} name={'Company phone'}/>
             </div>
-            <Input required={true} value={note} setValue={setNote} placeholder={''} type={'textarea'} name={'Duties'}/>
+            <Input required={true} value={Duties} setValue={setNote} placeholder={''} type={'textarea'} name={'Duties'}/>
             <div className='my-8 flex flex-col gap-4 md:flex-row justify-between'>
                 <Input required={true} value={start} setValue={setStartDate} placeholder={''} type={'date'} name={'Start date'}/>
                 <Input required={true} value={end} setValue={setEndDate} placeholder={''} type={'date'} name={'End date'}/>
