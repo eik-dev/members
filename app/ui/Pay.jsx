@@ -57,6 +57,11 @@ export default function Pay({title, description, amount, email, phone, name}){
     let [inputEmail, setInputEmail] = useState(email)
     let [inputName, setInputName] = useState(name)
 
+    useEffect(()=>{
+        setInputPhone(phone);
+        setInputEmail(email);
+    },[phone,email])
+
     let stk = (e,phone,email)=>{
         e.preventDefault();
         popupE('ok', 'Processing', 'Please wait...')
