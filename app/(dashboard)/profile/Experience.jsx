@@ -17,7 +17,7 @@ export default function Experience({control,id}){
     },[isLoading, isError])
     
     return(
-    <div className="bg-white w-[80%] md:w-fit py-1 px-4 rounded-lg max-h-[89%] md:max-h-fit -mt-12 overflow-y-scroll">
+    <div className="bg-white w-[80%] md:w-fit py-1 px-4 rounded-lg max-h-[89%] -mt-12 overflow-y-scroll">
         <div className="flex md:mx-2 mb-4 justify-between items-center py-3 sticky -top-1 bg-white z-50 border-b-2">
             <span className="font-semibold">Edit Work Experience</span>
             <XMarkIcon className="w-8 h-8" onClick={e=>control('')} />

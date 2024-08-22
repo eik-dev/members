@@ -1,5 +1,4 @@
 'use client'
-import Image from "next/image"
 import { useRouter } from "next/navigation"
 import { PrinterIcon, EllipsisVerticalIcon, PencilSquareIcon, XMarkIcon } from "@heroicons/react/24/outline"
 import Overlay from "@/app/ui/overlay"
@@ -8,8 +7,10 @@ import FirmDetails from "@/app/ui/FirmDetails"
 import { useState, useEffect } from "react"
 import { getData } from "@/app/lib/data"
 import { popupE } from "@/app/lib/trigger"
+import useProfile from "@/app/lib/hooks/useProfile"
+import Spinner from "@/app/ui/Spinner"
 
-function SectionHead({section}){
+function SectionHead({section, id}){
     let [showEdit, setShowEdit] = useState(false);
     let [showOverlay, setShowOverlay] = useState(false);
     let [overlay, setOverlay] = useState('');
@@ -36,32 +37,26 @@ function SectionHead({section}){
             }
         </div>
         <Overlay className={`${showOverlay?'block':'hidden'}`} >
-            {overlay=='Basic Information'?<FirmDetails control={setOverlay} />:null}
+            {overlay=='Basic Information'?<FirmDetails control={setOverlay} id={id} />:null}
         </Overlay>
         </>
     )
 }
 export default function Firm({id, role}){
-    let [profile, setProfile] = useState({});
     let [overlay, setOverlay] = useState('');
 
     let router = useRouter()
 
-    useEffect(() => {
-        getData((profile)=>{
-            getData((requirements)=>{
-                getData((photo)=>{
-                    setProfile({...profile, requirements:requirements, photo: photo[0]})
-                }, '/files/profile', {id,role})
-            }, '/files/requirements', {id,role})
-        }, '/profile', {id,role})
-    }, [])
+    let { data:profile, isLoading, isError } = useProfile(id, role)
+
+    if (isLoading) return <Spinner />
+    if (isError) return <>xxx</>
 
     let print = e => {
         e.preventDefault();
         if(profile['certificate']){
             if(profile['certificate'].verified){
-                router.push(`/download/certificate?id=${profile['certificate'].id}`)
+                router.push(`/download/certificate?id=${profile['certificate'].number}`)
             } else{
                 popupE('error','Error' ,'Certificate request has not been approved')
             }
@@ -79,7 +74,7 @@ export default function Firm({id, role}){
         </header>
         <div className="mx-2">
             <section>
-                <SectionHead section={'Basic Information'}/>
+                <SectionHead section={'Basic Information'} id={id}/>
                 <div className="flex flex-col gap-x-3 md:flex-row w-full">
                     <div className="w-32 md:w-64 h-fit relative mr-4 mb-4">
                     {
@@ -151,18 +146,16 @@ export default function Firm({id, role}){
             overlay=='Pay' &&
             <div className="bg-white px-8 py-6 rounded-md">
                 <div className="flex mb-8 justify-between items-center py-3 sticky -top-1 bg-white z-50 border-b-2">
-                    <span className="font-semibold">Payment</span>
-                    <XMarkIcon className="w-8 h-8" onClick={e=>setOverlay('')} />
-                </div>
-                <Pay title={'Annual Fees'} description={'Annual subscription fee'} amount={7500} email={profile.profile.email} phone={profile.profile.phone} name={profile.profile.name} />
-                <p className="text-primary font-semibold text-right cursor-pointer mt-4" onClick={e=>{
+                <span className="text-primary font-semibold text-right cursor-pointer text-lg hover:scale-105" onClick={e=>{
                     getData((response)=>{
-                        setProfile({...profile, certificate:response.cert})
                         setOverlay('')
                     }, '/request', {id})
                 }}>
                     Already paid? Proceed
-                </p>
+                </span>
+                    <XMarkIcon className="w-8 h-8" onClick={e=>setOverlay('')} />
+                </div>
+                <Pay title={'Annual Fees'} description={'Annual subscription fee'} amount={7500} email={profile.profile.email} phone={profile.profile.phone} name={profile.profile.name} />
             </div>
             }
         </Overlay>

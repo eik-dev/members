@@ -8,6 +8,7 @@ import Overlay from "@/app/ui/overlay";
 import { EllipsisVerticalIcon, PencilSquareIcon, TrashIcon, CheckIcon, XMarkIcon, DocumentIcon } from "@heroicons/react/24/outline";
 import { getData } from "@/app/lib/data";
 import { popupE } from "@/app/lib/trigger";
+import { userInfo } from "os";
 
 export default function Page(){
     let Range = useState(20);
@@ -19,6 +20,7 @@ export default function Page(){
     let [showOverlay, setShowOverlay] = useState(false);
     let [overlay, setOverlay] = useState('');
     let [optionsAt, setOptionsAt] = useState(-1);
+    let [userID, setUserID] = useState(null);
     
     let router = useRouter();
     
@@ -89,7 +91,7 @@ export default function Page(){
                                     </button>
                                     {
                                         optionsAt === index &&
-                                        <div className={`flex absolute z-50 right-12 md:right-44 bg-white flex-col gap-y-4 ${true?'block':'hidden'}`}>
+                                        <div className={`flex shadow-xl p-4 absolute z-50 right-12 md:right-44 bg-white flex-col gap-y-4 ${true?'block':'hidden'}`} onClick={e=>setUserID(data['id'])}>
                                             <div className="flex gap-x-2" onClick={e=>setOverlay('details')}>
                                                 <PencilSquareIcon className="w-6 h-6"/>
                                                 Edit details
@@ -122,8 +124,8 @@ export default function Page(){
         </table>
         </div>
         <Overlay className={`${showOverlay?'block':'hidden'}`} >
-            {overlay=='details'?<FirmDetails control={setOverlay} />:null}
-            {overlay=='delete'?<Delete control={setOverlay} />:null}
+            {overlay=='details'?<FirmDetails control={setOverlay} id={userID} />:null}
+            {overlay=='delete'?<Delete control={setOverlay} id={userID} />:null}
         </Overlay>
         </div>
     )
