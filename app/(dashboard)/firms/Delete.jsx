@@ -2,11 +2,12 @@ import { ExclamationTriangleIcon } from "@heroicons/react/24/outline"
 import { getData } from "@/app/lib/data";
 import { popupE } from "@/app/lib/trigger";
 
-export default function Delete({control}){
+export default function Delete({control,id}){
     let deleteF = e=>{
         e.preventDefault();
         popupE('ok', 'processing', 'Please wait...')
-        console.log('submitting')
+        getData((_)=>{}, '/admin/firm/delete', {id})
+        control('');
     }
 
     return(
@@ -21,7 +22,7 @@ export default function Delete({control}){
         Are you sure? This action cannot be undone. All values associated with this admin will be lost.
         </p>
         <div className="flex w-full justify-between gap-4 my-4 text-xs md:text-sm">
-            <button className="py-2 px-4 w-[50%] whitespace-nowrap rounded-md font-semibold bg-warning text-white">Yes, Delete Firm</button>
+            <button className="py-2 px-4 w-[50%] whitespace-nowrap rounded-md font-semibold bg-warning text-white" onClick={e=>deleteF(e)}>Yes, Delete Firm</button>
             <button className="border-2 py-2 px-4 w-[50%] whitespace-nowrap rounded-md font-semibold" onClick={e=>control('')}>Cancel</button>
         </div>
     </div>

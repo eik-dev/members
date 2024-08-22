@@ -120,7 +120,7 @@ export default function Page() {
             popupE('ok', 'Processing', 'Please wait...')
             postData((response)=>{
                 let token = response.token;
-                if (image.length>0) postFile((_)=>{},image[0],'profile picture','/files/profile',token)
+                if (image.length>0) postFile((_)=>{},image[0],{title:'profile picture'},'/files/profile',token)
                 if (requirements.length>0) {
                     requirements.forEach((file, index) => {
                         postFile((_)=>{},file,{title:'requirements'},'/files/requirements',token)

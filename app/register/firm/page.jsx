@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Input from "@/app/ui/Input"
+import Quill from '@/app/ui/Quill'
 import Pay from '@/app/ui/Pay'
 import File from '@/app/ui/File'
 import PaymentInfo from '@/app/ui/PaymentInfo'
@@ -9,7 +10,6 @@ import Overlay from '@/app/ui/overlay'
 import { Corporate, Firms } from '@/app/lib/instructions'
 import { popupE, verifyE } from '@/app/lib/trigger'
 import { postData, postFile } from '@/app/lib/data'
-import { title } from 'process'
 
 export default function Page() {
     let router = useRouter()
@@ -29,7 +29,7 @@ export default function Page() {
     let [phone, setPhone] = useState('');
     let [email, setEmail] = useState('');
     let [alternate, setAlternate] = useState('');
-    let [note, setNote] = useState('');
+    let [note, setNote] = useState(' ');
     let [password, setPassword] = useState('');
     let [confirm, setConfirm] = useState('');
     let [practicing, setPracticing] = useState(true);
@@ -54,7 +54,7 @@ export default function Page() {
 
     let validate = () => {
         //validate all required fields
-        if (pin==''){
+        if (pin=='' || note=='' || firmName=='' || email=='' || password==''){
             verifyE();
             popupE('error', 'Error', 'Fill all mandatory fields')
             window.scrollTo({
@@ -62,6 +62,14 @@ export default function Page() {
                 behavior: 'smooth'
             });
             return false;
+        }
+        if(password!=confirm){
+            popupE('error', 'Error', 'Passwords must match')
+            window.scrollTo({
+                top: 10,
+                behavior: 'smooth'
+            });
+            return false
         }
         return true;
     }
@@ -72,7 +80,7 @@ export default function Page() {
             popupE('ok', 'Processing', 'Please wait...')
             postData((response)=>{
                 let token = response.token;
-                if (image.length>0) postFile((_)=>{},image[0],'/files/profile',token)
+                if (image.length>0) postFile((_)=>{},image[0],{title:'profile picture'},'/files/profile',token)
                 if (requirements.length>0) {
                     requirements.forEach((file, index) => {
                         postFile((_)=>{},file,{title:'requirements'},'/files/requirements',token)
@@ -142,7 +150,18 @@ export default function Page() {
                 </div>
             </div>
 
-            <Input required={true} value={note} setValue={setNote} placeholder={'Bio'} type={'textarea'} name={'Bio'}/>
+            <div className='flex flex-col md:flex-row justify-center gap-y-7 gap-x-7 mb-12'>
+                <div className='flex-grow md:h-96'>
+                    <Quill placeholder={'Bio'} value={note} setValue={setNote}/>
+                </div>
+                <div className='flex-grow'>
+                    <p className='font-bold mb-5'>*Bio Preview</p>
+                    <div 
+                    className="" 
+                    dangerouslySetInnerHTML={{ __html: note }} 
+                    />
+                </div>
+            </div>
             
             <h1 className='text-xl 2xl:text-2xl font-medium mx-2 py-2 border-b-2 my-8'>Requirements</h1>
             <div className='text-sm 2xl:text-base mx-2'>
