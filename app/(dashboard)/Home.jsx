@@ -86,13 +86,15 @@ export default function Home(){
                 <div>
                     <img className="w-96" src="/home/Hero-Image.png" alt="" />
                 </div>
-                <div className="md:w-1/3">
-                    <h3 className="text-secondary text-xl 2xl:text-2xl font-bold">Principles of Sustainable Waste Management</h3>
-                    <p className="mt-4">
-                    Discover innovative solutions and practical tips to reduce, reuse, and recycle waste effectively. Together, lets pave the way towards a greener, cleaner future. RSVP now and be part of the change!
+                <div className="md:w-2/5">
+                    <h3 className="text-secondary text-xl 2xl:text-2xl font-bold">EIK Land Acquisition & Resettlement Planning</h3>
+                    <p className="mt-4 text-right text-lg font-semibold">9<span className="align-super text-xs">th</span> - 27<span className="align-super text-xs">th</span> September 2024</p>
+                    <p className="mt-2">
+                    Land acquisition and resettlement planning is crucial in infrastructure projects as demand for services rises. Resettlement Action Planning (RAP) is vital for fair compensation, livelihood restoration, and minimizing social disruption. It integrates social and environmental safeguards, emphasizing inclusivity, transparency, and protection of vulnerable groups. RAP addresses stakeholder engagement, gender considerations, and human rights, balancing development with social equity and environmental sustainability.
                     </p>
-                    <a href="https://elearning.eik.co.ke/" target="_blank" rel="noopener noreferrer">
-                    <button className="bg-secondary text-white py-2 px-4 font-semibold mt-6 rounded-lg hover:scale-105">Register Now</button></a>
+                    <a href="https://bit.ly/eik-course" target="_blank" rel="noopener noreferrer">
+                        <button className="bg-secondary text-white py-2 px-4 font-semibold mt-6 rounded-lg hover:scale-105">Register Now</button>
+                    </a>
                 </div>
             </div>
             <div className="w-4/5 2xl:w-2/3 mx-auto my-12">
