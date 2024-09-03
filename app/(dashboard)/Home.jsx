@@ -22,6 +22,8 @@ let getAmount = (role) => {
             return 5000;
         case 'Fellow':
             return 0;
+        case 'Corporate':
+            return 7500;
         default:
             break;
     }

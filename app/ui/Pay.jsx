@@ -70,7 +70,7 @@ export default function Pay({title, description, amount, email, phone, name}){
                 setCallback({CheckoutRequestID: response.CheckoutRequestID})
                 setOverlay('processing')
             } else popupE('error', 'Error', response.ResponseDescription)
-        },{phone, amount, email,AccountReference:title},'/pay/mpesa')
+        },{phone:inputPhone, amount, email:inputEmail,AccountReference:title},'/pay/mpesa')
     }
 
     return (
