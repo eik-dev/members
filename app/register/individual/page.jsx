@@ -57,7 +57,7 @@ export default function Page() {
                 break;
             case 'Associate':
                 setInstructions(Associate)
-                setAmount(4500)
+                setAmount(3000)
                 break;
             case 'Lead':
                 setInstructions(Lead)
