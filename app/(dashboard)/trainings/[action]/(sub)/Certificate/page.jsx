@@ -6,10 +6,11 @@ import { PhotoIcon, QrCodeIcon, CalendarDaysIcon, UserIcon, IdentificationIcon, 
 
 export default function Certificate(){
     let params = useSearchParams();
-    let id = params.get('id')
+    let id = 1
     let [action, setAction] = useState('');
     return(
         <>
+        <h5 className="text-lg font-semibold mb-4">Certificate Generator</h5>
         <div className='hidden md:flex justify-between bg-gray-200/70 py-8 px-4 mt-4'>
             {/* <TrainingCert data={{}} /> */}
             <div className='bg-white px-4 py-4 flex flex-col h-3/4 w-56 gap-5 rounded-lg mr-2'>

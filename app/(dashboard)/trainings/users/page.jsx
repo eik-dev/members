@@ -100,7 +100,7 @@ export default function Users(){
         });
     }
 
-    if(isError || isLoading) return <Spinner/>
+    if(isError || isLoading) return <Spinner internal={true}/>
 
     return(
         <div>
