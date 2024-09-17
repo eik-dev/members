@@ -2,11 +2,11 @@ import { ExclamationTriangleIcon } from "@heroicons/react/24/outline"
 import { getData } from "@/app/lib/data";
 import { popupE } from "@/app/lib/trigger";
 
-export default function Delete({control, id}){
+export default function Delete({control, data}){
     let submit = e=>{
         e.preventDefault();
         popupE('ok', 'processing', 'Please wait...')
-        getData((_)=>{}, '/admin/member/delete', {id})
+        getData((_)=>{}, '/training/member/delete', {number:data.Number})
         control('');
     }
 

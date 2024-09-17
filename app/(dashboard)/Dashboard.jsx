@@ -2,11 +2,11 @@
 import { useState, useEffect } from "react";
 import useSWR from "swr";
 import { fetcher } from "@/app/lib/data";
+import Spinner from "@/app/ui/Spinner";
 import useUser from "@/app/lib/hooks/useUser";
 import Bur from "@/app/ui/charts/Bar"
 import Lyn from "@/app/ui/charts/Line"
 import Py from "@/app/ui/charts/Pie"
-import Spinner from "@/app/ui/Spinner";
 import { ArrowTrendingUpIcon, ArrowTrendingDownIcon, UsersIcon } from "@heroicons/react/24/outline"
 import { useRouter } from "next/navigation";
 import { getData } from "@/app/lib/data"

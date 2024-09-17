@@ -1,8 +1,10 @@
 'use client'
 import { useState, useEffect } from "react";
-import { UserCircleIcon, PlusIcon, EllipsisVerticalIcon, TrashIcon } from "@heroicons/react/24/outline";
+import { UserCircleIcon, PlusIcon, EllipsisVerticalIcon, TrashIcon, ArrowDownTrayIcon, AtSymbolIcon } from "@heroicons/react/24/outline";
 import { useSearchParams } from "next/navigation";
-import { getData, postFile } from '@/app/lib/data';
+import useSWR from "swr";
+import Spinner from "@/app/ui/Spinner";
+import { getData, postFile, getFile, fetcher, postData } from '@/app/lib/data';
 import Overlay from '@/app/ui/overlay';
 import Head from '@/app/ui/head';
 import Add from "./Add";
@@ -23,22 +25,27 @@ export default function Users(){
     let [selection, setSelection] = useState([]);
     let [filtered, setFiltered] = useState([]);
     let [optionsAt, setOptionsAt] = useState(-1);
-    let [userID, setUserID] = useState(0);
-    let [data, setData] = useState([]);
     let [csv, setCSV] = useState([]);
+    let [massAction, setMassAction] = useState(false);
 
-    useEffect(()=>{
-        getData(setData,'/training/attendee',{id})
-    },[])
+    const { data, isError, isLoading, mutate } = useSWR(['/training/attendee',{id}], fetcher,{})
+
     useEffect(()=>{
         if(csv.length>0){
             csv.forEach(file => {
                 postFile((response)=>{
                     console.log(response)
-                    if(response.data) setData(response.data);
+                    if(response.data){
+                        postData((response)=>{
+                            mutate(response.data)
+                        },{
+                            data:response.data,
+                            training:id
+                        },'/training/members')
+                    }
                     setCSV([])
                     setOverlay('')
-                }, file, 'csv', '/csv')
+                }, file, {}, '/csv')
             });
         }
     },[csv])
@@ -46,7 +53,6 @@ export default function Users(){
     useEffect(()=>{
         if(data){
             let temp = data.filter((item, i)=>selection.includes(i))
-            console.log(temp);
             setFiltered(temp);
         }
     },[selection])
@@ -70,7 +76,6 @@ export default function Users(){
             setSelection([...selection, index]);
             checkbox.checked = true;
         }
-        setOptionsAt(index)
     }
 
     let selectAll = (e)=>{
@@ -82,15 +87,6 @@ export default function Users(){
         console.log(selection)
     }
 
-    let generate = (e)=>{
-        e.preventDefault();
-        postData((response)=>{
-            setData(response.data)
-        },{
-            data:filtered,
-            training:id
-        },'/training/members')
-    }
     let download = (e)=>{
         e.preventDefault();
         filtered.forEach(participant => {
@@ -104,6 +100,8 @@ export default function Users(){
         });
     }
 
+    if(isError || isLoading) return <Spinner/>
+
     return(
         <div>
             <Head Range={Range} total={total} Search={Search} Title={'Attendees'} TH={TH} Sort={Sort} placeholder={'Search attendees'} Genesis={Genesis}>
@@ -116,7 +114,7 @@ export default function Users(){
             <div className='text-center mt-8'>{filtered.length}/{data.length} selected</div>
 
             <div className="max-h-[90vh] overflow-y-scroll large-scroll mt-8">
-                <table className="w-full text-sm lg:text-xs 2xl:text-sm text-left table-auto" onClick={e=>{optionsAt>=0?setOptionsAt(-1):null}}>
+                <table className="w-full text-sm lg:text-xs 2xl:text-sm text-left table-auto" onClick={e=>{optionsAt>=0?setOptionsAt(-1):null;massAction?setMassAction(false):null}}>
                     <thead className="capitalize bg-gray-100 sticky top-0 z-20">
                         <tr>
                         {
@@ -126,11 +124,24 @@ export default function Users(){
                             })
                         }
                         <th className="px-6 py-3 whitespace-nowrap">
-                            <button onClick={e=>setOptionsAt(-2)}>
+                            <button onClick={e=>{massAction?setMassAction(false):setMassAction(true)}}>
                                 <EllipsisVerticalIcon className="w-6 h-6"/>
                             </button>
                         </th>
                         </tr>
+                        {
+                            massAction &&
+                            <div className={`flex shadow-xl p-4 absolute z-50 right-12 md:right-20 bg-white flex-col gap-y-4 top-4`}>
+                                <button className="flex gap-x-2" onClick={e=>download(e)}>
+                                    <ArrowDownTrayIcon className="w-6 h-6"/>
+                                    Download Certificates
+                                </button>
+                                <button className="flex gap-x-2" onClick={e=>email(e)}>
+                                    <AtSymbolIcon className="w-6 h-6"/>
+                                    Email Certificates
+                                </button>
+                            </div>
+                        }
                     </thead>
                     <tbody>
                         {
@@ -143,13 +154,21 @@ export default function Users(){
                                         <td className={`px-6 py-4 whitespace-nowrap ${data['Sent']!=null?(data['Sent']==1?'text-primary':'text-warning'):null}`}>{data['Email']}</td>
                                         <td className="px-6 py-4 whitespace-nowrap">{data['Number']}</td>
                                         <td className="px-6 py-4 whitespace-nowrap relative">
-                                            <button>
+                                            <button onClick={e=>setOptionsAt(index)}>
                                                 <EllipsisVerticalIcon className="w-6 h-6"/>
                                             </button>
                                             {
                                                 optionsAt === index &&
-                                                <div className={`flex shadow-xl p-4 absolute z-50 right-12 md:right-20 bg-white flex-col gap-y-4 ${true?'block':'hidden'}`}>
-                                                    <button className="flex gap-x-2" onClick={e=>setOverlay('edit')}>
+                                                <div className={`flex shadow-xl p-4 absolute z-50 right-12 md:right-20 bg-white flex-col gap-y-4 top-2 ${true?'block':'hidden'}`}>
+                                                    <button className="flex gap-x-2" onClick={e=>download(e)}>
+                                                        <ArrowDownTrayIcon className="w-6 h-6"/>
+                                                        Download Certificate
+                                                    </button>
+                                                    <button className="flex gap-x-2" onClick={e=>email(e)}>
+                                                        <AtSymbolIcon className="w-6 h-6"/>
+                                                        Email Certificate
+                                                    </button>
+                                                    <button className="flex gap-x-2" onClick={e=>{setOverlay('edit');e.stopPropagation();}}>
                                                         <UserCircleIcon className="w-6 h-6"/>
                                                         Edit details
                                                     </button>
@@ -178,10 +197,10 @@ export default function Users(){
             </div>
 
             <Overlay className={`${overlay!=''?'block':'hidden'}`} >
-                {overlay === 'add' && <Add control={setOverlay} />}
+                {overlay === 'add' && <Add control={setOverlay} training={id} mutate={mutate} />}
                 {overlay === 'upload' && <Upload control={setOverlay} csv={csv} setCSV={setCSV} />}
-                {overlay === 'delete' && <Delete control={setOverlay} id={userID} />}
-                {overlay === 'edit' && <Edit control={setOverlay} id={userID} data={data[userID]} />}
+                {overlay === 'delete' && <Delete control={setOverlay} data={data[optionsAt]} />}
+                {overlay === 'edit' && <Edit control={setOverlay} mutate={mutate} data={data[optionsAt]} />}
             </Overlay>
         </div>
     )

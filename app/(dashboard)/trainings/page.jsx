@@ -30,27 +30,27 @@ export default function Page() {
                 <button className='flex items-center bg-secondary text-white px-4 py-2 rounded-md font-semibold gap-2' onClick={e=>setOverlay('new')}> <PlusIcon className='w-5 h-5'/> New training</button>
             </div>
         </div>
+        <div className="grid grid-cols-2">
         {
             trainings.data.map((training,i)=>{
                 return(
                     <div key={i} className='shadow-md rounded-xl shadow-gray-400 relative my-9 p-3 flex w-4/5 mx-auto'>
                         <button className='absolute right-0'><EllipsisVerticalIcon className='w-7 h-7'/></button>
-                        <div className='flex-grow'>
-                            <PhotoIcon className='w-40 h-40 text-gray-400'/>
-                            <div className='flex gap-5'>
-                                <Link className='text-secondary flex items-center justify-center hover:font-semibold gap-1' href={`/trainings/users?id=${training.id}`}><UserIcon className='w-4 h-4'/> Attendees</Link>
-                                <Link className='text-secondary flex items-center justify-center hover:font-semibold gap-1' href={`/trainings/certificate?id=${training.id}`}><DocumentIcon className='w-4 h-4'/> Certificate</Link>
-                            </div>
-                        </div>
-                        <div className='flex-grow'>
-                            <h3 className='font-bold text-xl text-primary'>{training.Name}</h3>
-                            <p className='text-sm'>{training.Info}</p>
+                        <div className=''>
+                            <h3 className='font-bold text-xl mb-4 text-primary'>{training.Name}</h3>
+                            <img src='/Training2.jpeg' className='mb-4'/>
                             <p className=''>{training.StartDate}</p>
+                        </div>
+                        <div className="absolute bg-white right-6 top-10 p-2 rounded-lg">
+                            <Link className='text-secondary flex items-center justify-center hover:font-semibold gap-1' href={`/trainings/users?id=${training.id}`}><UserIcon className='w-4 h-4'/> Attendees</Link>
+                            <Link className='text-secondary flex items-center justify-center hover:font-semibold gap-1' href={`/trainings/certificate?id=${training.id}`}><DocumentIcon className='w-4 h-4'/> Certificate</Link>
+                            <button className=''><span>Modify</span></button>
                         </div>
                     </div>
                 )
             })
         }
+        </div>
         <Overlay className={`${overlay!=''?'block':'hidden'}`} >
             {overlay === 'new' && <New control={setOverlay} />}
         </Overlay>
