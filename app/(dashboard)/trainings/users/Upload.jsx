@@ -1,7 +1,5 @@
 'use client'
-import { useState, useEffect } from "react";
-import { XMarkIcon, PlusIcon } from "@heroicons/react/24/outline"
-import { postFile } from "@/app/lib/data"
+import { XMarkIcon } from "@heroicons/react/24/outline"
 import File from '@/app/ui/File';
 
 export default function Upload({control, csv, setCSV}){

@@ -9,7 +9,7 @@ export default function TrainingsLayout({children}){
     return(
         <div>
             {
-                path!=='/trainings' && <Link href={'/trainings'}><ChevronLeftIcon className="w-6 h-6"/></Link>
+                path!=='/trainings' && <Link href={'/trainings'} className="flex hover:font-semibold items-center"><ChevronLeftIcon className="w-5 h-5"/> Back</Link>
             }
             {children}
         </div>
