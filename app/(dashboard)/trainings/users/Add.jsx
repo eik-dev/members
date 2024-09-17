@@ -4,12 +4,15 @@ import { XMarkIcon, UserPlusIcon } from "@heroicons/react/24/outline"
 import Input from "@/app/ui/Input"
 import { postData } from "@/app/lib/data"
 
-export default function Add({control}){
+export default function Add({control, training, mutate}){
     let [fullName, setFullName] = useState('')
     let [email, setEmail] = useState('')
     let submit = (e)=>{
         e.preventDefault();
-        postData((_)=>{},{fullName,email},'/')
+        postData((_)=>{
+            mutate();
+            control('');
+        },{fullName,email, training},'/training/member/add')
     }
     return(
         <div className="bg-white w-[80%] md:w-1/2 lg:w-1/3 2xl:w-[20%] py-1 px-4 rounded-lg">

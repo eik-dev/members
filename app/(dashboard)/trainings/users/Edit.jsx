@@ -4,13 +4,16 @@ import { XMarkIcon, UserPlusIcon } from "@heroicons/react/24/outline"
 import Input from "@/app/ui/Input"
 import { postData } from "@/app/lib/data"
 
-export default function Edit({control, id, data}){
+export default function Edit({control, data, mutate}){
     console.log(data)
     let [fullName, setFullName] = useState(data.Name)
     let [email, setEmail] = useState(data.Email)
     let submit = (e)=>{
         e.preventDefault();
-        postData((_)=>{},{id,fullName,email},'/')
+        postData((_)=>{
+            mutate();
+            control('');
+        },{number:data.Number,fullName,email},'/training/member/edit')
     }
     return(
         <div className="bg-white w-[80%] md:w-1/2 lg:w-1/3 2xl:w-[20%] py-1 px-4 rounded-lg">
@@ -25,7 +28,7 @@ export default function Edit({control, id, data}){
 
             <button className="bg-secondary text-white flex px-4 py-2 rounded-lg mx-auto w-full items-center justify-center my-6" onClick={e=>submit(e)}>
                 <UserPlusIcon className="w-6 h-6 mr-2"/>
-                <span className="font-semibold">Add User</span>
+                <span className="font-semibold">Edit User</span>
             </button>
         </div>
     )
