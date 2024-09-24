@@ -86,7 +86,7 @@ export default function Home(){
             </div>
             <div className="flex flex-col md:flex-row gap-12 mt-12 bg-gradient-to-r from-white from-70% to-primary/70 to-95% py-12">
                 <div>
-                    <img className="w-96" src="/home/Hero-Image.png" alt="" />
+                    <img className="md:w-3/4" src="/Training1.jpeg" alt="" />
                 </div>
                 <div className="md:w-2/5">
                     <h3 className="text-secondary text-xl 2xl:text-2xl font-bold">EIK Land Acquisition & Resettlement Planning</h3>
