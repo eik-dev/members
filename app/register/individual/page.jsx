@@ -253,7 +253,7 @@ export default function Page() {
 
             <div className='mt-6'>
                 <input type="checkbox" name="policy" id="" />
-                <label className='ml-4' htmlFor="policy">By signing up you Accept the <a href="" className='text-secondary'>Our data privacy policy</a> terms </label>
+                <label className='ml-4' htmlFor="policy">By signing up you Accept the <a href="https://docs.google.com/document/d/105XUTKZipyKBwxy4jO7wLQD7WIRufxLcgEFQGCpk6-A/edit?usp=sharing" target='blank' className='text-secondary'>Our data privacy policy</a> terms </label>
             </div>
 
             <div className='flex justify-between'>

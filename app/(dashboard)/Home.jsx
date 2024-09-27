@@ -1,12 +1,18 @@
 'use client'
 import Link from "next/link"
 import { Suspense, useState } from "react"
+import useSWR from "swr";
+import { fetcher, getData } from "@/app/lib/data";
+import Spinner from "@/app/ui/Spinner";
 import useUser from "@/app/lib/hooks/useUser";
 import useProfile from "@/app/lib/hooks/useProfile"
-import Spinner from "@/app/ui/Spinner";
 import Overlay from "@/app/ui/overlay"
 import Pay from "@/app/ui/Pay"
-import { XMarkIcon } from "@heroicons/react/24/outline";
+import { XMarkIcon, PlusIcon, MinusIcon } from "@heroicons/react/24/outline";
+import { popupE } from "@/app/lib/trigger"
+import dynamic from 'next/dynamic'
+import { get } from "http";
+const DotLottieReact = dynamic(() =>import('@lottiefiles/dotlottie-react').then((mod) => mod.DotLottieReact),{ssr: false,})
 
 let getAmount = (role) => {
     switch (role) {
@@ -28,6 +34,115 @@ let getAmount = (role) => {
             break;
     }
 }
+
+export function TWG({joined, twg, key}){
+    let [show, setShow] = useState(false);
+
+    let join = (e, twg, action) => {
+        e.preventDefault();
+        if(action) getData(()=>{},'/twg/join',{twg})
+        else getData(()=>{},'/twg/exit',{twg})
+    }
+
+    return(
+        <div key={key} className="bg-white rounded-lg shadow-lg p-4 my-2 md:mx-2">
+            <div className="flex items-center justify-between">
+                <h6 className="font-semibold text-lg">{twg.name}</h6>
+                <button onClick={e=>setShow(true)} className="block md:hidden">
+                    {
+                        show?
+                        <MinusIcon className="w-8 h-8"/>
+                        :
+                        <PlusIcon className="w-8 h-8"/>
+                    }
+                </button>
+            </div>
+            <div className={`${!show?'hidden':'block'} md:block`}>
+                <p className="py-4">{twg.text}</p>
+                <button onClick={e=>join(e,twg.name, !joined)} className={`${joined?'text-warning':'text-secondary'} font-light hover:font-normal`}>
+                    {
+                        joined?'<< Leave':'Join >>'
+                    }
+                </button>
+            </div>
+        </div>
+    )
+}
+
+export function TWGs(){
+    const { data:twgs, error, isLoading } = useSWR(['/twg/index',{}], fetcher)
+    console.log(twgs)
+
+    return(
+        <section className="mb-12">
+            <h3 className="text-2xl 2xl:text-3xl text-right md:text-left my-6 font-bold">Technical Working <span className="text-primary">Groups (TWGs)</span></h3>
+            <div className="flex flex-col-reverse md:flex-row items-center mb-5">
+                <div className="flex-grow">
+                    <DotLottieReact
+                        src="/animations/group.lottie"
+                        loop
+                        autoplay
+                    />
+                </div>
+                <p className="md:w-1/2 text-justify leading-6">
+                    The Environmental Institute of Kenya (EIK) offers specialized Technical Working Groups (Professional Chapters) that focus on key disciplines within the environmental field. These groups provide members with a platform to collaborate, share knowledge, and contribute to the advancement of environmental conservation and sustainability. By joining a chapter aligned with your expertise or interest, you can engage with like-minded professionals and actively shape the future of Kenya{"\'"}s environmental sector. <span className="font-semibold text-secondary">Select your preferred working group below to get started</span>.
+                </p>
+            </div>
+            {
+                (isLoading || error) ?
+                <div className="w-full h-[10vh]"><Spinner internal={true} /></div>
+                :
+                <div className="grid grid-cols-1 md:grid-cols-2">
+                    {
+                        [
+                            {
+                                name:'Enviromental Educators',
+                                text:'Focused on enhancing environmental literacy, this group empowers educators to promote sustainability through curriculum development, awareness programs, and capacity-building, fostering a knowledgeable and eco-conscious society.'
+                            },
+                            {
+                                name:'Watershed Catchment Management (Blue economy)',
+                                text:'Dedicated to sustainable management of water resources, this group promotes conservation practices, rehabilitation, and sustainable use of watersheds and aquatic ecosystems to support Kenya’s growing blue economy.'
+                            },
+                            {
+                                name:'Sustainable Waste Management',
+                                text:'This group addresses innovative approaches to managing waste through recycling, waste reduction, and circular economy practices, promoting sustainability and reducing environmental impact in urban and rural settings.'
+                            },
+                            {
+                                name:'Climate Science',
+                                text:'Focused on understanding and addressing climate change, this group brings together professionals to advance climate research, mitigation strategies, and adaptation practices for a more resilient future.'
+                            },
+                            {
+                                name:'Biodiversity / Natural Sciences',
+                                text:'This group works to conserve biodiversity and promote the sustainable use of natural resources, focusing on protecting ecosystems, wildlife, and enhancing conservation efforts across diverse habitats.'
+                            },
+                            {
+                                name:'Built Environment & Construction',
+                                text:'Promoting sustainable practices in urban planning, architecture, and construction, this group aims to reduce the environmental footprint of infrastructure development while fostering green building initiatives.'
+                            },
+                            {
+                                name:'Clean Energy and Renewables',
+                                text:'This group champions the transition to renewable energy sources, advocating for clean energy solutions such as solar, wind, and geothermal power to reduce carbon emissions and promote sustainability.'
+                            },
+                            {
+                                name:'Environmental Policy & Governance',
+                                text:'Focused on shaping and influencing environmental policies, this group engages in advocacy, research, and collaboration with policymakers to strengthen governance and regulatory frameworks for environmental protection.'
+                            },
+                            {
+                                name:'Environmental Advocacy - Youth & Women Groups',
+                                text:'Empowering youth and women in environmental leadership, this group focuses on advocacy, community engagement, and capacity-building to foster inclusive participation in sustainable development initiatives.'
+                            },
+
+                        ].map((twg, i) => {
+                            return <TWG key={i} twg={twg} joined={twgs.includes(twg.name)} />
+                        })
+                    }
+                </div>
+
+            }
+        </section>
+    )
+}
+
 export default function Home(){
     let [overlay, setOverlay] = useState('');
     const { user, isLoading, isError } = useUser()
@@ -81,10 +196,11 @@ export default function Home(){
                 </div>
                 <p className="block md:hidden">This portal is your gateway to exclusive resources, networking opportunities, and support to enhance your professional journey.</p>
             </div>
+            <TWGs />
             <div>
-                <h3 className="text-2xl 2xl:text-3xl text-right md:text-left my-6 font-bold">Upcoming <span className="text-primary">Trainings</span></h3>
+                <h3 className="text-2xl 2xl:text-3xl text-right md:text-left font-bold">Upcoming <span className="text-primary">Trainings</span></h3>
             </div>
-            <div className="flex flex-col md:flex-row gap-12 mt-12 bg-gradient-to-r from-white from-70% to-primary/70 to-95% py-12">
+            <div className="flex flex-col md:flex-row gap-12 bg-gradient-to-r from-white from-70% to-primary/70 to-95% py-12">
                 <div>
                     <img className="md:w-3/4" src="/Training1.jpeg" alt="" />
                 </div>
