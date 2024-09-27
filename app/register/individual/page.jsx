@@ -251,6 +251,11 @@ export default function Page() {
             <h1 className='text-xl 2xl:text-2xl font-medium mx-2 py-2 border-b-2 mb-8'>Payment</h1>
             <Pay title={'Registration fee'} description={'First time registration fee'} amount={amount} email={email} phone={phone} name={`${name} ${last}`} />
 
+            <div className='mt-6'>
+                <input type="checkbox" name="policy" id="" />
+                <label className='ml-4' htmlFor="policy">By signing up you Accept the <a href="https://docs.google.com/document/d/105XUTKZipyKBwxy4jO7wLQD7WIRufxLcgEFQGCpk6-A/edit?usp=sharing" target='blank' className='text-secondary'>Our data privacy policy</a> terms </label>
+            </div>
+
             <div className='flex justify-between'>
                 <div></div>
                 <button className="bg-primary px-4 md:px-6 py-2 text-white font-semibold my-8 rounded-md hover:scale-105" onClick={e=>submit(e)}>Sign Up</button>
