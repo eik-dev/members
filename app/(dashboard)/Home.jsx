@@ -11,7 +11,6 @@ import Pay from "@/app/ui/Pay"
 import { XMarkIcon, PlusIcon, MinusIcon } from "@heroicons/react/24/outline";
 import { popupE } from "@/app/lib/trigger"
 import dynamic from 'next/dynamic'
-import { get } from "http";
 const DotLottieReact = dynamic(() =>import('@lottiefiles/dotlottie-react').then((mod) => mod.DotLottieReact),{ssr: false,})
 
 let getAmount = (role) => {
