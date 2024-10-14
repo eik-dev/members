@@ -1,7 +1,6 @@
 'use client'
 import { useState, useEffect } from "react"
 import { ViewfinderCircleIcon } from '@heroicons/react/24/outline'
-import Input from "./Input";
 
 export default function File({ files, setFiles, type }) {
     const [dragging, setDragging] = useState(false);

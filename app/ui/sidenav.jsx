@@ -82,7 +82,7 @@ export default function SideNav({control}){
     if (isLoading) return <></>
     if (isError) return <></>
     return(<>
-    <img className="w-48" src="/transparent-logo.svg" alt="" />
+    <img className="w-48" src="/logo10.jpeg" alt="" />
     {
         links.map((link, index) => {
             if(link.roles.includes(user.role)){
