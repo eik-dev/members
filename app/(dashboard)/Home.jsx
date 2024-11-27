@@ -93,50 +93,11 @@ export function TWGs(){
                 :
                 <div className="grid grid-cols-1 md:grid-cols-2">
                     {
-                        [
-                            {
-                                name:'Enviromental Educators',
-                                text:'Focused on enhancing environmental literacy, this group empowers educators to promote sustainability through curriculum development, awareness programs, and capacity-building, fostering a knowledgeable and eco-conscious society.'
-                            },
-                            {
-                                name:'Watershed Catchment Management (Blue economy)',
-                                text:'Dedicated to sustainable management of water resources, this group promotes conservation practices, rehabilitation, and sustainable use of watersheds and aquatic ecosystems to support Kenya’s growing blue economy.'
-                            },
-                            {
-                                name:'Sustainable Waste Management',
-                                text:'This group addresses innovative approaches to managing waste through recycling, waste reduction, and circular economy practices, promoting sustainability and reducing environmental impact in urban and rural settings.'
-                            },
-                            {
-                                name:'Climate Science',
-                                text:'Focused on understanding and addressing climate change, this group brings together professionals to advance climate research, mitigation strategies, and adaptation practices for a more resilient future.'
-                            },
-                            {
-                                name:'Biodiversity / Natural Sciences',
-                                text:'This group works to conserve biodiversity and promote the sustainable use of natural resources, focusing on protecting ecosystems, wildlife, and enhancing conservation efforts across diverse habitats.'
-                            },
-                            {
-                                name:'Built Environment & Construction',
-                                text:'Promoting sustainable practices in urban planning, architecture, and construction, this group aims to reduce the environmental footprint of infrastructure development while fostering green building initiatives.'
-                            },
-                            {
-                                name:'Clean Energy and Renewables',
-                                text:'This group champions the transition to renewable energy sources, advocating for clean energy solutions such as solar, wind, and geothermal power to reduce carbon emissions and promote sustainability.'
-                            },
-                            {
-                                name:'Environmental Policy & Governance',
-                                text:'Focused on shaping and influencing environmental policies, this group engages in advocacy, research, and collaboration with policymakers to strengthen governance and regulatory frameworks for environmental protection.'
-                            },
-                            {
-                                name:'Environmental Advocacy - Youth & Women Groups',
-                                text:'Empowering youth and women in environmental leadership, this group focuses on advocacy, community engagement, and capacity-building to foster inclusive participation in sustainable development initiatives.'
-                            },
-
-                        ].map((twg, i) => {
-                            return <TWG key={i} twg={twg} joined={twgs.includes(twg.name)} />
+                        twgs.all.map((twg, i) => {
+                            return <TWG key={i} twg={twg} joined={twgs.twgs.includes(twg.name)} />
                         })
                     }
                 </div>
-
             }
         </section>
     )
@@ -169,15 +130,21 @@ export default function Home(){
                     <h2 className="text-3xl 2xl:text-4xl text-right md:text-left mb-6 font-bold">Hello, <span className="text-primary">{displayName}</span></h2>
                     <p className="w-2/3 hidden md:block text-base 2xl:text-base">This portal is your gateway to exclusive resources, networking opportunities, and support to enhance your professional journey.</p>
                     <div className="my-5">
-                        <div className="grid grid-cols-2 md:w-1/2 gap-y-1">
-                            <div className="font-semibold text-lg">Membership status:</div>
+                        <div className="grid md:grid-cols-2 md:w-1/2 gap-1">
+                            <div className="font-semibold whitespace-nowrap text-lg">Membership status:</div>
                             <div className={`${user?.active?'':'text-warning'}`}>{user?.active?'Active':'Expired'}</div>
-                            <div className="font-semibold text-lg">Membership type:</div>
+                            <div className="font-semibold whitespace-nowrap text-lg">Membership type:</div>
                             <div>{profile?.profile?.category}</div>
-                            <div className="font-semibold text-lg">Expiry date:</div>
+                            <div className="font-semibold whitespace-nowrap text-lg">Expiry date:</div>
                             <div>{`31st December, ${user?.active?'2024':'2023'}`}</div>
-                            <div className="font-semibold text-lg">CPD Points:</div>
+                            <div className="font-semibold whitespace-nowrap text-lg">CPD Points:</div>
                             <div>{user?.points} points.</div>
+                            <div className="font-semibold whitespace-nowrap text-lg">Technical Working Groups:</div>
+                            <div>
+                                {
+                                 profile?.twgs?.twgs.map((twg,i)=>(<span className="block my-1 md:whitespace-nowrap" key={i}>{twg}</span>))   
+                                }
+                            </div>
                         </div>
                         {
                             !user?.active &&

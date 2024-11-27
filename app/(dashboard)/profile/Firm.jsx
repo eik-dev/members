@@ -145,17 +145,17 @@ export default function Firm({id, role}){
             {
             overlay=='Pay' &&
             <div className="bg-white px-8 py-6 rounded-md">
-                <div className="flex mb-8 justify-between items-center py-3 sticky -top-1 bg-white z-50 border-b-2">
-                <span className="text-primary font-semibold text-right cursor-pointer text-lg hover:scale-105" onClick={e=>{
+                <div className="flex mb-8 justify-end items-center py-3 sticky -top-1 bg-white z-50 border-b-2">
+                    <XMarkIcon className="w-8 h-8" onClick={e=>setOverlay('')} />
+                </div>
+                <Pay title={'Annual Fees'} description={'Annual subscription fee'} amount={7500} email={profile.profile.email} phone={profile.profile.phone} name={profile.profile.name} />
+                <button className="text-primary mt-2 font-semibold text-right cursor-pointer text-lg hover:scale-105" onClick={e=>{
                     getData((response)=>{
                         setOverlay('')
                     }, '/request', {id})
                 }}>
                     Already paid? Proceed
-                </span>
-                    <XMarkIcon className="w-8 h-8" onClick={e=>setOverlay('')} />
-                </div>
-                <Pay title={'Annual Fees'} description={'Annual subscription fee'} amount={7500} email={profile.profile.email} phone={profile.profile.phone} name={profile.profile.name} />
+                </button>
             </div>
             }
         </Overlay>
