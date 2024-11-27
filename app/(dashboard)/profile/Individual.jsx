@@ -223,7 +223,7 @@ export default function Individual({id,role}){
                         return(
                             <div key={index} className="grid grid-cols-2 md:w-1/3 gap-y-1 mb-4">
                                 <span className="font-bold w-fit">Institution:</span>
-                                <span className="md:whitespace-nowrap">{item.Institution}</span>
+                                <span className="md:whitespace-nowrap">{item.institution}</span>
                                 <span className="font-bold w-fit">Title:</span>
                                 <span className="md:whitespace-nowrap">{item.Title}</span>
                                 <span className="font-bold w-fit">Certification</span>
@@ -291,17 +291,17 @@ export default function Individual({id,role}){
             {
             overlay=='Pay' &&
             <div className="bg-white px-8 py-6 rounded-md">
-                <div className="flex mb-8 justify-between items-center py-3 sticky -top-1 bg-white z-50 border-b-2">
-                <span className="text-primary font-semibold text-right cursor-pointer text-lg hover:scale-105" onClick={e=>{
+                <div className="flex mb-8 justify-end items-center py-3 sticky -top-1 bg-white z-50 border-b-2">
+                    <XMarkIcon className="w-8 h-8" onClick={e=>setOverlay('')} />
+                </div>
+                <Pay title={'Annual Fees'} description={'Annual subscription fee'} amount={getAmount(profile.profile.category)} email={profile.profile.email} phone={profile.profile.phone} name={profile.profile.name} />
+                <button className="text-primary mt-5 font-semibold text-right cursor-pointer text-lg hover:scale-105" onClick={e=>{
                     getData((response)=>{
                         setOverlay('')
                     }, '/request', {id})
                 }}>
                     Already paid? Proceed
-                </span>
-                    <XMarkIcon className="w-8 h-8" onClick={e=>setOverlay('')} />
-                </div>
-                <Pay title={'Annual Fees'} description={'Annual subscription fee'} amount={getAmount(profile.profile.category)} email={profile.profile.email} phone={profile.profile.phone} name={profile.profile.name} />
+                </button>
             </div>
             }
         </Overlay>

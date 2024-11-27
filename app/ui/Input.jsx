@@ -25,7 +25,7 @@ export function Institutions({data, setData}){
                 let newData = [...prevData];
                 newData[newData.length - 1] = {
                     ...newData[newData.length - 1],
-                    Institution,
+                    institution: Institution,
                     Certification,
                     Title,
                     start,
@@ -61,7 +61,7 @@ export function Institutions({data, setData}){
     }
     let modify = (e, i) => {
         e.preventDefault();
-        setTitle(data[i].Institution)
+        setTitle(data[i].institution)
         setInstitution(data[i].Certification)
         setCourse(data[i].Title)
         setStartDate(data[i].start)
@@ -76,7 +76,7 @@ export function Institutions({data, setData}){
                 data.slice(0,data.length-1).map((item, index)=>{
                     return(
                         <div key={index} className='my-8 flex flex-col gap-4 md:flex-row justify-between items-center'>
-                            <Input disabled={true} value={item.Institution} placeholder={'University of Nairobi'} type={'text'} name={'Institution'}/>
+                            <Input disabled={true} value={item.institution} placeholder={'University of Nairobi'} type={'text'} name={'Institution'}/>
                             <Input disabled={true} value={item.Certification} placeholder={'Enviromental Science'} type={'text'} name={'Course'}/>
                             <Input disabled={true} value={item.start} placeholder={''} type={'date'} name={'Start date'}/>
                             <Input disabled={true} value={item.end}  placeholder={''} type={'date'} name={'End date'}/>
@@ -87,9 +87,9 @@ export function Institutions({data, setData}){
                 })
             }
             <div className='my-8 flex flex-col gap-4 md:flex-row justify-between'>
-                <Input required={true} value={Title} setValue={setTitle} placeholder={''} type={'text'} name={'Title'}/>
                 <Input required={true} value={Institution} setValue={setInstitution} placeholder={'University of Nairobi'} type={'text'} name={'Institution'}/>
                 <Input required={true} value={Certification} setValue={setCourse} placeholder={'BSc. Enviromental Science'} type={'text'} name={'Certification'}/>
+                <Input required={true} value={Title} setValue={setTitle} placeholder={'Enviromental Science'} type={'text'} name={'Title'}/>
             </div>
             <div className='my-8 flex flex-col gap-4 md:flex-row justify-between'>
                 <Input required={true} value={start} setValue={setStartDate} placeholder={''} type={'date'} name={'Start date'}/>

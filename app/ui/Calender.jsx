@@ -1,5 +1,7 @@
 'use client'
 
+import { useState } from "react";
+
 export function getDaySuffix (day) {
     if (day >= 11 && day <= 13) {
         return 'th';
@@ -75,6 +77,33 @@ export function getDatesInRange(start,end){
 
 export function getMonthName(month){
     return ['January','February','March','April','May','June','July','August','September','October','November','December'][month]
+}
+
+export function CalenderRange({control, DateRef}){
+    let [from, setFrom] = useState('')
+    let [to, setTo] = useState('')
+
+    let submit = (e)=>{
+        e.preventDefault();
+        DateRef.current = {from,to}
+        control('')
+    }
+
+    return(
+        <div className="bg-white rounded-lg md:min-w-1/2 p-2 overflow-hidden">
+            <div className="flex border-b-2 py-4 justify-between">
+                <h6>Custom Date</h6>
+            </div>
+            <div className="flex flex-col md:flex-row my-5 gap-3">
+                <input className="py-2 px-1 rounded-md" type="date" name="" value={from} onChange={e=>setFrom(e.target.value)} placeholder="From" id="" />
+                <input className="py-2 px-1 rounded-md" type="date" name="" value={to} onChange={e=>setTo(e.target.value)} placeholder="To" id="" />
+            </div>
+            <div className="flex items-end gap-5">
+                <button className="py-2 font-semibold w-fit px-2 rounded-md bg-primary text-white" onClick={e=>submit(e)}>Apply Dates</button>
+                <button className="py-2 font-semibold" onClick={e=>control('')}>Cancel</button>
+            </div>
+        </div>
+    )
 }
 
 export default function Calender({date}) {
