@@ -1,230 +1,106 @@
 'use client'
-import { useState, useContext, useEffect } from 'react'
-import { Context } from "@/app/lib/ContextProvider"
-import Link from "next/link"
-import { useRouter } from 'next/navigation'
+
+import { useState, useContext } from 'react'
+import Link from 'next/link';
 import Input from "@/app/ui/Input"
-import {load, save, saveDB, loadDB} from "@/app/lib/storage"
-import { ViewfinderCircleIcon } from '@heroicons/react/24/outline'
+import { SignupContext } from "@/app/lib/SignupProvider";
 
-export default function Page() {
-    let {Signup} = useContext(Context)
-    let [data, setData] = Signup
-    let router = useRouter()
+export function Individual(){
+    let {Name, Last, Username, Email, Nema, Nationality, Postal, Town, County, Phone, Alternate, Password, Confirm} = useContext(SignupContext);
 
-    let [image, setImage] = useState(null);
-    const [dragging, setDragging] = useState(false);
-
-    let [practicing, setPracticing] = useState(false);
-    let [category, setCategory] = useState('Fellow');
-    let [name, setName] = useState('');
-    let [last, setLast] = useState('');
-    let [firmName, setFirmName] = useState('');
-    let [username, setUsername] = useState('');
-    let [nema, setNema] = useState('');
-    let [firm, setFirm] = useState('');
-    let [pin, setPin] = useState('');
-    let [nationality, setNationality] = useState('');
-    let [ID, setID] = useState('');
-    let [postal, setPostal] = useState('');
-    let [town, setTown] = useState('');
-    let [county, setCounty] = useState('');
-    let [phone, setPhone] = useState('');
-    let [email, setEmail] = useState('');
-    let [alternate, setAlternate] = useState('');
-    let [note, setNote] = useState('');
-
-    useEffect(() => {
-        loadDB('profile').then(res=>{
-            setImage(res)
-        })
-        .catch(err=>console.log(err))
-        if (load('data')){
-            let saved = load('data')
-            setData({...data, ...saved})
-        }
-        console.log(data)
-    }, [])
-
-    let validate = () => {
-        if (email.length < 1) return false;
-        return true;
-    }
-
-    let next = e => {
-        e.preventDefault();
-        if (validate()){
-            save('data', {
-                ...data,
-                category: category,
-                name: name,
-                last: last,
-                username: username,
-                firm: firm,
-                firmName: firmName,
-                nema: nema,
-                email:email
-            })
-            router.push('/register/requirements')
-        } else{
-            alert('Please fill Email field')
-        }
-    }
-    const handleFileChange = (event) => {
-        let file = event.target.files[0];
-        if (file && file.type.startsWith('image/')){
-            let url = URL.createObjectURL(file);
-            // saveDB('profile', file)
-            setImage(url);
-        } else {
-            alert ('File uploaded not image')
-        }
-    };
-
-    const handleDragEnter = (event) => {
-        event.preventDefault();
-        setDragging(true);
-    };
-
-    const handleDragLeave = (event) => {
-        event.preventDefault();
-        setDragging(false);
-    };
-
-    const handleDrop = (event) => {
-        event.preventDefault();
-        setDragging(false);
-        let file = event.dataTransfer.files[0];
-        if (file && file.type.startsWith('image/')){
-            let url = URL.createObjectURL(file);
-            // saveDB('profile', file)
-            setImage(url);
-        } else {
-            alert ('File uploaded not image')
-        }
-    };
-    let edit = true;
+    let [name, setName] = Name;
+    let [last, setLast] = Last;
+    let [username, setUsername] = Username;
+    let [email, setEmail] = Email;
+    let [nema, setNema] = Nema;
+    let [nationality, setNationality] = Nationality;
+    let [postal, setPostal] = Postal;
+    let [town, setTown] = Town;
+    let [county, setCounty] = County;
+    let [phone, setPhone] = Phone;
+    let [alternate, setAlternate] = Alternate;
+    let [password, setPassword] = Password;
+    let [confirm, setConfirm] = Confirm;
 
     return(
-        <div className='md:w-2/3 md:mx-auto'>
-            <h1 className='text-xl md:text-2xl font-medium mx-2 py-2 border-b-2 mb-8'>Profile info</h1>
-            <div className='flex flex-col md:flex-row gap-5'>
-
-                <div className='h-[50%]'>
-                    <h4 className='mb-4'>Upload Profile Photo</h4>
-                    <div
-                        onDragEnter={handleDragEnter}
-                        onDragOver={handleDragEnter}
-                        onDragLeave={handleDragLeave}
-                        onDrop={handleDrop}
-                        className={`p-2 mx-2 rounded-md flex flex-col items-center justify-center ${dragging ? "border-2 border-primary" : "border-2"}`}
-                    >
-                        {
-                            image?
-                            <img src={image} alt="profile" className='h-56 w-56 rounded-lg'/>
-                            :
-                            <ViewfinderCircleIcon className='text-tertiary h-56 w-56'/>
-                        }
-                        <input 
-                            type="file"
-                            id='profile' 
-                            accept=".jpg,.jpeg,.png"
-                            multiple onChange={handleFileChange} 
-                            placeholder='Upload profile photo'
-                            className="
-                                text-sm text-stone-500
-                                file:mr-5 file:py-1 file:px-3 file:border-[1px]
-                                file:text-xs file:font-medium
-                                file:bg-stone-50 file:text-stone-700
-                                hover:file:cursor-pointer hover:file:bg-blue-50
-                                hover:file:text-blue-700
-                                file:hidden
-                            " 
-                        />
-                        <label htmlFor="profile" className='py-4'>
-                            <span className='text-secondary'>Browse Files</span> or Drag into area
-                        </label>
-                    </div>
-                </div>
-
-                <div>
-                    <h3>Select Category</h3>
-                    <div className='my-4 flex flex-col md:flex-row gap-4'>
-                        <select className="bg-white border-[2px] rounded-lg p-2" name="" id="" onChange={e=>setPracticing(!practicing)}>
-                            <option className='bg-white hover:bg-white' value={false}>Non-Practicing Membership</option>
-                            <option className='bg-white hover:bg-white' value={true}>Practising Membership</option>
-                        </select>
-                        {
-                            data.type=='Individual'?
-                            practicing?
-                            <select className="bg-white border-[2px] rounded-lg p-2" name="" id="" onChange={e=>setCategory(e.target.value)}>
-                                <option className='bg-white hover:bg-white' value="Fellow">Fellow membership</option>
-                                <option className='bg-white hover:bg-white' value="Lead">Lead membership</option>
-                                <option className='bg-white hover:bg-white' value="Associate">Associate membership</option>
-                            </select>
-                            :
-                            <select className="bg-white border-[2px] rounded-lg p-2" name="" id="" onChange={e=>setCategory(e.target.value)}>
-                                <option className='bg-white hover:bg-white' value="Honorary">Honorary membership</option>
-                                <option className='bg-white hover:bg-white' value="Affiliate">Affiliate membership</option>
-                                <option className='bg-white hover:bg-white' value="Student">Student membership</option>
-                            </select>
-                            :
-                            null
-                        }
-                        {
-                            data.type=='Firm'?
-                            practicing?
-                            <div>
-                                Firms membership
-                            </div>
-                            :
-                            <div>
-                                Corporate membership
-                            </div>
-                            :null
-                        }
-                    </div>
-                    <div className='grid gap-4 md:grid-cols-2'>
-                        {
-                            data.type=='Individual'?
-                            <>
-                            <Input value={name} setValue={setName} placeholder={'Jane'} type={'text'} name={'First name'}/>
-                            <Input value={last} setValue={setLast} placeholder={'Doe'} type={'text'} name={'Last name'}/>
-                            <Input value={username} setValue={setUsername} placeholder={'Username'} type={'username'} name={'username'}/>
-                            <Input value={firm} setValue={setFirm} placeholder={'Firm name'} type={'text'} name={'Firm'}/>
-                            </>
-                            :
-                            <Input value={firmName} setValue={setFirmName} placeholder={'XYZ ltd.'} type={'text'} name={'Firm of experts'}/>
-                        }
-                        <Input value={email} setValue={setEmail} placeholder={'jane@gmail.com'} type={'email'} name={'Email'}/>
-                        <Input value={alternate} setValue={setAlternate} placeholder={'jane@gmail.com'} type={'email'} name={'Alternate email'}/>
-                        <Input value={nationality} setValue={setNationality} placeholder={'Kenya'} type={'text'} name={'Nationality'}/>
-                        <Input value={ID} setValue={setID} placeholder={'12345678'} type={'number'} name={'National ID'}/>
-                        <Input value={postal} setValue={setPostal} placeholder={'1234-4321'} type={'text'} name={'Postal Address'}/>
-                        <Input value={town} setValue={setTown} placeholder={'Town'} type={'text'} name={'Town'}/>
-                        <Input value={county} setValue={setCounty} placeholder={'County'} type={'text'} name={'County'}/>
-                        <Input value={nema} setValue={setNema} placeholder={'AXR/321'} type={'text'} name={'NEMA'}/>
-                        <Input value={pin} setValue={setPin} placeholder={'4321'} type={'number'} name={'Firm PIN'}/>
-                        <Input value={phone} setValue={setPhone} placeholder={'0712345678'} type={'phone'} name={'Phone number'}/>
-                    </div>
-                </div>
+        <form action="">
+            <div className='grid gap-6 md:gap-y-8 md:grid-cols-3'>
+                <Input required={true} value={name} setValue={setName} placeholder={'Jane'} type={'text'} name={'First name'}/>
+                <Input required={true} value={last} setValue={setLast} placeholder={'Doe'} type={'text'} name={'Last name'}/>
+                <Input required={true} value={username} setValue={setUsername} placeholder={'Username'} type={'username'} name={'username'}/>
+                <Input required={true} value={email} setValue={setEmail} placeholder={'jane@gmail.com'} type={'email'} name={'Email'}/>
+                <Input value={alternate} setValue={setAlternate} placeholder={'jane@gmail.com'} type={'email'} name={'Alternate email'}/>
+                <Input value={nationality} setValue={setNationality} placeholder={'Kenya'} type={'text'} name={'Nationality'}/>
+                <Input value={postal} setValue={setPostal} placeholder={'1234-4321'} type={'text'} name={'Postal Address'}/>
+                <Input value={town} setValue={setTown} placeholder={'Town'} type={'text'} name={'Town'}/>
+                <Input value={county} setValue={setCounty} placeholder={'County'} type={'text'} name={'County'}/>
+                <Input value={nema} setValue={setNema} placeholder={'AXR/321'} type={'text'} name={'NEMA'}/>
+                <Input value={phone} setValue={setPhone} placeholder={'0712345678'} type={'phone'} name={'Phone number'}/>
             </div>
-            
-            <div className="border-2 rounded-md focus-within:border-primary text-gray-400 focus-within:text-primary py-2 relative h-fit mt-4 md:w-2/3 mx-2">
-                <span className="text-xs absolute -top-2 left-2 bg-white px-2 focus-within:text-primary font-semibold">Bio</span>
-                <textarea disabled={!edit} className={`px-4 w-full h-48 ${edit?'text-black':'text-gray-600'}`} type="text" placeholder="Note" value={note} onChange={e=>setNote(e.target.value)} />
+            <div className='flex flex-col gap-x-6 gap-y-4 md:gap-y-8 md:flex-row mt-4 md:mt-8'>
+                <Input required={true} value={password} setValue={setPassword} placeholder={'******'} type={'password'} name={'Password'}/>
+                <Input value={confirm} setValue={setConfirm} placeholder={'******'} type={'password'} name={'Confirm password'}/>
             </div>
+        </form>
+    )
+}
 
-            <div className='flex mt-8 ml-2 my-4 justify-between'>
-                <div></div>
-                <div className='flex gap-5'>
-                    <Link href={'/register/type'}>
-                        <div className="leading-6 bg-tertiary border-2 w-fit py-2 text-center mr-4 rounded-md px-6 md:text-xl">Back</div>
-                    </Link>
-                    <div onClick={e=>next(e)} className='font-semibold leading-6 text-white bg-primary w-fit text-center mr-4 py-2 rounded-md md:text-xl'>
-                        <span className="px-6">Next</span>
-                    </div>
-                </div>
+export function Firm(){
+    let {FirmName, Pin, Email, Nema, Nationality, Postal, Town, County, Phone, Alternate, Password, Confirm} = useContext(SignupContext);
+
+    let [firmName, setFirmName] = FirmName;
+    let [nema, setNema] = Nema;
+    let [pin, setPin] = Pin;
+    let [nationality, setNationality] = Nationality;
+    let [postal, setPostal] = Postal;
+    let [town, setTown] = Town;
+    let [county, setCounty] = County;
+    let [phone, setPhone] = Phone;
+    let [email, setEmail] = Email;
+    let [alternate, setAlternate] = Alternate;
+    let [password, setPassword] = Password;
+    let [confirm, setConfirm] = Confirm;
+
+    return(
+        <form action="" className='grid gap-x-6 gap-y-4 md:gap-y-8 md:grid-cols-2'>
+            <Input required={true} value={firmName} setValue={setFirmName} placeholder={'XYZ ltd.'} type={'text'} name={'Firm of experts'}/>
+            <Input required={true} value={email} setValue={setEmail} placeholder={'jane@gmail.com'} type={'email'} name={'Email'}/>
+            <Input value={alternate} setValue={setAlternate} placeholder={'jane@gmail.com'} type={'email'} name={'Alternate email'}/>
+            <Input value={nationality} setValue={setNationality} placeholder={'Kenya'} type={'text'} name={'Nationality'}/>
+            <Input value={postal} setValue={setPostal} placeholder={'1234-4321'} type={'text'} name={'Postal Address'}/>
+            <Input value={town} setValue={setTown} placeholder={'Town'} type={'text'} name={'Town'}/>
+            <Input value={county} setValue={setCounty} placeholder={'County'} type={'text'} name={'County'}/>
+            <Input value={nema} setValue={setNema} placeholder={'AXR/321'} type={'text'} name={'NEMA'}/>
+            <Input required={true} value={pin} setValue={setPin} placeholder={'4321'} type={'text'} name={'Firm KRA PIN'}/>
+            <Input value={phone} setValue={setPhone} placeholder={'0712345678'} type={'phone'} name={'Phone number'}/>
+            <Input required={true} value={password} setValue={setPassword} placeholder={'******'} type={'password'} name={'Password'}/>
+            <Input value={confirm} setValue={setConfirm} placeholder={'******'} type={'password'} name={'Confirm password'}/>
+        </form>
+    )
+}
+
+export default function ProfilePage(){
+    let {Type} = useContext(SignupContext);
+    console.log(Type[0])
+
+    return(
+        <div className='min-h-[60vh] p-10'>
+            <h3 className='mb-7 text-secondary text-lg 2xl:text-xl'>Applicant Details</h3>
+            {
+                Type[0]==='individual'?
+                <Individual/>
+                :
+                <Firm/>
+            }
+            <div className="flex justify-between mt-8">
+                <Link href={'/register'} className='flex items-center gap-1'>
+                    <span className='icon-[grommet-icons--previous] w-5 h-5'/>
+                    Previous
+                </Link>
+                <Link href={'/register/bio'} className='flex items-center gap-2 bg-primary text-white hover:bg-secondary px-10 py-2 rounded-md hover:font-semibold'>
+                    Next
+                    <span className='icon-[tabler--player-track-next-filled] w-5 h-5'/>
+                </Link>
             </div>
         </div>
     )
