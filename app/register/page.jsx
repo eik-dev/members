@@ -27,6 +27,18 @@ export function Categories({type, setType, cat, setCategory}){
             entryFee: 7500,
             anualFee: 10000
         }
+        ,
+        {
+            name: 'Honorary',
+            entryFee: 0,
+            anualFee: 0
+        }
+        ,
+        {
+            name: 'Fellow',
+            entryFee: 0,
+            anualFee: 0
+        }
     ]
 
     if(type==='individual')
@@ -71,20 +83,25 @@ export default function Page(){
                 type && type==='individual'?
                 <Categories type={type} setType={setType} cat={category} setCategory={setCategory}/>
                 :
-                <div className="flex flex-col gap-y-10 md:flex-row mt-6 justify-center md:justify-around rounded-xl items-center h-[40vh]">
+                <div className="flex flex-col gap-y-10 md:flex-row mt-6 justify-center md:justify-around rounded-xl items-center md:h-[40vh]">
                     <button onClick={e=>setType('individual')}>
-                        <div className={`flex px-8 md:px-10 py-2 justify-center items-center gap-5 rounded-md border-4 border-gray-400 hover:scale-105 font-semibold w-56 h-56 relative group`}>
-                            <UserIcon className={`w-6 h-8 md:w-12 md:h-12`}/>
-                            <span>Individual</span>
-                            <div className="flex justify-center items-center absolute w-6 h-6 rounded-full border-2 border-black top-2 right-2 group-hover:border-secondary group-hover:border-[3px]">
-                                <div className={`w-3 h-3 bg-secondary rounded-full ${!true?'block':'hidden'}`}/>
+                        <div className={`flex flex-col gap-y-12 px-2 md:px-10 py-7 justify-center items-center gap-5 rounded-md border-4 border-gray-400 font-semibold relative group`}>
+                            <p className="uppercase text-xl">Individual</p>
+                            <UserIcon className={`w-8 h-8 md:w-12 md:h-12`}/>
+                            <div className="bg-primary text-white py-2 px-4 rounded-md hover:scale-105 flex items-center gap-2">
+                                Continue To Registration
+                                <span className="icon-[grommet-icons--form-next] w-6 h-6"/>
                             </div>
                         </div>
                     </button>
                     <Link href={'/register/profile'} onClick={e=>{setType('firm');setCategory('Firm')}}>
-                        <div className={`flex px-8 md:px-10 py-2 justify-center items-center gap-5 rounded-md text-white bg-secondary hover:bg-primary w-56 h-40`}>
-                            <UserGroupIcon className={`w-6 h-8 md:w-12 md:h-12 `}/>
-                            <span>Firms</span>
+                    <div className={`flex flex-col gap-y-12 px-2 md:px-10 py-7 justify-center items-center gap-5 rounded-md border-4 border-gray-400 font-semibold relative group`}>
+                            <p className="uppercase text-xl">Frms</p>
+                            <UserGroupIcon className={`w-8 h-8 md:w-12 md:h-12`}/>
+                            <div className="bg-primary text-white py-2 px-4 rounded-md hover:scale-105 flex items-center gap-2">
+                                Continue To Registration
+                                <span className="icon-[grommet-icons--form-next] w-6 h-6"/>
+                            </div>
                         </div>
                     </Link>
                 </div>

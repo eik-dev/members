@@ -1,14 +1,16 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useContext } from 'react'
+import { SignupContext } from '@/app/lib/SignupProvider';
 import Link from 'next/link';
-import Input from "@/app/ui/Input"
 import File from '@/app/ui/File'
 import Quill from '@/app/ui/Quill'
 
 export default function ProfilePage(){
-    let [image, setImage] = useState([]);
-    let [note, setNote] = useState(' ');
+    let {Image, Note, Paths} = useContext(SignupContext);
+    let [image, setImage] = Image;
+    let [note, setNote] = Note;
+    let [paths, _] = Paths;
 
     return(
         <div className='min-h-[60vh] p-10'>
@@ -38,10 +40,18 @@ export default function ProfilePage(){
                     <span className='icon-[grommet-icons--previous] w-5 h-5'/>
                     Previous
                 </Link>
-                <Link href={'/register/requirements'} className='flex items-center gap-2 bg-primary text-white hover:bg-secondary px-10 py-2 rounded-md hover:font-semibold'>
-                    Next
-                    <span className='icon-[tabler--player-track-next-filled] w-5 h-5'/>
-                </Link>
+                {
+                    paths.indexOf('/register/bio')==paths.length-1?
+                    <Link href={'/register/payment'} className='flex items-center gap-2 bg-primary text-white hover:bg-secondary px-10 py-2 rounded-md hover:font-semibold'>
+                        Payment
+                        <span className='icon-[tabler--player-track-next-filled] w-5 h-5'/>
+                    </Link>
+                    :
+                    <Link href={paths[paths.indexOf('/register/bio')+1]} className='flex items-center gap-2 bg-primary text-white hover:bg-secondary px-10 py-2 rounded-md hover:font-semibold'>
+                        Next
+                        <span className='icon-[tabler--player-track-next-filled] w-5 h-5'/>
+                    </Link>
+                }
             </div>
         </div>
     )

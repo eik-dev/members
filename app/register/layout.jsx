@@ -10,7 +10,7 @@ export default function Layout({children}){
     return(
         <SignupProvider>
             <main className='bg-gray-200 min-h-[100vh] pb-7'>
-                <div className="md:w-2/3 md:mx-auto">
+                <div className="md:w-10/12 2xl:w-2/3 md:mx-auto">
                     <section className="flex flex-col gap-y-3 lg:flex-row md:items-center md:gap-0 justify-between rounded-b-lg bg-white py-10 px-5">
                         <img src="/logo10.jpeg" className="w-56 mx-auto md:mx-0" alt="" />
                         <div>
