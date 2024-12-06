@@ -209,11 +209,15 @@ export function Organizations({data, setData}){
                 <Input required={true} value={Location} setValue={setLocation} placeholder={'Nairobi, Kenya'} type={'text'} name={'Location'}/>
             </div>
             <div className='my-8 flex flex-col gap-4 md:flex-row justify-between'>
-                <Input required={true} value={Email} setValue={setEmail} placeholder={''} type={'text'} name={'Company email'}/>
-                <Input required={true} value={Phone} setValue={setPhone} placeholder={''} type={'text'} name={'Company phone'}/>
+                <Input required={false} value={Email} setValue={setEmail} placeholder={''} type={'text'} name={'Company email'}/>
+                <Input required={false} value={Phone} setValue={setPhone} placeholder={''} type={'text'} name={'Company phone'}/>
             </div>
             <Input required={true} value={Duties} setValue={setNote} placeholder={''} type={'textarea'} name={'Duties'}/>
-            <div className='my-8 flex flex-col gap-4 md:flex-row justify-between'>
+            <div className="flex gap-3 mt-4">
+                <input type="checkbox" name="" id="" />
+                <p>Is this your current role?</p>
+            </div>
+            <div className='my-4 flex flex-col gap-4 md:flex-row justify-between'>
                 <Input required={true} value={start} setValue={setStartDate} placeholder={''} type={'date'} name={'Start date'}/>
                 <Input required={true} value={end} setValue={setEndDate} placeholder={''} type={'date'} name={'End date'}/>
             </div>
