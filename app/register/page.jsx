@@ -60,7 +60,7 @@ export function Categories({type, setType, cat, setCategory}){
                                 <div className="icon-[bxs--category-alt] w-9 h-9 text-gray-500"/>
                             </div>
                             <p className="">Entry Fee: <span className="text-gray-600">KES {category.entryFee}</span></p>
-                            <p className="">Anual Fee: <span className="text-gray-600">KES {category.anualFee}</span></p>
+                            <p className="">Annual Fee: <span className="text-gray-600">KES {category.anualFee}</span></p>
                             <div className="flex justify-between mt-10 ">
                                 <div></div>
                                 <Link href={'/register/profile'} onClick={e=>setCategory(category.name)} className="bg-primary hover:bg-secondary hover:scale-105 text-white rounded-md px-9 py-2">Select</Link>
@@ -85,7 +85,7 @@ export default function Page(){
                 :
                 <div className="flex flex-col gap-y-10 md:flex-row mt-6 justify-center md:justify-around rounded-xl items-center md:h-[40vh]">
                     <button onClick={e=>setType('individual')}>
-                        <div className={`flex flex-col gap-y-12 px-2 md:px-10 py-7 justify-center items-center gap-5 rounded-md border-4 border-gray-400 font-semibold relative group`}>
+                        <div className={`flex flex-col gap-y-12 px-2 md:px-10 py-7 justify-center items-center gap-5 rounded-md shadow-2xl font-semibold relative group`}>
                             <p className="uppercase text-xl">Individual</p>
                             <UserIcon className={`w-8 h-8 md:w-12 md:h-12`}/>
                             <div className="bg-primary text-white py-2 px-4 rounded-md hover:scale-105 flex items-center gap-2">
@@ -95,8 +95,8 @@ export default function Page(){
                         </div>
                     </button>
                     <Link href={'/register/profile'} onClick={e=>{setType('firm');setCategory('Firm')}}>
-                    <div className={`flex flex-col gap-y-12 px-2 md:px-10 py-7 justify-center items-center gap-5 rounded-md border-4 border-gray-400 font-semibold relative group`}>
-                            <p className="uppercase text-xl">Frms</p>
+                    <div className={`flex flex-col gap-y-12 px-2 md:px-10 py-7 justify-center items-center gap-5 rounded-md shadow-2xl font-semibold relative group`}>
+                            <p className="uppercase text-xl">Firms</p>
                             <UserGroupIcon className={`w-8 h-8 md:w-12 md:h-12`}/>
                             <div className="bg-primary text-white py-2 px-4 rounded-md hover:scale-105 flex items-center gap-2">
                                 Continue To Registration

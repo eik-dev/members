@@ -113,6 +113,7 @@ export function Organizations({data, setData}){
     let [Phone, setPhone] = useState('');
     let [start, setStartDate] = useState('');
     let [end, setEndDate] = useState('');
+    let [current, setCurrent] = useState(false);
 
     let handler = e => {
     }
@@ -214,12 +215,15 @@ export function Organizations({data, setData}){
             </div>
             <Input required={true} value={Duties} setValue={setNote} placeholder={''} type={'textarea'} name={'Duties'}/>
             <div className="flex gap-3 mt-4">
-                <input type="checkbox" name="" id="" />
+                <input className="w-5 h-5" type="checkbox" name="" id="" onClick={e=>setCurrent(!current)} />
                 <p>Is this your current role?</p>
             </div>
             <div className='my-4 flex flex-col gap-4 md:flex-row justify-between'>
                 <Input required={true} value={start} setValue={setStartDate} placeholder={''} type={'date'} name={'Start date'}/>
-                <Input required={true} value={end} setValue={setEndDate} placeholder={''} type={'date'} name={'End date'}/>
+                {
+                    !current &&
+                    <Input required={true} value={end} setValue={setEndDate} placeholder={''} type={'date'} name={'End date'}/>
+                }
             </div>
         </div>
         <div className="flex items-center group">
