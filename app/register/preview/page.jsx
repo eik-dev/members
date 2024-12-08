@@ -299,7 +299,7 @@ export default function Page() {
 
     let submitFirm = e => {
         e.preventDefault();
-        if (validate()){
+        if (true){
             popupE('ok', 'Processing', 'Please wait...')
             postData((response)=>{
                 let token = response.token;
