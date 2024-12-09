@@ -105,6 +105,10 @@ export function TWGs(){
 
 export default function Home(){
     let [overlay, setOverlay] = useState('');
+    let [paymentMeta, setPaymentMeta] = useState({
+        title: 'Annual Fees',
+        description:'Annual subscription fee'
+    })
     const { user, isLoading, isError } = useUser()
     let { data:profile, isProfileLoading, isProfileError } = useProfile()
     
@@ -121,7 +125,13 @@ export default function Home(){
             <div className="flex flex-col gap-y-3 md:flex-row px-1 items-center mb-4 justify-around bg-gradient-to-tr from-primary to-green-800 text-white py-4">
                 <p className="w-fit text-center font-semibold">Your EIK membership expires on 1st January 2025. Subscribe now for 2025/2026 Membership</p>
                 <Countdown target="January 1, 2025"/>
-                <button className="bg-secondary py-2 px-5 rounded-lg font-semibold">Subscribe</button>
+                <button onClick={e=>{
+                    setPaymentMeta({
+                        title: 'Annual Fees',
+                        description:'Annual subscription fee'
+                    })
+                    setOverlay('Pay')
+                }} className="bg-secondary py-2 px-5 rounded-lg font-semibold">Subscribe</button>
             </div>
             {
                 !user?.active &&
@@ -234,7 +244,7 @@ export default function Home(){
                     <h6 className="font-semibold text-lg">Make Payment</h6>
                     <button onClick={e=>setOverlay('')}><XMarkIcon className="w-8 h-8"/></button>
                 </div>
-                <Pay title={'Annual Fees'} description={'Annual subscription fee'} amount={getAmount(profile?.profile?.category)} email={profile?.profile?.email} phone={profile?.profile?.phone} name={profile?.profile?.name} />
+                <Pay title={paymentMeta.title} description={paymentMeta.description} amount={getAmount(profile?.profile?.category)} email={profile?.profile?.email} phone={profile?.profile?.phone} name={profile?.profile?.name} />
             </div>
             }
         </Overlay>

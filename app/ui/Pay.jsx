@@ -62,7 +62,7 @@ export default function Pay({title, description, amount, email, phone, name}){
         setInputEmail(email);
     },[phone,email])
 
-    let stk = (e,phone,email)=>{
+    let stk = (e)=>{
         e.preventDefault();
         popupE('ok', 'Processing', 'Please wait...')
         postData((response)=>{
