@@ -9,7 +9,7 @@ import useProfile from "@/app/lib/hooks/useProfile"
 import Overlay from "@/app/ui/overlay"
 import Pay from "@/app/ui/Pay"
 import { XMarkIcon, PlusIcon, MinusIcon } from "@heroicons/react/24/outline";
-import { popupE } from "@/app/lib/trigger"
+import Countdown from "@/app/ui/Countdown";
 import dynamic from 'next/dynamic'
 const DotLottieReact = dynamic(() =>import('@lottiefiles/dotlottie-react').then((mod) => mod.DotLottieReact),{ssr: false,})
 
@@ -105,6 +105,10 @@ export function TWGs(){
 
 export default function Home(){
     let [overlay, setOverlay] = useState('');
+    let [paymentMeta, setPaymentMeta] = useState({
+        title: 'Annual Fees',
+        description:'Annual subscription fee'
+    })
     const { user, isLoading, isError } = useUser()
     let { data:profile, isProfileLoading, isProfileError } = useProfile()
     
@@ -117,14 +121,25 @@ export default function Home(){
 
     return(
         <Suspense fallback={<div>Loading....</div>}>
-            <div className="m-2">
-                {
-                    !user?.active &&
-                    <div className="bg-warning text-white flex flex-col md:flex-row gap-3 px-4 py-5 rounded-md mb-10 items-center">
-                        <p>Your membership with the EIK has expired. Please renew your membership to continue receiving member privileges.</p>
-                        <button onClick={e=>setOverlay('Pay')} className="bg-secondary text-white font-semibold ml-5 py-3 rounded-md px-4 hover:scale-105">Renew Membership</button>
-                    </div>
-                }
+        <div className="m-2">
+            <div className="flex flex-col gap-y-3 md:flex-row px-1 items-center mb-4 justify-around bg-gradient-to-tr from-primary to-green-800 text-white py-4">
+                <p className="w-fit text-center font-semibold">Your EIK membership expires on 1st January 2025. Subscribe now for 2025/2026 Membership</p>
+                <Countdown target="January 1, 2025"/>
+                <button onClick={e=>{
+                    setPaymentMeta({
+                        title: 'Annual Fees',
+                        description:'Annual subscription fee'
+                    })
+                    setOverlay('Pay')
+                }} className="bg-secondary py-2 px-5 rounded-lg font-semibold">Subscribe</button>
+            </div>
+            {
+                !user?.active &&
+                <div className="bg-warning text-white flex flex-col md:flex-row gap-3 px-4 py-5 rounded-md mb-10 items-center">
+                    <p>Your membership with the EIK has expired. Please renew your membership to continue receiving member privileges.</p>
+                    <button onClick={e=>setOverlay('Pay')} className="bg-secondary text-white font-semibold ml-5 py-3 rounded-md px-4 hover:scale-105">Renew Membership</button>
+                </div>
+            }
             <div className="flex flex-col md:flex-row">
                 <div>
                     <h2 className="text-3xl 2xl:text-4xl text-right md:text-left mb-6 font-bold">Hello, <span className="text-primary">{displayName}</span></h2>
@@ -229,7 +244,7 @@ export default function Home(){
                     <h6 className="font-semibold text-lg">Make Payment</h6>
                     <button onClick={e=>setOverlay('')}><XMarkIcon className="w-8 h-8"/></button>
                 </div>
-                <Pay title={'Annual Fees'} description={'Annual subscription fee'} amount={getAmount(profile?.profile?.category)} email={profile?.profile?.email} phone={profile?.profile?.phone} name={profile?.profile?.name} />
+                <Pay title={paymentMeta.title} description={paymentMeta.description} amount={getAmount(profile?.profile?.category)} email={profile?.profile?.email} phone={profile?.profile?.phone} name={profile?.profile?.name} />
             </div>
             }
         </Overlay>

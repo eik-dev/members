@@ -2,7 +2,7 @@
 import Link from "next/link";
 import useUser from "@/app/lib/hooks/useUser";
 import { usePathname } from "next/navigation";
-import {RectangleGroupIcon, UserPlusIcon, Square3Stack3DIcon, UserGroupIcon, BuildingLibraryIcon, AcademicCapIcon, ArrowLeftEndOnRectangleIcon, UserCircleIcon, HomeIcon, CurrencyDollarIcon, NewspaperIcon} from '@heroicons/react/24/outline';
+import {RectangleGroupIcon, UserPlusIcon, Square3Stack3DIcon, UserGroupIcon, BuildingLibraryIcon, AcademicCapIcon, ArrowLeftEndOnRectangleIcon, UserCircleIcon, HomeIcon, CurrencyDollarIcon, NewspaperIcon, CreditCardIcon} from '@heroicons/react/24/outline';
 import { remove } from "@/app/lib/storage";
 
 export default function SideNav({control}){
@@ -27,6 +27,12 @@ export default function SideNav({control}){
             name: "Profile",
             icon: UserCircleIcon,
             href: "/profile",
+            roles:['Firm','Individual']
+        },
+        {
+            name: "Account",
+            icon: CreditCardIcon,
+            href: "/account",
             roles:['Firm','Individual']
         },
         {
