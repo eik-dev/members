@@ -3,6 +3,7 @@ import ContextProvider from "@/app/lib/ContextProvider";
 import { Montserrat } from "next/font/google";
 import { Suspense } from "react";
 import Popup from "@/app/ui/Popup";
+import Maintenance from "./ui/Maintenance";
 
 const montserrat = Montserrat({ subsets: ["latin"] });
 
@@ -17,7 +18,9 @@ export default function RootLayout({ children }) {
       <body className={montserrat.className+' lg:text-sm 2xl:text-base'}>
         <ContextProvider>
           <Suspense>
-            {children}
+            {
+              true ? <Maintenance /> : children
+            }
             <Popup />
           </Suspense>
         </ContextProvider>
