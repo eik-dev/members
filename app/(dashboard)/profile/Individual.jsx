@@ -295,13 +295,15 @@ export default function Individual({id,role}){
                     <XMarkIcon className="w-8 h-8" onClick={e=>setOverlay('')} />
                 </div>
                 <Pay title={'Annual Fees'} description={'Annual subscription fee'} amount={getAmount(profile.profile.category)} email={profile.profile.email} phone={profile.profile.phone} name={profile.profile.name} />
-                <button className="text-primary mt-5 font-semibold text-right cursor-pointer text-lg hover:scale-105" onClick={e=>{
-                    getData((response)=>{
-                        setOverlay('')
-                    }, '/request', {id})
-                }}>
-                    Already paid? Proceed
-                </button>
+                <div className="flex justify-end">
+                    <button className="text-white bg-primary p-3 rounded-lg mt-5 font-semibold text-sm cursor-pointer hover:scale-105" onClick={e=>{
+                        getData((response)=>{
+                            setOverlay('')
+                        }, '/request', {id})
+                    }}>
+                        Already paid? Proceed
+                    </button>
+                </div>
             </div>
             }
         </Overlay>
