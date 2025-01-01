@@ -119,20 +119,12 @@ export default function Home(){
     if(name.length==1) name.push('');
     let displayName = (`${name[0]}, ${name[1].charAt(0)}!`);
 
+    const currentYear = new Date().getFullYear();
+    const previousYear = currentYear - 1;
+
     return(
         <Suspense fallback={<div>Loading....</div>}>
         <div className="m-2">
-            <div className="flex flex-col gap-y-3 md:flex-row px-1 items-center mb-4 justify-around bg-gradient-to-tr from-primary to-green-800 text-white py-4">
-                <p className="w-fit text-center font-semibold">Your EIK membership expires on 1st January 2025. Subscribe now for 2025/2026 Membership</p>
-                <Countdown target="January 1, 2025"/>
-                <button onClick={e=>{
-                    setPaymentMeta({
-                        title: 'Annual Fees',
-                        description:'Annual subscription fee'
-                    })
-                    setOverlay('Pay')
-                }} className="bg-secondary py-2 px-5 rounded-lg font-semibold">Subscribe</button>
-            </div>
             {
                 !user?.active &&
                 <div className="bg-warning text-white flex flex-col md:flex-row gap-3 px-4 py-5 rounded-md mb-10 items-center">
@@ -151,7 +143,7 @@ export default function Home(){
                             <div className="font-semibold whitespace-nowrap text-lg">Membership type:</div>
                             <div>{profile?.profile?.category}</div>
                             <div className="font-semibold whitespace-nowrap text-lg">Expiry date:</div>
-                            <div>{`31st December, ${user?.active?'2024':'2023'}`}</div>
+                            <div>{`31st December, ${user?.active?currentYear:previousYear}`}</div>
                             <div className="font-semibold whitespace-nowrap text-lg">CPD Points:</div>
                             <div>{user?.points} points.</div>
                             <div className="font-semibold whitespace-nowrap text-lg">Technical Working Groups:</div>
@@ -165,7 +157,7 @@ export default function Home(){
                             !user?.active &&
                             <div className="md:w-1/2 mt-4">
                                 <p>
-                                Your membership expired on <span className="font-semibold">31st December, 2023.</span> Please make a payment to renew your subscription and continue enjoying the benefits of being an EIK member.
+                                Your membership expired on <span className="font-semibold">31st December, {previousYear}.</span> Please make a payment to renew your subscription and continue enjoying the benefits of being an EIK member.
                                 </p>
                                 <button onClick={e=>setOverlay('Pay')} className="bg-secondary text-white font-semibold mt-5 py-3 rounded-md px-4 hover:scale-105">Make Payment</button>
                             </div>

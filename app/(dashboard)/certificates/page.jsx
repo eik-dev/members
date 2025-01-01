@@ -14,7 +14,7 @@ export default function Page(){
     let Genesis = useState(0);
     let [total, setTotal] = useState(0);
     let router = useRouter();
-    let TH = ['Full name', 'Email', 'NEMA Reg. No.', 'Certificate No.', 'Date Requested', 'Action'];
+    let TH = ['Full name', 'Email', 'Year', 'Certificate No.', 'Date Requested', 'Action'];
     let Sort = useState(TH[0]);
     let [showOverlay, setShowOverlay] = useState(false);
     let [overlay, setOverlay] = useState('');
@@ -72,7 +72,7 @@ export default function Page(){
                             <tr key={index} className="border-b border-gray-300">
                                 <td className="px-6 py-4 whitespace-nowrap">{data['user'].name}</td>
                                 <td className="px-6 py-4 whitespace-nowrap">{data['user'].email}</td>
-                                <td className="px-6 py-4 whitespace-nowrap">{data['user'].nema}</td>
+                                <td className="px-6 py-4 whitespace-nowrap">{data['year']}</td>
                                 <td className="px-6 py-4 whitespace-nowrap">{data['number']}</td>
                                 <td className="px-6 py-4 whitespace-nowrap">{data['created_at']}</td>
                                 <td className="px-6 py-4 whitespace-nowrap">
