@@ -14,6 +14,7 @@ import useProfile from "@/app/lib/hooks/useProfile"
 import { getData, getFile } from "@/app/lib/data"
 import { popupE } from "@/app/lib/trigger"
 import useUser from "@/app/lib/hooks/useUser";
+import History from "@/app/ui/History"
 
 let getAmount = (role) => {
     switch (role) {
@@ -277,13 +278,7 @@ export default function Individual({id,role}){
                 id &&
                 <section>
                     <SectionHead id={id} section={'Payment History'}/>
-                    {
-                        profile.payments != undefined &&
-                        profile.payments.map((payment, index) => (
-                            <div key={index}>
-                            </div>
-                        ))
-                    }
+                    <History id={id} />
                 </section>
             }
         </div>
