@@ -80,13 +80,15 @@ function SectionHead({section, id}){
     )
 }
 
+const currentYear = new Date().getFullYear();
+
 export default function Individual({id,role}){
     let router = useRouter();
     let [overlay, setOverlay] = useState('');
 
     let print = e => {
         e.preventDefault();
-        if(profile['certificate']){
+        if(profile['certificate'] && profile['certificate']?.year==currentYear){
             if(profile['certificate'].verified){
                 router.push(`/download/certificate?id=${profile['certificate'].number}`)
             } else{
@@ -108,7 +110,7 @@ export default function Individual({id,role}){
             <h1 className="my-2 ml-2 md:ml-0 text-primary font-bold text-4xl">Profile</h1>
             <button className={`flex items-center h-fit bg-secondary w-fit text-white font-semibold px-4 py-2 rounded-md justify-between text-sm`} onClick={e=>print(e)}>
                 <PrinterIcon className="h-6 w-6 mr-2" />
-                {profile['certificate']?'Print Certificate':'Print Certificate Request'}
+                {(profile['certificate'] && profile['certificate']?.year==currentYear)?'Print Certificate':'Print Certificate Request'}
             </button>
         </header>
         <div className="mx-2 lg:text-sm 2xl:text-base">
