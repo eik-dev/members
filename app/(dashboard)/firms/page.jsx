@@ -8,7 +8,6 @@ import Overlay from "@/app/ui/overlay";
 import { EllipsisVerticalIcon, PencilSquareIcon, TrashIcon, CheckIcon, XMarkIcon, DocumentIcon } from "@heroicons/react/24/outline";
 import { getData } from "@/app/lib/data";
 import { popupE } from "@/app/lib/trigger";
-import { userInfo } from "os";
 
 export default function Page(){
     let Range = useState(20);
