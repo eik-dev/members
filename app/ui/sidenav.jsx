@@ -1,12 +1,13 @@
 'use client'
 import Link from "next/link";
 import useUser from "@/app/lib/hooks/useUser";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import {RectangleGroupIcon, UserPlusIcon, Square3Stack3DIcon, UserGroupIcon, BuildingLibraryIcon, AcademicCapIcon, ArrowLeftEndOnRectangleIcon, UserCircleIcon, HomeIcon, CurrencyDollarIcon, NewspaperIcon, CreditCardIcon} from '@heroicons/react/24/outline';
 import { remove } from "@/app/lib/storage";
 
 export default function SideNav({control}){
     let pathname = usePathname();
+    const router = useRouter();
     const { user, isLoading, isError } = useUser()
 
     let logout = e => {

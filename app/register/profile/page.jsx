@@ -81,7 +81,6 @@ export function Firm(){
 
 export default function ProfilePage(){
     let {Type} = useContext(SignupContext);
-    console.log(Type[0])
 
     return(
         <div className='min-h-[60vh] p-10'>
