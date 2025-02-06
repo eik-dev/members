@@ -27,7 +27,7 @@ export default function Page(){
 
     useEffect(()=>{
         getData((response)=>{
-            setData(response.firms)
+            setData(response.firms?response.firms:response)
             setTotal(response.count)
         }, '/admin/firms', {search:Search[0], limit:Range[0], Genesis:Genesis[0], count:true})
     },[])
@@ -48,6 +48,8 @@ export default function Page(){
         getData((_)=>{}, '/user/verify', {verify:action, user:id})
         getData(setData, '/admin/firms', {search:Search[0], limit:Range[0], Genesis:Genesis[0]})
     }
+
+    console.log(data)
 
     return(
         <div onClick={e=>{optionsAt>=0?setOptionsAt(-1):null}}>
@@ -74,8 +76,8 @@ export default function Page(){
                                 <td className="px-6 py-4 whitespace-nowrap">{data['email']}</td>
                                 <td className="px-6 py-4 whitespace-nowrap">{data['nema']}</td>
                                 <td className="px-6 py-4 whitespace-nowrap">{data['number']}</td>
-                                <td className="px-6 py-4 whitespace-nowrap">{data['firm'].kra}</td>
-                                {/* <td className="px-6 py-4 whitespace-nowrap">{'KRA_PIN'}</td> */}
+                                {/* <td className="px-6 py-4 whitespace-nowrap">{data['firm'].kra}</td> */}
+                                <td className="px-6 py-4 whitespace-nowrap">{'KRA_PIN'}</td>
                                 <td className="px-6 py-4 whitespace-nowrap">{data['created_at']}</td>
                                 <td className="px-6 py-4 whitespace-nowrap">
                                     <button className={`border-2 ${data['email_verified_at']==null?'border-primary text-primary':'border-gray-900/50 text-gray-900'} mr-4`} onClick={e=>action(e, data['id'], 'true')}>
