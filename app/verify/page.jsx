@@ -1,17 +1,16 @@
 'use client'
 import { Scanner } from '@yudiel/react-qr-scanner';
-import { useEffect, useState, Suspense } from "react";
+import { Suspense } from "react";
 import { useSearchParams } from "next/navigation";
-import { getData } from "@/app/lib/data";
+import useSWR from 'swr';
+import { fetcher } from '@/app/lib/data';
+import Spinner from '@/app/ui/Spinner';
 
 export default function Page(){
-    let params = useSearchParams();
-    let id = params.get('id');
-    let [data, setData] = useState();
-
-    useEffect(()=>{
-        if (id != null)  getData(setData, '/certificate/verify', {id});
-    },[])
+    const params = useSearchParams();
+    const id = params.get('id');
+    const training = params.get('training');
+    const { data, error, isLoading } = useSWR(['/certificate/verify',{id,training}], fetcher)
 
     let verify = result=>{
         if (result.includes('https://portal.eik.co.ke/verify?id='))
@@ -19,6 +18,9 @@ export default function Page(){
         else
             alert('Invalid QR code')
     }
+
+    if (isLoading) return <Spinner />
+    if (error) return <p>Server Error</p>
 
     return(
         <Suspense>
@@ -44,12 +46,26 @@ export default function Page(){
                 />
                 </>
                 :
-                data &&
+                (data && data?.user) ?
                 <div className="mx-4 md:mx-auto md:w-2/3">
                     <span className="bg-primary text-white px-4 py-2 block my-4 text-center text-xl font-semibold lg:w-1/2">Certificate Valid</span>
-                    <div className='my-2'>Issued to: {data['user'].name}</div>
-                    <div className='my-2'>Member Number: {data['number']}</div>
-                    <div className='my-2'>Date issued: {data['created_at']}</div>
+                    {
+                        training?
+                        <>
+                        <div className='my-2'>Issued to: {data['user']?.name}</div>
+                        <div className='my-2'>For attending: {data['training']?.Name}</div>
+                        </>
+                        :
+                        <>
+                        <div className='my-2'>Issued to: {data['user'].name}</div>
+                        <div className='my-2'>Member Number: {data['number']}</div>
+                        <div className='my-2'>Date issued: {data['created_at']}</div>
+                        </>
+                    }
+                </div>
+                :
+                <div>
+                    <p className='p-3'>Invalid Certificate</p>
                 </div>
             }
         </Suspense>

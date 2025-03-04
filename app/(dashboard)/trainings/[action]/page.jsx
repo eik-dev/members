@@ -1,6 +1,8 @@
 'use client'
 import { useContext } from "react"
 import { Training } from "./TrainingProvider"
+import Editor from "@/app/ui/WYSIWYG/Editor";
+import Edit from "../users/Edit";
 
 export default function Page(){
     let {Title,TWG, Description} = useContext(Training);
@@ -31,7 +33,7 @@ export default function Page(){
             </div>
             <div className="mt-6">
                 <label htmlFor="description">Class Description</label>
-                <textarea className="block p-2 bg-transparent border-2 w-4/5 h-56 rounded-lg" placeholder="Training description" name="description" id="" value={description} onChange={e=>setDescription(e.target.value)}></textarea>
+                <Editor className={'min-h-72'} content={description} setContent={setDescription} placeholder={'Training Info'}/>
             </div>
             
             <h5 className="text-xl mt-8 font-semibold mb-4">Pricing Information</h5>
