@@ -2,7 +2,7 @@
 import Link from "next/link";
 import useUser from "@/app/lib/hooks/useUser";
 import { usePathname, useRouter } from "next/navigation";
-import {RectangleGroupIcon, UserPlusIcon, Square3Stack3DIcon, UserGroupIcon, BuildingLibraryIcon, AcademicCapIcon, ArrowLeftEndOnRectangleIcon, UserCircleIcon, HomeIcon, CurrencyDollarIcon, NewspaperIcon, CreditCardIcon} from '@heroicons/react/24/outline';
+import {RectangleGroupIcon, GlobeAltIcon, UserPlusIcon, Square3Stack3DIcon, UserGroupIcon, BuildingLibraryIcon, AcademicCapIcon, ArrowLeftEndOnRectangleIcon, UserCircleIcon, HomeIcon, CurrencyDollarIcon, NewspaperIcon, CreditCardIcon} from '@heroicons/react/24/outline';
 import { remove } from "@/app/lib/storage";
 
 export default function SideNav({control}){
@@ -82,6 +82,12 @@ export default function SideNav({control}){
             name: "Trainings",
             icon: NewspaperIcon,
             href: "/trainings",
+            roles:['Admin']
+        },
+        {
+            name: "Conferences",
+            icon: GlobeAltIcon,
+            href: "/conference",
             roles:['Admin']
         },
     ]

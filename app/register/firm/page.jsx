@@ -186,7 +186,7 @@ export default function Page() {
                 <div></div>
                 <button className="bg-primary px-4 md:px-6 py-2 text-white font-semibold my-8 rounded-md hover:scale-105" onClick={e=>submit(e)}>Sign Up</button>
             </div>
-            <Overlay className={`${overlay!=''?'block':'hidden'}`} >
+            <Overlay control={setOverlay} className={`${overlay!=''?'flex items-center justify-center':'hidden'}`} >
                 {overlay === 'payment' && <PaymentInfo control={setOverlay} amount={amount}/>}
             </Overlay>
         </>

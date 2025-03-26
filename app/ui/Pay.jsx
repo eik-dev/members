@@ -116,7 +116,7 @@ export default function Pay({title, description, amount, email, phone, name}){
                     <FlutterWave title={title} description={description} amount={amount} email={email} phone={phone} name={name} />
                 }
             </div>
-            <Overlay className={`${overlay!=''?'block':'hidden'}`} >
+            <Overlay control={setOverlay} className={`${overlay!=''?'flex items-center justify-center':'hidden'}`} >
                 {overlay === 'payment' && <PaymentInfo control={setOverlay} amount={amount} trigger={stk}/>}
                 {overlay === 'processing' && <Processing control={setOverlay} callback={callback} phone={phone} email={email} amount={amount} trigger={stk}/>}
             </Overlay>

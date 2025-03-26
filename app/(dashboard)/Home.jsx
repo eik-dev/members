@@ -228,7 +228,7 @@ export default function Home(){
             </div>
             <h3 className="text-2xl 2xl:text-3xl my-10 font-bold text-center">Frequently Asked <span className="text-primary">Questions (FAQs) </span></h3>
         </div>
-        <Overlay className={`${overlay!=''?'block':'hidden'}`} >
+        <Overlay control={setOverlay} className={`${overlay!=''?'flex items-center justify-center':'hidden'}`} >
             {
             overlay=='Pay' &&
             <div className="bg-white px-8 py-6 rounded-md md:w-1/3">

@@ -106,7 +106,7 @@ export default function Page(){
             </tbody>
         </table>
         </div>
-        <Overlay className={`${showOverlay?'block':'hidden'}`} >
+        <Overlay control={setOverlay} className={`${showOverlay?'flex items-center justify-center':'hidden'}`} >
             {overlay === 'edit' && <Edit control={setOverlay} id={userID} />}
             {overlay === 'delete' && <Delete control={setOverlay} id={userID} />}
             {overlay === 'new' && <New control={setOverlay} id={userID} />}

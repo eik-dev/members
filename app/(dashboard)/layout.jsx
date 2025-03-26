@@ -68,7 +68,7 @@ export default async function Layout({children}){
 
                 {children}
 
-                <Overlay className={`${showOverlay?'block':'hidden'}`} >
+                <Overlay control={setOverlay} className={`${showOverlay?'flex items-center justify-center':'hidden'}`} >
                     {overlay === 'password' && <ChangePassword control={setOverlay} />}
                 </Overlay>
 
