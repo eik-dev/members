@@ -69,7 +69,7 @@ function SectionHead({section, id}){
                 </div>
             }
         </div>
-        <Overlay className={`${showOverlay?'block':'hidden'}`} >
+        <Overlay control={setOverlay} className={`${showOverlay?'flex items-center justify-center':'hidden'}`} >
             {overlay=='Basic Information'?<MemberDetails id={id} control={setOverlay} />:null}
             {overlay=='Introductory Statement'?<Introductory id={id} control={setOverlay} />:null}
             {overlay=='Professional Qualification'?<Qualifications id={id} control={setOverlay} />:null}
@@ -284,7 +284,7 @@ export default function Individual({id,role}){
                 </section>
             }
         </div>
-        <Overlay className={`${overlay!=''?'block':'hidden'}`} >
+        <Overlay control={setOverlay} className={`${overlay!=''?'flex items-center justify-center':'hidden'}`} >
             {
             overlay=='Pay' &&
             <div className="bg-white px-8 py-6 rounded-md">

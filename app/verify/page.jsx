@@ -10,10 +10,11 @@ export default function Page(){
     const params = useSearchParams();
     const id = params.get('id');
     const training = params.get('training');
-    const { data, error, isLoading } = useSWR(['/certificate/verify',{id,training}], fetcher)
+    const conference = params.get('conference');
+    const { data, error, isLoading } = useSWR(['/certificate/verify',{id,training,conference}], fetcher)
 
     let verify = result=>{
-        if (result.includes('https://portal.eik.co.ke/verify?id='))
+        if (result.includes('https://portal.eik.co.ke/verify?'))
             window.location.href = result
         else
             alert('Invalid QR code')
@@ -59,6 +60,10 @@ export default function Page(){
                         <>
                         <div className='my-2'>Issued to: {data['user'].name}</div>
                         <div className='my-2'>Member Number: {data['number']}</div>
+                        {
+                            data?.cert &&
+                            <div className='my-2'>Certificate Number: {data?.cert?.Number}</div>
+                        }
                         <div className='my-2'>Date issued: {data['created_at']}</div>
                         </>
                     }

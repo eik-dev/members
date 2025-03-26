@@ -129,7 +129,7 @@ export default function Dashboard(){
                 <Bur/>
                 <Py/>
             </div>
-            <Overlay control={setPage} id={'alpha-overlay'} className={`${page==''?'hidden':'block'}`}>
+            <Overlay control={setPage} id={'alpha-overlay'} className={`${page==''?'hidden':'flex items-center justify-center'}`}>
                 {page=='/custom' && <CalenderRange DateRef={timeRef} control={setPage}/>}
             </Overlay>
         </>
