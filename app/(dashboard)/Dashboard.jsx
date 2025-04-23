@@ -75,7 +75,7 @@ export default function Dashboard(){
                     <div className="flex justify-between mb-4">
                         <div>
                             <div className="mb-4 lg:text-xs 2xl:text-base">Total Revenue</div>
-                            <div className="text-2xl font-bold lg:text-xl 2xl:text-2xl">KES {data.revenue.quantity}</div>
+                            <div className="text-2xl font-bold lg:text-xl 2xl:text-2xl">KES {parseInt(data.revenue.quantity)?.toLocaleString()}</div>
                         </div>
                         <div className="flex bg-primary bg-opacity-25 px-4 mb-4 items-center rounded-lg">
                             <img src="/icons/bag.svg" className="w-8 h-8 block" alt="" />

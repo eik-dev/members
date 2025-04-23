@@ -17,7 +17,7 @@ export default function Status(){
                     'This training is currently inactive and not available for sale.'
                 }
             </p>
-            <p>Adverts</p>
+            {/* <p>Adverts</p>
             <input type="checkbox" name="" id="" />
 
             <button>Save Draft</button>
@@ -28,7 +28,7 @@ export default function Status(){
 
             <section>
                 <h5 className="text-lg font-semibold mt-8 mb-4">Drafts</h5>
-            </section>
+            </section> */}
         </div>
     )
 }
