@@ -4,7 +4,6 @@ import { useContext, useState } from "react"
 import { useRouter } from "next/navigation";
 import { Training } from "./TrainingProvider"
 import Editor from "@/app/ui/WYSIWYG/Editor";
-import Edit from "../users/Edit";
 import { postData } from "@/app/lib/data";
 
 export default function Page(){
@@ -13,9 +12,9 @@ export default function Page(){
     let [title, setTitle] = Title;
     let [description, setDescription] = Description;
     let [twg, setTWG] = TWG;
-    const [membersPrice, setMembersPrice] = useState(null);
-    const [nonMembersPrice, setNonMembersPrice] = useState(null);
-    const [studentPrice, setStudentPrice] = useState(null);
+    const [start, setStart] = useState(new Date());
+    const [end, setEnd] = useState(new Date());
+
     // let []
     const twgs = ['Environmental Educators','Watershed Catchment Management (Blue economy)','Sustainable Waste Management','Climate Science','Biodiversity / Natural Sciences','Built Environment & Construction','Clean Energy and Renewables','Environmental Policy & Governance','Environmental Advocacty'];
 
@@ -24,16 +23,31 @@ export default function Page(){
         postData(
             (response)=>{
                 if(response.success){
-                    router.push('/trainings/create/media');
+                    postData(
+                        (response)=>{
+                            if(response.success){
+                                router.push('/trainings/create/Pricing');
+                            }
+                        },
+                        {
+                            reference_id: response.data.id,
+                            title: title,
+                            description: description,
+                            category: JSON.stringify(twg),
+                            start: start,
+                            end: end
+                        },
+                        '/training/create',
+                        null,
+                        process.env.NEXT_PUBLIC_TRAININGS_URL
+                    )
                 }
             },
             {
                 title: title,
                 description: description,
-                twg: twg,
-                membersPrice: membersPrice,
-                nonMembersPrice: nonMembersPrice,
-                studentPrice: studentPrice
+                start: start,
+                end: end
             },
             '/training/create'
         )
@@ -56,6 +70,31 @@ export default function Page(){
                             value={title} 
                             onChange={e=>setTitle(e.target.value)} 
                         />
+                    </div>
+
+                    <div>
+                        <div className="flex gap-10">
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="start">
+                                    Start Date
+                                </label>
+                                <input 
+                                    type="date" 
+                                    value={start} 
+                                    onChange={e=>setStart(e.target.value)} 
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="end">
+                                    End Date
+                                </label>
+                                <input 
+                                    type="date" 
+                                    value={end} 
+                                    onChange={e=>setEnd(e.target.value)} 
+                                />
+                            </div>
+                        </div>
                     </div>
 
                     <div>
@@ -98,59 +137,6 @@ export default function Page(){
                             setContent={setDescription} 
                             placeholder="Training Info"
                         />
-                    </div>
-                </div>
-            </section>
-
-            <section className="bg-white rounded-lg shadow-sm p-6">
-                <h5 className="text-2xl font-semibold mb-6 text-gray-800">Pricing Information</h5>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
-                            Members Price
-                        </label>
-                        <div className="relative">
-                            <span className="absolute left-3 top-2">Ksh.</span>
-                            <input 
-                                type="number" 
-                                className="w-full pl-16 pr-4 py-2 border-2 border-gray-200 rounded-md focus:outline-none focus:border-blue-500" 
-                                placeholder="0.00"
-                                value={membersPrice}
-                                onChange={e=>setMembersPrice(e.target.value)}
-                            />
-                        </div>
-                    </div>
-
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
-                            Non-Members Price
-                        </label>
-                        <div className="relative">
-                            <span className="absolute left-3 top-2">Ksh.</span>
-                            <input 
-                                type="number" 
-                                className="w-full pl-16 pr-4 py-2 border-2 border-gray-200 rounded-md focus:outline-none focus:border-blue-500" 
-                                placeholder="0.00"
-                                value={nonMembersPrice}
-                                onChange={e=>setNonMembersPrice(e.target.value)}
-                            />
-                        </div>
-                    </div>
-
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
-                            Student Price
-                        </label>
-                        <div className="relative">
-                            <span className="absolute left-3 top-2">Ksh.</span>
-                            <input 
-                                type="number" 
-                                className="w-full pl-16 pr-4 py-2 border-2 border-gray-200 rounded-md focus:outline-none focus:border-blue-500" 
-                                placeholder="0.00"
-                                value={studentPrice}
-                                onChange={e=>setStudentPrice(e.target.value)}
-                            />
-                        </div>
                     </div>
                 </div>
             </section>

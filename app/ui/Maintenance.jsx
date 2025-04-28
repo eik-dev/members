@@ -64,7 +64,7 @@ export default function Maintenance() {
           autoplay
         />
       </div>
-      <Countdown target="January 2, 2025"/>
+      <Countdown target="April 29, 2025"/>
       <button className='bg-primary-base text-white mt-9 py-3 rounded-full w-44 hover:scale-105 hover:bg-secondary-base hover:font-bold'>Join Waitlist</button>
     </main>
   );

@@ -6,7 +6,7 @@ export default function Navigation(){
     let path = usePathname().replaceAll('%20',' ');
     let pathArray = path.split('/')
     let sub = pathArray[pathArray.length-1];
-    let pages = ['Basic Information','Media','Sessions','Certificate','Publish']
+    let pages = ['Basic Information', 'Pricing','Media','Sessions','Certificate','Publish']
 
     const getPageState = (index, currentPage) => {
         // Get index of current page

@@ -2,7 +2,8 @@
 
 import { useState } from 'react'
 import Editor from "@/app/ui/WYSIWYG/Editor"
-import { postData, postFile } from "@/app/lib/data"
+import useSWR from 'swr'
+import { postData, postFile, fetcher } from "@/app/lib/data"
 import File from "@/app/ui/File"
 
 export default function Page() {
@@ -12,6 +13,10 @@ export default function Page() {
     const [youtubeUrl, setYoutubeUrl] = useState('')
     const [description, setDescription] = useState('')
     const [files, setFiles] = useState([])
+    const [selectedTrainers, setSelectedTrainers] = useState([])
+    const [trainer, setTrainer] = useState(null)
+
+    const { data: trainers, isLoading, error } = useSWR(['/trainers', {}, null, process.env.NEXT_PUBLIC_TRAININGS_URL], fetcher)
 
     const handleAddSession = (e) => {
         e.preventDefault()
@@ -93,6 +98,47 @@ export default function Page() {
                             className="w-full border-2 border-gray-200 px-4 py-2 rounded-md focus:outline-none focus:border-blue-500"
                             required
                         />
+                    </div>
+
+                    <div>
+                        {
+                            selectedTrainers.map((trainer, index) => (
+                                <button 
+                                    key={index} 
+                                    className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 flex"
+                                    onClick={() => setSelectedTrainers(selectedTrainers.filter((_, i) => i !== index))}
+                                >
+                                    <span>{trainer.name}</span>
+                                    <span className='icon-[mdi--close] w-4 h-4'/>
+                                </button>
+                            ))
+                        }
+                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                            Trainers
+                        </label>
+                        <select
+                            onChange={(e) => setSelectedTrainers([...selectedTrainers, trainers.find(trainer => trainer.name === e.target.value)])}
+                            className="w-full border-2 border-gray-200 px-4 py-2 rounded-md focus:outline-none focus:border-blue-500"
+                        >
+                            <option value={null}>Select Trainer</option>
+                            {trainers?.map((trainer) => (
+                                <option key={trainer.id} value={trainer.name}>{trainer.name}</option>
+                            ))}
+                        </select>
+                        <div className="flex items-center gap-10 w-3/4">
+                            <input 
+                                type="text" 
+                                value={trainer} 
+                                onChange={(e) => setTrainer(e.target.value)}
+                                className="w-full border-2 border-gray-200 px-4 py-2 rounded-md focus:outline-none focus:border-blue-500 mt-3"
+                            />
+                            <button 
+                                className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700"
+                                onClick={() => setSelectedTrainers([...selectedTrainers, {name: trainer}])}
+                            >
+                                Add
+                            </button>
+                        </div>
                     </div>
 
                     <div>

@@ -35,11 +35,9 @@ export default function Page(){
                         media.map((file, index) => {
                             return (
                                 <div key={index} className="relative w-1/4">
-                                    <Image 
+                                    <img 
                                         src={URL.createObjectURL(file)} 
                                         alt="" 
-                                        width={300}
-                                        height={160}
                                         className="object-cover w-full h-40 rounded-lg"
                                     />
                                     <button className="absolute top-0 right-0 bg-white p-1 w-6 h-6 rounded-full text-red-500" onClick={() => setMedia(media.filter((_, i) => i !== index))}>X</button>
