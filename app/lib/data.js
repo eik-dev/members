@@ -73,8 +73,8 @@ export function postFile(setData,file,data,endpoint,token = load('token')) {
         });
 }
 
-export function postData(setData,data,endpoint,token = load('token')) {
-    fetch(`${process.env.NEXT_PUBLIC_API_URL}${endpoint}`, {
+export function postData(setData,data,endpoint,token = load('token'), url = process.env.NEXT_PUBLIC_API_URL) {
+    fetch(`${url}${endpoint}`, {
         method: "POST",
         headers:{
             'Authorization': `Bearer ${token}`,
@@ -95,11 +95,11 @@ export function postData(setData,data,endpoint,token = load('token')) {
     });
 }
 
-export function fetcher([endpoint,parameters, token=load('token')]) {
+export function fetcher([endpoint,parameters, token=load('token'), url=process.env.NEXT_PUBLIC_API_URL]) {
     // if (load('token') == null) throw new Error('Session Expired')
     let params = new URLSearchParams(parameters).toString();
     console.log(`Payload to ${endpoint} :: `, params)
-    return fetch(`${process.env.NEXT_PUBLIC_API_URL}${endpoint}?${params}`, {
+    return fetch(`${url}${endpoint}?${params}`, {
     headers: {
         'Authorization': `Bearer ${token}`,
     }

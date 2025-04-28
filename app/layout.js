@@ -19,7 +19,7 @@ export default function RootLayout({ children }) {
         <ContextProvider>
           <Suspense>
             {
-              false ? <Maintenance /> : children
+              true ? <Maintenance /> : children
             }
             <Popup />
           </Suspense>

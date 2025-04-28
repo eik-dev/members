@@ -6,18 +6,36 @@ export default function Navigation(){
     let path = usePathname().replaceAll('%20',' ');
     let pathArray = path.split('/')
     let sub = pathArray[pathArray.length-1];
-    let pages = ['Basic Information','Media','Sessions','Certificate','Publish']
+    let pages = ['Basic Information', 'Pricing','Media','Sessions','Certificate','Publish']
+
+    const getPageState = (index, currentPage) => {
+        // Get index of current page
+        const currentIndex = pages.findIndex(p => path.includes(p)) || 0;
+        
+        if (index < currentIndex) {
+            return "text-primary"; // Completed pages
+        } else if (index === currentIndex) {
+            return "text-primary font-semibold"; // Current page
+        }
+        return "text-gray-400"; // Upcoming pages
+    }
 
     return (
         <nav>
             {
                 pages.map((page,index)=>{
                     return(
-                        <Link key={index} href={`/trainings/create/${index==0?'':page}`} className={`flex items-center my-5 ${path.includes('Basic')?'':''}`}>
+                        <Link key={index} href={`/trainings/create/${index==0?'':page}`} className={`flex items-center my-5 ${getPageState(index, page)}`}>
                             <div className="mr-1">
-                                {sub=='calendar' && <div className="text-primary border-l-2 border-primary flex items-center"><span className="w-6 h-6 icon-[fluent--radio-button-16-filled]"/></div>}
-                                {(sub!='Publish' && sub!='media') && <span className="w-6 h-6 icon-[fluent--radio-button-16-regular]"/>}
-                                {sub=='Publish' && <span className="w-6 h-6 icon-[teenyicons--tick-circle-outline] text-primary"/>}
+                                {index < pages.findIndex(p => path.includes(p)) && 
+                                    <span className="w-6 h-6 icon-[teenyicons--tick-circle-outline] text-primary"/>
+                                }
+                                {index === pages.findIndex(p => path.includes(p)) && 
+                                    <span className="w-6 h-6 icon-[fluent--radio-button-16-filled] text-primary"/>
+                                }
+                                {index > pages.findIndex(p => path.includes(p)) && 
+                                    <span className="w-6 h-6 icon-[fluent--radio-button-16-regular] text-gray-400"/>
+                                }
                             </div>
                             {page}
                         </Link>
