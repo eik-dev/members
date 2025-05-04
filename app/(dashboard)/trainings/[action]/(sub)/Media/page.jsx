@@ -1,13 +1,20 @@
 'use client'
 
 import { useState, useEffect } from "react"
-import { postFile } from "@/app/lib/data";
+import { useRouter, useSearchParams, useParams } from "next/navigation";
+import { postFileFetcher } from "@/app/lib/data";
 import File from "@/app/ui/File";
-import Image from "next/image"
+import { popupE } from "@/app/lib/trigger";
+
+let checks = [];
 
 export default function Page(){
+    const router = useRouter();
+    const {action} = useParams();
     let [media, setMedia] = useState([]);
     let [files, setFiles] = useState([]);
+    const searchParams = useSearchParams();
+    const id = searchParams.get('id');
 
     useEffect(()=>{
         setMedia(files);
@@ -15,15 +22,38 @@ export default function Page(){
 
     const handleSubmit = (e)=>{
         e.preventDefault();
-        postFile(
-            (response)=>{
-                if(response.success){
-                    router.push('/trainings/create/media');
-                }
-            },
-            files,
-            '/training/media'
-        )
+        checks = files.map(() => false);
+        try {
+            files.forEach(async (file) => {
+                await postFileFetcher(
+                    [
+                        file,
+                        {
+                            training_id: id,
+                            type: 'media'
+                        },
+                        '/training/media',
+                        null,
+                        process.env.NEXT_PUBLIC_TRAININGS_URL
+                    ]
+                ).then((res) => {
+                    if(res.success){
+                        checks.pop();
+                        console.log(checks);
+                        if(checks.length === 0){
+                            router.push(`/trainings/${action}/Sessions?id=${id}`);
+                        }
+                    }
+                })
+                .catch(err => {
+                    console.log(err);
+                    popupE('error', 'Error', 'File upload Error In response')
+                });
+            })
+        } catch (error) {
+            console.log(error);
+            popupE('error', 'Error', 'File upload Error In catch')
+        }
     }
     return(
         <div>
@@ -49,6 +79,14 @@ export default function Page(){
                 <div className="w-1/2 mx-auto mt-7">
                     <File files={files} setFiles={setFiles} type={'image'}/>
                 </div>
+            </section>
+            <section className="flex justify-end my-5">
+                <button 
+                className="bg-secondary text-white px-4 py-2 rounded-md"
+                onClick={handleSubmit}
+                >
+                    Save Draft
+                </button>
             </section>
         </div>
     )

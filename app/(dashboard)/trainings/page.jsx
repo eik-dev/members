@@ -1,14 +1,18 @@
 'use client'
+
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import Link from 'next/link';
 import useSWR from 'swr';
-import { fetcher } from '@/app/lib/data';
+import { fetcher, postData, getData } from '@/app/lib/data';
 import Spinner from '@/app/ui/Spinner';
 import { MagnifyingGlassIcon, PencilSquareIcon, TrashIcon ,EllipsisVerticalIcon, DocumentIcon, UserIcon, PlusIcon,EyeIcon } from '@heroicons/react/24/outline';
 import Overlay from '@/app/ui/overlay';
 import Delete from './Delete';
 
 export default function Page() {
+    const router = useRouter();
+
     let [search, setSearch] = useState('')
     let [overlay, setOverlay] = useState('');
     let [active, setActive] = useState('');
@@ -17,7 +21,32 @@ export default function Page() {
     if (isLoading) return <Spinner/>
     if (error) return <p>Error when fetching trainings</p>
     
-    console.log(trainings)
+    const handleModify = (id) => {
+        getData((response)=>{
+            if(response.success && response.data){
+                router.push(`/trainings/modify?id=${response.data.id}`)
+            }else{
+                postData(
+                    (r)=>{
+                        if(r.success){
+                            router.push(`/trainings/modify?id=${r.data.id}`);
+                        }
+                    },
+                    {
+                        reference_id: id,
+                        title: trainings.data.find(t=>t.id == id).Name,
+                        description: 'Please modify description',
+                        category: '',
+                        start: '',
+                        end: ''
+                    },
+                    '/training',
+                    null,
+                    process.env.NEXT_PUBLIC_TRAININGS_URL
+                )
+            }
+        },`/training/check`,{reference_id:id},null,process.env.NEXT_PUBLIC_TRAININGS_URL)
+    }
 
     return (
     <main className="">
@@ -46,7 +75,7 @@ export default function Page() {
                             active == training.Name &&
                             <div className="absolute bg-white border-t-2 shadow-lg right-3 top-10 px-5 p-2 rounded-b-lg">
                                 <Link className='flex items-center my-2 hover:font-semibold gap-1' href={`/trainings/users?id=${training.id}`}><UserIcon className='w-5 h-5'/> Attendees</Link>
-                                <Link href={`/trainings/modify`} className='flex items-center my-2 hover:font-semibold gap-1'><PencilSquareIcon className='w-5 h-5'/><span>Modify</span></Link>
+                                <button onClick={()=>handleModify(training.id)} className='flex items-center my-2 hover:font-semibold gap-1'><PencilSquareIcon className='w-5 h-5'/><span>Modify</span></button>
                                 <a className='flex items-center my-2 hover:font-semibold gap-1' href={`https://elearning.eik.co.ke/course/${training.Name}`} target='blank'><EyeIcon className='w-5 h-5'/> Preview</a>
                                 <button className='flex items-center my-2 hover:font-semibold gap-1 text-warning' onClick={e=>setOverlay('delete')}><TrashIcon className='w-5 h-5'/><span>Delete</span></button>
                             </div>

@@ -1,12 +1,14 @@
 'use client'
 import { useState } from "react"
-import { useSearchParams } from "next/navigation"
+import { useSearchParams, useRouter, useParams } from "next/navigation"
 import Modify from "./Modify";
 import { PhotoIcon, QrCodeIcon, CalendarDaysIcon, UserIcon, IdentificationIcon, ChatBubbleBottomCenterTextIcon } from '@heroicons/react/24/outline';
 
 export default function Certificate(){
-    let params = useSearchParams();
-    let id = 1
+    const router = useRouter();
+    const {action: act} = useParams();
+    let searchParams = useSearchParams();
+    let id = searchParams.get('id');
     let [action, setAction] = useState('');
     let [showMenu, setShowMenu] = useState(false);
     return(
@@ -27,6 +29,14 @@ export default function Certificate(){
                 action!='' && <Modify control={setAction} action={action} />
             }
         </div>
+        <section className="flex justify-end my-5">
+            <button 
+            className="bg-secondary text-white px-4 py-2 rounded-md"
+            onClick={e=>router.push(`/trainings/${act}/Publish?id=${id}`)}
+            >
+                Publish
+            </button>
+        </section>
         </>
     )
 }

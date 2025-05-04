@@ -1,19 +1,41 @@
 'use client'
 
-import { useContext, useState } from "react"
-import { useRouter } from "next/navigation";
+import { useContext, useState, useEffect } from "react"
+import { useRouter, useSearchParams } from "next/navigation";
 import { Training } from "./TrainingProvider"
 import Editor from "@/app/ui/WYSIWYG/Editor";
-import { postData } from "@/app/lib/data";
+import { postData, getData } from "@/app/lib/data";
 
 export default function Page(){
     const router = useRouter();
+    const searchParams = useSearchParams();
+    const id = searchParams.get('id');
     let {Title,TWG, Description} = useContext(Training);
     let [title, setTitle] = Title;
     let [description, setDescription] = Description;
     let [twg, setTWG] = TWG;
     const [start, setStart] = useState(new Date());
     const [end, setEnd] = useState(new Date());
+
+    useEffect(()=>{
+        if(id){
+            getData(
+                (response)=>{
+                    if(response.success){
+                        setTitle(response.data.title);
+                        setDescription(response.data.description);
+                        setTWG(JSON.parse(response.data.category) ?? []);
+                        setStart(response.data.start_date);
+                        setEnd(response.data.end_date);
+                    }
+                },
+                `/training/${id}`,
+                {},
+                null,
+                process.env.NEXT_PUBLIC_TRAININGS_URL
+            )
+        }
+    },[])
 
     // let []
     const twgs = ['Environmental Educators','Watershed Catchment Management (Blue economy)','Sustainable Waste Management','Climate Science','Biodiversity / Natural Sciences','Built Environment & Construction','Clean Energy and Renewables','Environmental Policy & Governance','Environmental Advocacty'];
@@ -24,9 +46,9 @@ export default function Page(){
             (response)=>{
                 if(response.success){
                     postData(
-                        (response)=>{
-                            if(response.success){
-                                router.push('/trainings/create/Pricing');
+                        (r)=>{
+                            if(r.success){
+                                router.push(`/trainings/create/Pricing?id=${r.data.id}`);
                             }
                         },
                         {
@@ -37,7 +59,7 @@ export default function Page(){
                             start: start,
                             end: end
                         },
-                        '/training/create',
+                        '/training',
                         null,
                         process.env.NEXT_PUBLIC_TRAININGS_URL
                     )

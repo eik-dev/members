@@ -34,7 +34,7 @@ let getAmount = (role) => {
     }
 }
 
-export function TWG({joined, twg, key}){
+function TWG({joined, twg, key}){
     let [show, setShow] = useState(false);
 
     let join = (e, twg, action) => {
@@ -65,6 +65,55 @@ export function TWG({joined, twg, key}){
                 </button>
             </div>
         </div>
+    )
+}
+
+function Trainings(){
+    let { data, isError, isLoading } = useSWR(['/trainings',{filter:'upcoming'},null, process.env.NEXT_PUBLIC_TRAININGS_URL], fetcher,{
+        revalidateOnFocus: true,
+        revalidateOnReconnect: false,
+        revalidateOnMount: true,
+        errorRetryInterval: 300000
+    });  
+
+    let getSuffix = (day) => {
+        if (day === 1 || day === 21 || day === 31) return 'st';
+        if (day === 2 || day === 22) return 'nd';
+        if (day === 3 || day === 23) return 'rd';
+        return 'th';
+    }
+
+    if(isError || isLoading) return <Spinner/>
+    return(
+        <>
+        <div>
+            <h3 className="text-2xl 2xl:text-3xl text-right md:text-left font-bold">Upcoming <span className="text-primary">Trainings</span></h3>
+        </div>
+        {
+            data.data.length>0?
+            <div className="flex flex-col md:flex-row gap-12 bg-gradient-to-r from-white from-70% to-primary/70 to-95% py-12">
+                <div>
+                    <img className="md:w-3/4 max-h-96 rounded-lg" src={data.data[0].media[0].url} alt="" />
+                </div>
+                <div className="md:w-2/5">
+                    <h3 className="text-secondary text-xl 2xl:text-2xl font-bold">{data.data[0].title}</h3>
+                    <p className="mt-4 text-right text-lg font-semibold">
+                        {new Date(data.data[0].start_date).getDate()}<span className="align-super text-xs">{getSuffix(new Date(data.data[0].start_date).getDate())}</span> - 
+                        {new Date(data.data[0].end_date).getDate()}<span className="align-super text-xs">{getSuffix(new Date(data.data[0].end_date).getDate())}</span> {' '}
+                        {new Date(data.data[0].end_date).toLocaleString('default', { month: 'long' })} {new Date(data.data[0].end_date).getFullYear()}
+                    </p>
+                    <p className="mt-2">
+                     <div dangerouslySetInnerHTML={{ __html: data.data[0].description }} className="whitespace-pre-wrap"></div>
+                    </p>
+                    <a href={`https://elearning.eik.co.ke/course/${data.data[0].title}`} target="_blank" rel="noopener noreferrer">
+                        <button className="bg-secondary text-white py-2 px-4 font-semibold mt-6 rounded-lg hover:scale-105">Register Now</button>
+                    </a>
+                </div>
+            </div>
+            :
+            <div className="text-center text-lg">No upcoming trainings</div>
+        }
+        </>
     )
 }
 
@@ -169,25 +218,11 @@ export default function Home(){
                 </div>
                 <p className="block md:hidden">This portal is your gateway to exclusive resources, networking opportunities, and support to enhance your professional journey.</p>
             </div>
+
             <TWGs />
-            <div>
-                <h3 className="text-2xl 2xl:text-3xl text-right md:text-left font-bold">Upcoming <span className="text-primary">Trainings</span></h3>
-            </div>
-            <div className="flex flex-col md:flex-row gap-12 bg-gradient-to-r from-white from-70% to-primary/70 to-95% py-12">
-                <div>
-                    <img className="md:w-3/4" src="/Training1.jpeg" alt="" />
-                </div>
-                <div className="md:w-2/5">
-                    <h3 className="text-secondary text-xl 2xl:text-2xl font-bold">EIK Land Acquisition & Resettlement Planning</h3>
-                    <p className="mt-4 text-right text-lg font-semibold">9<span className="align-super text-xs">th</span> - 27<span className="align-super text-xs">th</span> September 2024</p>
-                    <p className="mt-2">
-                    Land acquisition and resettlement planning is crucial in infrastructure projects as demand for services rises. Resettlement Action Planning (RAP) is vital for fair compensation, livelihood restoration, and minimizing social disruption. It integrates social and environmental safeguards, emphasizing inclusivity, transparency, and protection of vulnerable groups. RAP addresses stakeholder engagement, gender considerations, and human rights, balancing development with social equity and environmental sustainability.
-                    </p>
-                    <a href="https://bit.ly/eik-course" target="_blank" rel="noopener noreferrer">
-                        <button className="bg-secondary text-white py-2 px-4 font-semibold mt-6 rounded-lg hover:scale-105">Register Now</button>
-                    </a>
-                </div>
-            </div>
+
+            <Trainings />
+
             <div className="w-4/5 2xl:w-2/3 mx-auto my-12">
                 <h3 className="text-2xl 2xl:text-3xl mb-6 font-bold text-center">Our Latest <span className="text-primary">Newsletters</span></h3>
                 <p className="text-center">
