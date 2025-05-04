@@ -24,7 +24,7 @@ export default function Page(){
                     if(response.success){
                         setTitle(response.data.title);
                         setDescription(response.data.description);
-                        setTWG(JSON.parse(response.data.category));
+                        setTWG(JSON.parse(response.data.category) ?? []);
                         setStart(response.data.start_date);
                         setEnd(response.data.end_date);
                     }

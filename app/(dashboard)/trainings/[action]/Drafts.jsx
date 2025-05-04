@@ -24,7 +24,7 @@ export default function Drafts(){
                 <p>Loading...</p>
                 :
                 data.data.map((draft)=>(
-                    <Link key={draft.id} href={`/trainings/${action}?id=${draft.id}`}>
+                    <Link className="text-secondary text-sm mb-2 block" key={draft.id} href={`/trainings/${action}?id=${draft.id}`}>
                         <p>{draft.title}</p>
                     </Link>
                 ))
