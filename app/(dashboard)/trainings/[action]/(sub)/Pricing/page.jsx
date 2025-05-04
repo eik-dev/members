@@ -1,20 +1,35 @@
 'use client'
 
 import { useState } from "react"
+import { useRouter, useSearchParams } from "next/navigation"
 import { postData } from "@/app/lib/data"
 
 export default function Page(){
-    const [membersPrice, setMembersPrice] = useState(0)
-    const [nonMembersPrice, setNonMembersPrice] = useState(0)
-    const [studentPrice, setStudentPrice] = useState(0)
+    const [membersPrice, setMembersPrice] = useState(null)
+    const [nonMembersPrice, setNonMembersPrice] = useState(null)
+    const [studentPrice, setStudentPrice] = useState(null)
+    const router = useRouter()
+    const searchParams = useSearchParams();
+    const id = searchParams.get('id');
 
     const handleSubmit = (e) => {
         e.preventDefault()
-        postData(null, {
-            membersPrice,
-            nonMembersPrice,
-            studentPrice
-        }, '/trainings/pricing')
+        postData(
+            (response)=>{
+                if(response.success){
+                    router.push(`/trainings/create/Media?id=${id}`);
+                }
+            },
+            {
+                membersPrice,
+                nonMembersPrice,
+                studentPrice,
+                training_id: id
+            },
+            '/training/pricing',
+            null,
+            process.env.NEXT_PUBLIC_TRAININGS_URL
+        )
     }
 
     return(

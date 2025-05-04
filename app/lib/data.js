@@ -1,11 +1,11 @@
 import {load} from './storage.js'
 import { popupE } from "@/app/lib/trigger"
 
-export function getData(setData,endpoint,parameters, token=load('token')) {
+export function getData(setData,endpoint,parameters, token=load('token'), url = process.env.NEXT_PUBLIC_API_URL) {
     //map parameters to get parameter format
     let params = new URLSearchParams(parameters).toString();
     console.log('Payload :: ', params)
-    fetch(`${process.env.NEXT_PUBLIC_API_URL}${endpoint}?${params}`, {
+    fetch(`${url}${endpoint}?${params}`, {
     headers: {
         'Authorization': `Bearer ${token}`,
     }
@@ -48,16 +48,17 @@ export function getFile(name,endpoint,parameters, token=load('token')) {
     });
 }
 
-export function postFile(setData,file,data,endpoint,token = load('token')) {
+export function postFile(setData,file,data,endpoint,token = load('token'), url = process.env.NEXT_PUBLIC_API_URL) {
     const formData = new FormData();
     formData.append(`file`, file);
     Object.keys(data).map((key,i)=>{
         formData.append(key, data[key]);
     })
-    fetch(`${process.env.NEXT_PUBLIC_API_URL}${endpoint}`, {
+    fetch(`${url}${endpoint}`, {
         method: "POST",
         headers:{
             'Authorization': `Bearer ${token}`,
+            'Content-Type': 'multipart/form-data'
         },
         body: formData
     })
@@ -105,4 +106,28 @@ export function fetcher([endpoint,parameters, token=load('token'), url=process.e
     }
     })
     .then(response => response.json())
+}
+
+export async function postFileFetcher([file,data,endpoint,token = load('token'), url = process.env.NEXT_PUBLIC_API_URL]) {
+    const formData = new FormData();
+    formData.append(`file`, file);
+    Object.keys(data).map((key,i)=>{
+        formData.append(key, data[key]);
+    })
+    return await fetch(`${url}${endpoint}`, {
+        method: "POST",
+        headers:{
+            'Authorization': `Bearer ${token}`,
+        },
+        body: formData
+    })
+    .then((res) => {
+        if (!res.ok) {
+            throw new Error('File upload Error')
+        }
+        return res.json();
+    })
+    .catch(err => {
+        popupE('error', 'Error', 'File upload Error')
+    });
 }

@@ -3,20 +3,29 @@
 import { useState } from 'react'
 import Editor from "@/app/ui/WYSIWYG/Editor"
 import useSWR from 'swr'
-import { postData, postFile, fetcher } from "@/app/lib/data"
+import { postData, postFileFetcher, fetcher } from "@/app/lib/data"
 import File from "@/app/ui/File"
+import { useRouter, useSearchParams } from 'next/navigation'
+import { popupE } from '@/app/ui/Popup'
+
+let checks = [];
 
 export default function Page() {
+    const router = useRouter()
+    const searchParams = useSearchParams()
+    const id = searchParams.get('id')
+
     const [sessions, setSessions] = useState([])
     const [title, setTitle] = useState('')
     const [date, setDate] = useState('')
     const [youtubeUrl, setYoutubeUrl] = useState('')
     const [description, setDescription] = useState('')
     const [files, setFiles] = useState([])
-    const [selectedTrainers, setSelectedTrainers] = useState([])
-    const [trainer, setTrainer] = useState(null)
 
-    const { data: trainers, isLoading, error } = useSWR(['/trainers', {}, null, process.env.NEXT_PUBLIC_TRAININGS_URL], fetcher)
+    const [selectedTrainer, setSelectedTrainer] = useState(null)
+    const { data: trainers, isLoading, error } = useSWR(['/trainers', {}, null, process.env.NEXT_PUBLIC_TRAININGS_URL], fetcher,{
+        revalidateOnFocus: false,
+    })
 
     const handleAddSession = (e) => {
         e.preventDefault()
@@ -25,7 +34,8 @@ export default function Page() {
             date,
             youtubeUrl,
             description,
-            resources: files
+            resources: files,
+            trainerId: selectedTrainer
         }
         setSessions([...sessions, newSession])
         
@@ -43,53 +53,92 @@ export default function Page() {
         return (match && match[2].length === 11) ? match[2] : null;
     };
 
-    const handleSave = (e)=>{
+    const handleSubmit = (e)=>{
         e.preventDefault();
+        sessions.forEach(session => {
+            checks.push(false);
+            session.resources.forEach(() => {
+                checks.push(false);
+            });
+        });
         sessions.forEach(session => {
             postData(
                 (response)=>{
                     if(response.success){
-                        postFile(
-                            (response)=>{
-                                if(response.success){
-                                    router.push('/trainings/create/sessions');
+                        console.log(checks)
+                        checks.pop();
+                        if(checks.length === 0){
+                            router.push(`/trainings/${action}/Certificate?id=${id}`);
+                        }
+                        session.resources.forEach(async (resource, index) => {
+                            await postFileFetcher(
+                                [
+                                    resource,
+                                    {
+                                        training_id: id,
+                                        module_id: response.data.id,
+                                    },
+                                    '/training/module-media',
+                                    null,
+                                    process.env.NEXT_PUBLIC_TRAININGS_URL
+                                ]
+                            ).then((res) => {
+                                if(res.success){
+                                    checks.pop();
+                                    if(checks.length === 0){
+                                        router.push(`/trainings/${action}/Certificate?id=${id}`);
+                                    }
                                 }
-                            },
-                            files,
-                            '/training/sessions'
-                        )
+                            })
+                            .catch(err => {
+                                console.log(err);
+                                popupE('error', 'Error', 'File upload Error In response')
+                            });
+                        })
                     }
                 },
-                session
+                {
+                    training_id: id,
+                    trainer_id: selectedTrainer,
+                    title: session.title,
+                    time: session.date,
+                    url: session.youtubeUrl,
+                    description: session.description,
+                    type: 'online',
+                    status: 'completed'
+                },
+                '/training/modules',
+                null,
+                process.env.NEXT_PUBLIC_TRAININGS_URL
             )
         })
     }
 
     return (
         <div className="space-y-8">
-            <h5 className="text-lg font-semibold mb-4">Sessions</h5>
+            <h5 className="text-lg font-semibold mb-4">Modules</h5>
 
             <div className="bg-white rounded-lg shadow-sm p-6">
-                <h6 className="text-lg font-medium mb-4">Add New Session</h6>
+                <h6 className="text-lg font-medium mb-4">Add New Module</h6>
                 
                 <form onSubmit={handleAddSession} className="space-y-4">
                     <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">
-                            Session Title
+                            Module Title
                         </label>
                         <input
                             type="text"
                             value={title}
                             onChange={(e) => setTitle(e.target.value)}
                             className="w-full border-2 border-gray-200 px-4 py-2 rounded-md focus:outline-none focus:border-blue-500"
-                            placeholder="Enter session title"
+                            placeholder="Enter module title"
                             required
                         />
                     </div>
 
                     <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">
-                            Date
+                            Date & Time
                         </label>
                         <input
                             type="datetime-local"
@@ -98,47 +147,21 @@ export default function Page() {
                             className="w-full border-2 border-gray-200 px-4 py-2 rounded-md focus:outline-none focus:border-blue-500"
                             required
                         />
-                    </div>
+                    </div>                    
 
                     <div>
-                        {
-                            selectedTrainers.map((trainer, index) => (
-                                <button 
-                                    key={index} 
-                                    className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 flex"
-                                    onClick={() => setSelectedTrainers(selectedTrainers.filter((_, i) => i !== index))}
-                                >
-                                    <span>{trainer.name}</span>
-                                    <span className='icon-[mdi--close] w-4 h-4'/>
-                                </button>
-                            ))
-                        }
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
-                            Trainers
+                        <label className="block text-sm font-medium text-gray-700 my-1">
+                            Trainer
                         </label>
                         <select
-                            onChange={(e) => setSelectedTrainers([...selectedTrainers, trainers.find(trainer => trainer.name === e.target.value)])}
+                            onChange={(e) => setSelectedTrainer(e.target.value)}
                             className="w-full border-2 border-gray-200 px-4 py-2 rounded-md focus:outline-none focus:border-blue-500"
                         >
                             <option value={null}>Select Trainer</option>
                             {trainers?.map((trainer) => (
-                                <option key={trainer.id} value={trainer.name}>{trainer.name}</option>
+                                <option key={trainer.id} value={trainer.id}>{trainer.name}</option>
                             ))}
                         </select>
-                        <div className="flex items-center gap-10 w-3/4">
-                            <input 
-                                type="text" 
-                                value={trainer} 
-                                onChange={(e) => setTrainer(e.target.value)}
-                                className="w-full border-2 border-gray-200 px-4 py-2 rounded-md focus:outline-none focus:border-blue-500 mt-3"
-                            />
-                            <button 
-                                className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700"
-                                onClick={() => setSelectedTrainers([...selectedTrainers, {name: trainer}])}
-                            >
-                                Add
-                            </button>
-                        </div>
                     </div>
 
                     <div>
@@ -158,7 +181,7 @@ export default function Page() {
                         <label className="block text-sm font-medium text-gray-700 mb-1">
                             Description
                         </label>
-                        <Editor content={description} setContent={setDescription} placeholder={'Enter session description'} />
+                        <Editor content={description} setContent={setDescription} placeholder={'Enter module description'} />
                     </div>
 
                     <div>
@@ -181,7 +204,10 @@ export default function Page() {
                 {sessions.map((session, index) => (
                     <div key={index} className="flex flex-col p-5 bg-gray-100 rounded-lg">
                         <div className="bg-white rounded-lg shadow-sm p-6">
-                            <h6 className="text-lg font-medium">{session.title}</h6>
+                            <div className="flex gap-3 items-end mb-3">
+                                <h6 className="text-lg font-medium">{session.title}</h6>
+                                <p className="text-black/70 text-sm">By: {trainers.find(trainer => trainer.id == session.trainerId)?.name}</p>
+                            </div>
                             <p className="text-gray-600">{new Date(session.date).toLocaleString()}</p>
                             
                             {session.youtubeUrl && (
@@ -216,17 +242,42 @@ export default function Page() {
                                     </div>
                                 </div>
                             )}
+
+                            <div className="flex justify-end mt-5 gap-2">
+                                <button
+                                    className="bg-primary/30 text-primary px-4 py-2 rounded-md"
+                                    onClick={() => {
+                                        setTitle(session.title)
+                                        setDate(session.date)
+                                        setYoutubeUrl(session.youtubeUrl)
+                                        setDescription(session.description)
+                                        setFiles(session.resources)
+                                        setSelectedTrainer(session.trainerId)
+                                        setSessions(sessions.filter((_, i) => i !== index))
+                                    }}
+                                >
+                                    Edit
+                                </button>
+                                <button 
+                                    className="bg-warning/30 text-warning px-4 py-2 rounded-md"
+                                    onClick={() => setSessions(sessions.filter((_, i) => i !== index))}
+                                >
+                                    Delete
+                                </button>
+                            </div>
                         </div>
                     </div>
                 ))}
             </div>
 
-            <button 
-                className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700"
-                onClick={handleSave}
-            >
-                Save
-            </button>
+            <section className="flex justify-end my-5">
+                <button 
+                className="bg-secondary text-white px-4 py-2 rounded-md"
+                onClick={handleSubmit}
+                >
+                    Save Draft
+                </button>
+            </section>
         </div>
     )
 }

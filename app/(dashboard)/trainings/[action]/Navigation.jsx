@@ -1,12 +1,14 @@
 'use client'
 import Link from "next/link"
-import { usePathname } from "next/navigation"
+import { usePathname, useSearchParams } from "next/navigation"
 
 export default function Navigation(){
     let path = usePathname().replaceAll('%20',' ');
     let pathArray = path.split('/')
     let sub = pathArray[pathArray.length-1];
-    let pages = ['Basic Information', 'Pricing','Media','Sessions','Certificate','Publish']
+    let pages = ['Basic Information', 'Pricing','Media', 'Trainer', 'Sessions','Certificate','Publish']
+    const searchParams = useSearchParams();
+    const id = searchParams.get('id');
 
     const getPageState = (index, currentPage) => {
         // Get index of current page
@@ -25,7 +27,7 @@ export default function Navigation(){
             {
                 pages.map((page,index)=>{
                     return(
-                        <Link key={index} href={`/trainings/create/${index==0?'':page}`} className={`flex items-center my-5 ${getPageState(index, page)}`}>
+                        <Link key={index} href={`/trainings/create/${index==0?'':page}${id && `?id=${id}`}`} className={`flex items-center my-5 ${getPageState(index, page)}`}>
                             <div className="mr-1">
                                 {index < pages.findIndex(p => path.includes(p)) && 
                                     <span className="w-6 h-6 icon-[teenyicons--tick-circle-outline] text-primary"/>
