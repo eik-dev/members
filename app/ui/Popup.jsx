@@ -21,6 +21,7 @@ export default function Popup(){
     let handler = e => {
         setHidden(false)
         if (e.detail.state == 'ok') setState('bg-primary/50 shadow-primary/50')
+        if (e.detail.state == 'processing') setState('bg-secondary/50 shadow-secondary/50')
         if (e.detail.state == 'warning') setState('bg-warning/50 shadow-warning/50')
         if (e.detail.state == 'error') setState('bg-warning/50 shadow-warning/50')
         setType(e.detail.type)
