@@ -2,14 +2,14 @@
 import Link from "next/link"
 import { Suspense, useState } from "react"
 import useSWR from "swr";
-import { fetcher, getData } from "@/app/lib/data";
+import { fetcher, getData, postData } from "@/app/lib/data";
 import Spinner from "@/app/ui/Spinner";
 import useUser from "@/app/lib/hooks/useUser";
 import useProfile from "@/app/lib/hooks/useProfile"
 import Overlay from "@/app/ui/overlay"
 import Pay from "@/app/ui/Pay"
 import { XMarkIcon, PlusIcon, MinusIcon } from "@heroicons/react/24/outline";
-import Countdown from "@/app/ui/Countdown";
+import { popupE } from "../lib/trigger";
 import dynamic from 'next/dynamic'
 const DotLottieReact = dynamic(() =>import('@lottiefiles/dotlottie-react').then((mod) => mod.DotLottieReact),{ssr: false,})
 
@@ -69,7 +69,7 @@ function TWG({joined, twg, key}){
 }
 
 function Trainings(){
-    let { data, isError, isLoading } = useSWR(['/trainings',{filter:'upcoming'},null, process.env.NEXT_PUBLIC_TRAININGS_URL], fetcher,{
+    let { data, error, isLoading } = useSWR(['/trainings',{filter:'upcoming'},null, process.env.NEXT_PUBLIC_TRAININGS_URL], fetcher,{
         revalidateOnFocus: true,
         revalidateOnReconnect: false,
         revalidateOnMount: true,
@@ -83,7 +83,7 @@ function Trainings(){
         return 'th';
     }
 
-    if(isError || isLoading) return <Spinner/>
+    if(error || isLoading) return <div className="flex w-full h-[30vh] items-center justify-center">Loading Trainings...</div>
     return(
         <>
         <div>
@@ -143,12 +143,20 @@ export function TWGs(){
                 <div className="grid grid-cols-1 md:grid-cols-2">
                     {
                         twgs.all.map((twg, i) => {
-                            return <TWG key={i} twg={twg} joined={twgs.twgs.includes(twg.name)} />
+                            return <TWG key={i} twg={twg} joined={Array.isArray(twgs.twgs) ? twgs.twgs.includes(twg.name) : false} />
                         })
                     }
                 </div>
             }
         </section>
+    )
+}
+
+function RSVP(){
+    return(
+        <div>
+            <h3>RSVP</h3>
+        </div>
     )
 }
 
@@ -158,7 +166,7 @@ export default function Home(){
         title: 'Annual Fees',
         description:'Annual subscription fee'
     })
-    const { user, isLoading, isError } = useUser()
+    const { user, isLoading, isError, mutate } = useUser()
     let { data:profile, isProfileLoading, isProfileError } = useProfile()
     
     if (isLoading  || isProfileLoading) return <Spinner />
@@ -180,6 +188,35 @@ export default function Home(){
                     <p>Your membership with the EIK has expired. Please renew your membership to continue receiving member privileges.</p>
                     <button onClick={e=>setOverlay('Pay')} className="bg-secondary text-white font-semibold ml-5 py-3 rounded-md px-4 hover:scale-105">Renew Membership</button>
                 </div>
+            }
+            {
+                user?.active &&
+                (
+                    user?.RSVP ?
+                    <div className="bg-gradient-to-r from-primary/70 to-primary/90 text-white flex flex-col md:flex-row gap-3 px-4 py-5 rounded-md mb-10 items-center">
+                        <p className="text-center font-semibold w-full">Successfully Reserved a seat for the AGM</p>
+                    </div>
+                    :
+                    <div className="bg-gradient-to-br from-primary/90 to-primary/70 text-white flex flex-col md:flex-row gap-3 px-4 py-5 rounded-md mb-10 items-center justify-between">
+                        <p className="text-center md:text-left">The EIK is pleased to announce that the 2025 Annual General Meeting (AGM) will be held on 
+                            <br /> 
+                            <span className="font-semibold">30th May, 2025</span> at the <span className="font-semibold">Utalii Hotel</span>. All valid members are cordially invited to attend.
+                        </p>
+                        <button onClick={e=>{
+                                popupE('processing','processing','Processing... please wait')
+                                postData(
+                                    (response)=>{
+                                        if(response.success){
+                                            mutate()
+                                        }
+                                    },{},'/agm/rsvp'
+                                )
+                            }} 
+                        className="bg-secondary text-white font-semibold ml-5 py-3 rounded-md px-8 hover:scale-105">
+                            RSVP
+                        </button>
+                    </div>
+                )
             }
             <div className="flex flex-col md:flex-row">
                 <div>
@@ -273,6 +310,13 @@ export default function Home(){
                 </div>
                 <Pay title={paymentMeta.title} description={paymentMeta.description} amount={getAmount(profile?.profile?.category)} email={profile?.profile?.email} phone={profile?.profile?.phone} name={profile?.profile?.name} />
             </div>
+            }
+            {
+                overlay=='RSVP' &&
+                <div className="bg-white px-8 py-6 rounded-md md:w-1/3">
+                    <h6 className="font-semibold text-lg">RSVP</h6>
+                    <button onClick={e=>setOverlay('')}><XMarkIcon className="w-8 h-8"/></button>
+                </div>
             }
         </Overlay>
         </Suspense>
