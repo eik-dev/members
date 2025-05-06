@@ -202,7 +202,7 @@ export default function Home(){
                             <br /> 
                             <span className="font-semibold">30th May, 2025</span> at the <span className="font-semibold">Utalii Hotel</span>. All valid members are cordially invited to attend.
                         </p>
-                        <button onClick={e=>{
+                        <button disabled={true} onClick={e=>{
                                 popupE('processing','processing','Processing... please wait')
                                 postData(
                                     (response)=>{
@@ -212,7 +212,8 @@ export default function Home(){
                                     },{},'/agm/rsvp'
                                 )
                             }} 
-                        className="bg-secondary text-white font-semibold ml-5 py-3 rounded-md px-8 hover:scale-105">
+                        className="bg-secondary text-white font-semibold ml-5 py-3 rounded-md px-8 hover:scale-105"
+                        >
                             RSVP
                         </button>
                     </div>
