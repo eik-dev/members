@@ -205,7 +205,14 @@ export default function Home(){
                 (
                     user?.RSVP ?
                     <div className="bg-gradient-to-r from-primary/70 to-primary/90 text-white flex flex-col md:flex-row gap-3 px-4 py-5 rounded-md mb-10 items-center">
-                        <p className="text-center font-semibold w-full">Successfully Reserved a seat for the AGM</p>
+                        <p className="text-center font-semibold w-full">
+                            {
+                                user?.RSVP?.type=='apologies'?
+                                'Successfully Submitted Apologies for the AGM'
+                                :
+                                'Successfully Reserved a seat for the AGM'
+                            }
+                        </p>
                     </div>
                     :
                     <div className="bg-gradient-to-br from-primary/90 to-primary/70 text-white flex flex-col md:flex-row gap-3 px-4 py-5 rounded-md mb-10 items-center justify-between">
@@ -213,7 +220,7 @@ export default function Home(){
                             <br /> 
                             <span className="font-semibold">30th May, 2025</span> at the <span className="font-semibold">Utalii Hotel</span> <span className="font-semibold">from 8a.m. to 1p.m.</span>. All valid members are cordially invited to attend.
                         </p>
-                        <div className="flex gap-x-2">
+                        <div className="flex gap-2 flex-wrap">
                             <button
                             onClick={e=>rsvp('online')} 
                             className="bg-secondary text-white font-semibold ml-5 py-3 rounded-md px-8 hover:scale-105 text-sm flex flex-col gap-y-1"
@@ -227,6 +234,13 @@ export default function Home(){
                             >
                                 RSVP
                                 <span className="block text-xs">Physical</span>
+                            </button>
+                            <button
+                            onClick={e=>rsvp('apologies')} 
+                            className="bg-warning text-white font-semibold ml-5 py-3 rounded-md px-8 hover:scale-105 text-sm flex flex-col gap-y-1"
+                            >
+                                Apologies
+                                <span className="block text-xs">I will not be able to attend</span>
                             </button>
                         </div>
                     </div>
