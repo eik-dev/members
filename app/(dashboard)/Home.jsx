@@ -240,7 +240,7 @@ export default function Home(){
                             className="bg-warning text-white font-semibold ml-5 py-3 rounded-md px-8 hover:scale-105 text-sm flex flex-col gap-y-1"
                             >
                                 Apologies
-                                <span className="block text-xs">I will not be able to attend</span>
+                                <span className="block text-xs">I will not be able to attending</span>
                             </button>
                         </div>
                     </div>
