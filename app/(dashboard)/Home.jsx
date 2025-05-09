@@ -176,6 +176,17 @@ export default function Home(){
     if(name.length==1) name.push('');
     let displayName = (`${name[0]}, ${name[1].charAt(0)}!`);
 
+    const rsvp = (type)=>{
+        popupE('processing','processing','Processing... please wait')
+        postData(
+            (response)=>{
+                if(response.success){
+                    mutate()
+                }
+            },{type},'/agm/rsvp'
+        )
+    }
+
     const currentYear = new Date().getFullYear();
     const previousYear = currentYear - 1;
 
@@ -200,22 +211,24 @@ export default function Home(){
                     <div className="bg-gradient-to-br from-primary/90 to-primary/70 text-white flex flex-col md:flex-row gap-3 px-4 py-5 rounded-md mb-10 items-center justify-between">
                         <p className="text-center md:text-left">The EIK is pleased to announce that the 2025 Annual General Meeting (AGM) will be held on 
                             <br /> 
-                            <span className="font-semibold">30th May, 2025</span> at the <span className="font-semibold">Utalii Hotel</span>. All valid members are cordially invited to attend.
+                            <span className="font-semibold">30th May, 2025</span> at the <span className="font-semibold">Utalii Hotel</span> <span className="font-semibold">from 8a.m. to 1p.m.</span>. All valid members are cordially invited to attend.
                         </p>
-                        <button disabled={true} onClick={e=>{
-                                popupE('processing','processing','Processing... please wait')
-                                postData(
-                                    (response)=>{
-                                        if(response.success){
-                                            mutate()
-                                        }
-                                    },{},'/agm/rsvp'
-                                )
-                            }} 
-                        className="bg-secondary text-white font-semibold ml-5 py-3 rounded-md px-8 hover:scale-105"
-                        >
-                            RSVP
-                        </button>
+                        <div className="flex gap-x-2">
+                            <button
+                            onClick={e=>rsvp('online')} 
+                            className="bg-secondary text-white font-semibold ml-5 py-3 rounded-md px-8 hover:scale-105 text-sm flex flex-col gap-y-1"
+                            >
+                                RSVP
+                                <span className="block text-xs">Virtual</span>
+                            </button>
+                            <button
+                            onClick={e=>rsvp('physical')} 
+                            className="bg-secondary text-white font-semibold ml-5 py-3 rounded-md px-8 hover:scale-105 text-sm flex flex-col gap-y-1"
+                            >
+                                RSVP
+                                <span className="block text-xs">Physical</span>
+                            </button>
+                        </div>
                     </div>
                 )
             }
