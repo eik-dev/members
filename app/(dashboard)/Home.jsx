@@ -201,7 +201,7 @@ export default function Home(){
                 </div>
             }
             {
-                user?.active &&
+                (user?.active && false) &&
                 (
                     user?.RSVP ?
                     <div className="bg-gradient-to-r from-primary/70 to-primary/90 text-white flex flex-col md:flex-row gap-3 px-4 py-5 rounded-md mb-10 items-center">
