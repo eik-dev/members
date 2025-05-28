@@ -17,7 +17,7 @@ export default function Introductory({control, id}){
     }
 
     return(
-    <div className="bg-white w-[80%] md:w-3/4 py-1 px-4 rounded-lg max-h-9/12 overflow-y-scroll">
+    <div className="bg-white w-[80%] md:min-w-[75vw] py-1 px-4 rounded-lg max-h-[80vh] -mt-12 overflow-y-scroll">
         <div className="flex md:mx-2 mb-4 justify-between items-center py-3 sticky -top-1 bg-white z-50 border-b-2">
             <span className="font-semibold">Edit Introductory Statement</span>
             <XMarkIcon className="w-8 h-8" onClick={e=>control('')} />
