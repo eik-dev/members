@@ -58,7 +58,6 @@ export function postFile(setData,file,data,endpoint,token = load('token'), url =
         method: "POST",
         headers:{
             'Authorization': `Bearer ${token}`,
-            'Content-Type': 'multipart/form-data'
         },
         body: formData
     })

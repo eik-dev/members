@@ -90,7 +90,7 @@ function Trainings(){
             <h3 className="text-2xl 2xl:text-3xl text-right md:text-left font-bold">Upcoming <span className="text-primary">Trainings</span></h3>
         </div>
         {
-            data.data.length>0?
+            data?.data?.length>0?
             <div className="flex flex-col md:flex-row gap-12 bg-gradient-to-r from-white from-70% to-primary/70 to-95% py-12">
                 <div>
                     <img className="md:w-3/4 max-h-96 rounded-lg" src={data.data[0].media[0].url} alt="" />
