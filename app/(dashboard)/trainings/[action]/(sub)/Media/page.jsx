@@ -41,7 +41,7 @@ export default function Page(){
                         checks.pop();
                         console.log(checks);
                         if(checks.length === 0){
-                            router.push(`/trainings/${action}/Sessions?id=${id}`);
+                            router.push(`/trainings/${action}/Trainer?id=${id}`);
                         }
                     }
                 })
