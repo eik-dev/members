@@ -6,7 +6,7 @@ import useSWR from 'swr'
 import { postData, postFileFetcher, fetcher } from "@/app/lib/data"
 import File from "@/app/ui/File"
 import { useRouter, useSearchParams } from 'next/navigation'
-import { popupE } from '@/app/ui/Popup'
+import { popupE } from "@/app/lib/trigger";
 
 let checks = [];
 
@@ -68,7 +68,7 @@ export default function Page() {
                         console.log(checks)
                         checks.pop();
                         if(checks.length === 0){
-                            router.push(`/trainings/${action}/Certificate?id=${id}`);
+                            router.push(`/trainings/create/Certificate?id=${id}`);
                         }
                         session.resources.forEach(async (resource, index) => {
                             await postFileFetcher(
@@ -86,7 +86,7 @@ export default function Page() {
                                 if(res.success){
                                     checks.pop();
                                     if(checks.length === 0){
-                                        router.push(`/trainings/${action}/Certificate?id=${id}`);
+                                        router.push(`/trainings/create/Certificate?id=${id}`);
                                     }
                                 }
                             })
