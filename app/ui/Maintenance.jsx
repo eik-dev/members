@@ -53,7 +53,7 @@ export function Countdown(Props){
     )
 }
 
-export default function Maintenance() {
+export default function Maintenance({duration}) {
   return (
     <main className='flex flex-col h-[100vh] items-center justify-center'>
         <h1 className='text-4xl mb-3 font-semibold'>Under Maintenance</h1>
@@ -64,7 +64,7 @@ export default function Maintenance() {
           autoplay
         />
       </div>
-      <Countdown target="June 19, 2025"/>
+      <Countdown target={duration}/>
       <button className='bg-primary-base text-white mt-9 py-3 rounded-full w-44 hover:scale-105 hover:bg-secondary-base hover:font-bold'>Join Waitlist</button>
     </main>
   );
