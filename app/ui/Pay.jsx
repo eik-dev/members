@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useFlutterwave, closePaymentModal } from 'flutterwave-react-v3';
+// import { useFlutterwave, closePaymentModal } from 'flutterwave-react-v3';
 import Processing from '@/app/ui/Processing';
 import PaymentInfo from '@/app/ui/PaymentInfo'
 import Overlay from '@/app/ui/overlay';
@@ -25,11 +25,11 @@ export function FlutterWave({tite, description, amount, email, phone, name}){
             logo: '/transparent-logo.svg',
         },
     };
-    const handleFlutterPayment = useFlutterwave(config);
+    // const handleFlutterPayment = useFlutterwave(config);
 
     return(
         <div>
-            <button
+            {/* <button
                 className='font-semibold leading-6 text-white bg-secondary w-fit text-center mr-4 py-2 px-6 rounded-md md:text-xl'
                 onClick={e => {
                     handleFlutterPayment({
@@ -44,7 +44,7 @@ export function FlutterWave({tite, description, amount, email, phone, name}){
                 }}
             >
                 Pay
-            </button>
+            </button> */}
         </div>
     )
 }
