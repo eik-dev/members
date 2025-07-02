@@ -34,40 +34,6 @@ let getAmount = (role) => {
     }
 }
 
-function TWG({joined, twg, key}){
-    let [show, setShow] = useState(false);
-
-    let join = (e, twg, action) => {
-        e.preventDefault();
-        if(action) getData(()=>{},'/twg/join',{twg})
-        else getData(()=>{},'/twg/exit',{twg})
-    }
-
-    return(
-        <div key={key} className="bg-white rounded-lg shadow-lg p-4 my-2 md:mx-2">
-            <div className="flex items-center justify-between">
-                <h6 className="font-semibold text-lg">{twg.name}</h6>
-                <button onClick={e=>setShow(true)} className="block md:hidden">
-                    {
-                        show?
-                        <MinusIcon className="w-8 h-8"/>
-                        :
-                        <PlusIcon className="w-8 h-8"/>
-                    }
-                </button>
-            </div>
-            <div className={`${!show?'hidden':'block'} md:block`}>
-                <p className="py-4">{twg.text}</p>
-                <button onClick={e=>join(e,twg.name, !joined)} className={`${joined?'text-warning':'text-secondary'} font-light hover:font-normal`}>
-                    {
-                        joined?'<< Leave':'Join >>'
-                    }
-                </button>
-            </div>
-        </div>
-    )
-}
-
 function Trainings(){
     let { data, error, isLoading } = useSWR(['/trainings',{filter:'upcoming'},null, process.env.NEXT_PUBLIC_TRAININGS_URL], fetcher,{
         revalidateOnFocus: true,
@@ -117,14 +83,110 @@ function Trainings(){
     )
 }
 
-export function TWGs(){
-    const { data:twgs, error, isLoading } = useSWR(['/twg/index',{}], fetcher)
-    console.log(twgs)
+function TWG({joined, twg, key, mutate}){
+    let [show, setShow] = useState(false);
+    let [showDetails, setShowDetails] = useState(false);
+
+    let join = (e, twg, action) => {
+        e.preventDefault();
+        if(action) getData(()=>{mutate()},'/twg/join',{twg})
+        else getData(()=>{mutate()},'/twg/exit',{twg})
+    }
+
+    return(
+        <div key={key} className="bg-white rounded-lg shadow-lg p-6 my-4 md:mx-2 hover:shadow-xl transition-shadow duration-300">
+            <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-3">
+                    <h6 className="font-bold text-xl text-gray-800">{twg.name}</h6>
+                    {joined && (
+                        <span className="bg-primary text-white text-xs px-2 py-1 rounded-full font-semibold">
+                            Member
+                        </span>
+                    )}
+                </div>
+                <div className="flex gap-2">
+                    <button 
+                        onClick={e=>setShowDetails(!showDetails)} 
+                        className="text-secondary hover:text-primary transition-colors duration-200"
+                        title="View Details"
+                    >
+                        {showDetails ? <MinusIcon className="w-6 h-6"/> : <PlusIcon className="w-6 h-6"/>}
+                    </button>
+                    <button onClick={e=>setShow(!show)} className="block md:hidden">
+                        {show ? <MinusIcon className="w-6 h-6"/> : <PlusIcon className="w-6 h-6"/>}
+                    </button>
+                </div>
+            </div>
+            
+            <div className={`${!show?'hidden':'block'} md:block`}>
+                <p className="text-gray-700 leading-relaxed mb-4">{twg.text}</p>
+                
+                {showDetails && (
+                    <div className="border-t pt-4 mt-4">
+                        <div className="grid md:grid-cols-2 gap-6">
+                            <div>
+                                <h6 className="font-semibold text-secondary mb-3 flex items-center gap-2">
+                                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                    Key Responsibilities
+                                </h6>
+                                <ul className="space-y-2">
+                                    {twg.responsibility?.map((resp, index) => (
+                                        <li key={index} className="flex items-start gap-2 text-sm text-gray-600">
+                                            <span className="w-2 h-2 bg-secondary rounded-full mt-2 flex-shrink-0"></span>
+                                            <span>{resp}</span>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                            
+                            <div>
+                                <h6 className="font-semibold text-secondary mb-3 flex items-center gap-2">
+                                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                                    </svg>
+                                    Ideal Membership
+                                </h6>
+                                <ul className="space-y-2">
+                                    {twg.membership?.map((member, index) => (
+                                        <li key={index} className="flex items-start gap-2 text-sm text-gray-600">
+                                            <span className="w-2 h-2 bg-primary rounded-full mt-2 flex-shrink-0"></span>
+                                            <span>{member}</span>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                )}
+                
+                <div className="flex items-center justify-between mt-6 pt-4 border-t">
+                    <button 
+                        onClick={e=>setShowDetails(!showDetails)} 
+                        className="text-secondary hover:text-primary font-medium text-sm transition-colors duration-200"
+                    >
+                        {showDetails ? 'Hide Details' : 'View Details'}
+                    </button>
+                    <button 
+                        onClick={e=>join(e,twg.name, !joined)} 
+                        className={`${joined ? 'bg-warning hover:bg-warning/80' : 'bg-secondary hover:bg-secondary/80'} text-white font-semibold py-2 px-6 rounded-lg transition-all duration-200 hover:scale-105`}
+                    >
+                        {joined ? 'Leave Group' : 'Join Group'}
+                    </button>
+                </div>
+            </div>
+        </div>
+    )
+}
+
+function TWGs(){
+    const { data:twgs, error, isLoading, mutate } = useSWR(['/twg/index',{}], fetcher)
 
     return(
         <section className="mb-12">
             <h3 className="text-2xl 2xl:text-3xl text-right md:text-left my-6 font-bold">Technical Working <span className="text-primary">Groups (TWGs)</span></h3>
-            <div className="flex flex-col-reverse md:flex-row items-center mb-5">
+            <div className="flex flex-col-reverse md:flex-row items-center mb-8">
                 <div className="flex-grow">
                     <DotLottieReact
                         src="/animations/group.lottie"
@@ -140,10 +202,10 @@ export function TWGs(){
                 (isLoading || error) ?
                 <div className="w-full h-[10vh]"><Spinner internal={true} /></div>
                 :
-                <div className="grid grid-cols-1 md:grid-cols-2">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     {
-                        twgs.all.map((twg, i) => {
-                            return <TWG key={i} twg={twg} joined={Array.isArray(twgs.twgs) ? twgs.twgs.includes(twg.name) : false} />
+                        twgs?.all?.map((twg, i) => {
+                            return <TWG key={i} twg={twg} mutate={mutate} joined={Array.isArray(twgs.twgs) ? twgs.twgs.includes(twg.name) : false} />
                         })
                     }
                 </div>
