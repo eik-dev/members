@@ -335,7 +335,18 @@ export default function Home(){
                                 <p>
                                 Your membership expired on <span className="font-semibold">31st December, {previousYear}.</span> Please make a payment to renew your subscription and continue enjoying the benefits of being an EIK member.
                                 </p>
-                                <button onClick={e=>setOverlay('Pay')} className="bg-secondary text-white font-semibold mt-5 py-3 rounded-md px-4 hover:scale-105">Make Payment</button>
+                                <div className="flex items-center gap-2">
+                                    <button onClick={e=>setOverlay('Pay')} className="bg-secondary text-white font-semibold mt-5 py-3 rounded-md px-4 hover:scale-105">Make Payment</button>
+
+                                    <button onClick={e=>postData(
+                                        (response)=>{},
+                                        {},
+                                        '/actions/notify',
+                                    )} className="bg-primary text-white font-semibold mt-5 py-3 rounded-md px-4 hover:scale-105 flex items-center gap-2 text-sm">
+                                        <span className="w-6 h-6 icon-[basil--notification-outline]"/>
+                                        <span>Ping Admin</span>
+                                    </button>
+                                </div>
                             </div>
                         }
                     </div>
