@@ -13,6 +13,14 @@ export default function Page(){
     const conference = params.get('conference');
     const { data, error, isLoading } = useSWR(['/certificate/verify',{id,training,conference}], fetcher)
 
+    const formatDate = (date) => {
+        return new Date(date).toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
+    }
+
     let verify = result=>{
         if (result.includes('https://portal.eik.co.ke/verify?'))
             window.location.href = result
@@ -53,8 +61,9 @@ export default function Page(){
                     {
                         training?
                         <>
-                        <div className='my-2'>Issued to: {data['user']?.name}</div>
-                        <div className='my-2'>For attending: {data['training']?.Name}</div>
+                        <div className='my-2'>Issued to. {data['user']?.name}</div>
+                        <div className='my-2'>For attending a one-month virtual training on {data['training']?.Name}</div>
+                        <div className='my-2'>Date issued: {data['created_at']}</div>
                         </>
                         :
                         <>
@@ -64,7 +73,9 @@ export default function Page(){
                             data?.cert &&
                             <div className='my-2'>Certificate Number: {data?.cert?.Number}</div>
                         }
-                        <div className='my-2'>Date issued: {data['created_at']}</div>
+                        <div className='my-2'>
+                            Date: {formatDate(data['StartDate'])} to {formatDate(data['EndDate'])}
+                        </div>
                         </>
                     }
                 </div>
