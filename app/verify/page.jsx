@@ -63,7 +63,9 @@ export default function Page(){
                         <>
                         <div className='my-2'>Issued to. {data['user']?.name}</div>
                         <div className='my-2'>For attending a one-month virtual training on {data['training']?.Name}</div>
-                        <div className='my-2'>Date issued: {data['created_at']}</div>
+                        <div className='my-2'>
+                            Date: {formatDate(data['StartDate'])} to {formatDate(data['EndDate'])}
+                        </div>
                         </>
                         :
                         <>
@@ -73,9 +75,7 @@ export default function Page(){
                             data?.cert &&
                             <div className='my-2'>Certificate Number: {data?.cert?.Number}</div>
                         }
-                        <div className='my-2'>
-                            Date: {formatDate(data['StartDate'])} to {formatDate(data['EndDate'])}
-                        </div>
+                        <div className='my-2'>Date issued: {data['created_at']}</div>
                         </>
                     }
                 </div>
