@@ -62,7 +62,7 @@ export default function Page(){
                         training?
                         <>
                         <div className='my-2'>Issued to. {data['user']?.name}</div>
-                        <div className='my-2'>For attending a one-month virtual training on {data['training']?.Name}</div>
+                        <div className='my-2'>For attending a one-month {data['training']?.Name}</div>
                         <div className='my-2'>
                             Date: {formatDate(data['training'].StartDate)} to {formatDate(data['training'].EndDate)}
                         </div>
