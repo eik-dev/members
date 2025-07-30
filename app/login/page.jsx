@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Input from '@/app/ui/Input';
 import { save, load } from '@/app/lib/storage';
 import { popupE } from '@/app/lib/trigger';
+import useUser from "@/app/lib/hooks/useUser";
 
 export default function Login() {
     let [email, setEmail] = useState('')
@@ -12,6 +13,7 @@ export default function Login() {
 
     let router = useRouter();
 
+    const { user, isLoading, isError } = useUser()
 
     let login = (e) => {
         e.preventDefault()
@@ -43,7 +45,7 @@ export default function Login() {
     }
 
     useEffect(()=>{
-        if (load('token')) router.push('/')
+        if (load('token') && !isLoading && !isError) router.push('/')
     },[])
 
     // if(Object.keys(user).length>0) router.push('/')
