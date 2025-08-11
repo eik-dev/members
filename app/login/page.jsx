@@ -36,7 +36,9 @@ export default function Login() {
             }
             if(!save('token', data.user.token)) alert('Error saving token');
             popupE('ok', 'Success', 'Login successful')
-            router.push('/')
+            setTimeout(()=>{
+                router.push('/')
+            }, 500)
         })
         .catch(err => {
             popupE('error', 'Error', err.message)
